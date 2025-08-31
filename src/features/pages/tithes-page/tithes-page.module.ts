@@ -5,14 +5,13 @@ import { TithesPageRoutingModule } from './tithes-page-routing.module';
 import { TithesPageComponent } from './tithes-page.component';
 import { DashboardHeaderModule } from '../../../common/components/dashboard-header/dashboard-header.module';
 import { TithesTableComponent } from './components/tithes-table/tithes-table.component';
+import { UserTithesTableComponent } from './components/user-tithes-table/user-tithes-table.component';
 
 
 @NgModule({
-  declarations: [TithesPageComponent, TithesTableComponent],
-  imports: [
-    DashboardHeaderModule,
-    CommonModule,
-    TithesPageRoutingModule
-  ]
+  declarations: [TithesPageComponent, TithesTableComponent, UserTithesTableComponent],
+  imports: [DashboardHeaderModule, CommonModule, TithesPageRoutingModule],
 })
-export class TithesPageModule { }
+export class TithesPageModule {
+
+}

@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { httpInterceptor } from '../common/interceptors/http.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,7 +18,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
     AppRoutingModule,
     NgbModule,
   ],
-  providers:[provideHttpClient(withInterceptors([]))],
+  providers:[provideHttpClient(withInterceptors([httpInterceptor]))],
   bootstrap: [AppComponent],
 })
 export class AppModule {

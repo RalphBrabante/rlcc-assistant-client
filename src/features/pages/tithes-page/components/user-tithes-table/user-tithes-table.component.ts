@@ -5,11 +5,11 @@ import { Tithe } from '../../models/tithe';
 import { finalize, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-tithes-table',
-  templateUrl: './tithes-table.component.html',
-  styleUrl: './tithes-table.component.scss',
+  selector: 'app-user-tithes-table',
+  templateUrl: './user-tithes-table.component.html',
+  styleUrl: './user-tithes-table.component.scss',
 })
-export class TithesTableComponent extends BaseComponent implements OnInit {
+export class UserTithesTableComponent extends BaseComponent implements OnInit {
   tithes = signal<Tithe[]>([]);
   isFetching = signal<boolean>(false);
 
@@ -20,7 +20,7 @@ export class TithesTableComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     this.isFetching.set(true);
     this.titheSvc
-      .getAllTithes()
+      .getUserTithes()
       .pipe(
         finalize(() => {
           this.isFetching.set(false);

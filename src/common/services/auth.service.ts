@@ -11,6 +11,8 @@ import { jwtDecode } from 'jwt-decode';
 
 interface JwtPayload {
   exp: number; // expiration timestamp in seconds
+  roles: string[];
+  name: string;
 }
 
 @Injectable({
@@ -51,14 +53,31 @@ export class AuthService {
     return localStorage.getItem('RLCCAT');
   }
 
+  getRoles(): string[] {
+    const token = this.getToken();
+
+    const decoded = jwtDecode<JwtPayload>(token!);
+
+    return decoded.roles;
+  }
+
+  getFullName(): string {
+    const token = this.getToken();
+
+    const decoded = jwtDecode<JwtPayload>(token!);
+
+    return decoded.name;
+  }
+
   isTokenExpired(): boolean {
     const token = this.getToken();
-    
+
     if (!token) return true;
 
     try {
       const decoded = jwtDecode<JwtPayload>(token);
       const expiry = decoded.exp * 1000; // convert to ms
+
       return Date.now() > expiry;
     } catch (e) {
       return true; // if invalid, treat as expired
