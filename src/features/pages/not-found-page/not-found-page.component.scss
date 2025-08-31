@@ -1,0 +1,54 @@
+.not-found-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  color: #333;
+}
+
+.not-found-container h1 {
+  font-size: 6rem;
+  font-weight: bold;
+  margin: 0;
+  color: #e63946;
+}
+
+.not-found-container h2 {
+  font-size: 2rem;
+  margin: 0.5rem 0;
+}
+
+.not-found-container p {
+  max-width: 500px;
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+.not-found-container .btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #1d3557;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.not-found-container .btn:hover {
+  background: #457b9d;
+}
+
+/* 📱 Responsive tweaks */
+@media (max-width: 768px) {
+  .not-found-container h1 {
+    font-size: 4rem;
+  }
+  .not-found-container h2 {
+    font-size: 1.5rem;
+  }
+}
