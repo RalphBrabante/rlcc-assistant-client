@@ -21,6 +21,22 @@
       class="card-header bg-white d-flex justify-content-between align-items-center"
     >
       <h5 class="mb-0 fw-semibold">Tithes</h5>
+      <!-- Search Bar -->
+      <div class="position-relative">
+        <input
+          type="text"
+          class="form-control form-control-sm ps-5"
+          placeholder="Search tithes..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+          style="min-width: 220px; border-radius: 30px"
+        />
+        <i
+          class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+        ></i>
+      </div>
+
+      <!-- Add Button -->
       <button class="btn btn-primary btn-sm">
         <i class="bi bi-plus-lg me-1"></i>Add New
       </button>
@@ -33,6 +49,7 @@
           <thead>
             <tr>
               <th scope="col">Date Received</th>
+              <th scope="col">Giver</th>
               <th scope="col">Amount</th>
               <th scope="col">Encoded By</th>
               <th scope="col" class="text-center">Actions</th>
@@ -42,8 +59,11 @@
             @for (tithe of tithes(); track tithe.id) {
             <tr>
               <td>{{ tithe.dateReceived | date : "long" }}</td>
+              <td>{{ tithe.giver?.firstName }} {{ tithe.giver?.lastName }}</td>
               <td>{{ tithe.amount | currency : "PHP" }}</td>
-             <td>{{tithe.encoder?.emailAddress}}</td>
+              <td>
+                {{ tithe.encoder?.firstName }} {{ tithe.encoder?.lastName }}
+              </td>
               <td class="text-center action-btns">
                 <button class="btn btn-light btn-sm me-1">
                   <i class="bi bi-eye"></i>
@@ -61,5 +81,12 @@
         </table>
       </div>
     </div>
+
+    <app-pagination
+      [data]="tithes()"
+      #pagination
+      [dataCount]="dataCount()"
+      (changeEmitter)="this.fetchData()"
+    />
   </div>
 </div>

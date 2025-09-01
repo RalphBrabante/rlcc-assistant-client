@@ -10,11 +10,15 @@ import { Observable } from 'rxjs';
 export class TithesService {
   constructor(private http: HttpClient) {}
 
-  getAllTithes(): Observable<TitheAPIResp> {
-    return this.http.get<TitheAPIResp>(baseUrl + '/tithes');
+  getAllTithes(limit: string, page: string): Observable<TitheAPIResp> {
+    return this.http.get<TitheAPIResp>(
+      baseUrl + `/tithes?page=${page}&limit=${limit}`
+    );
   }
 
-  getUserTithes(): Observable<TitheAPIResp> {
-    return this.http.get<TitheAPIResp>(baseUrl + '/tithes/user');
+  getUserTithes(limit: string, page: string): Observable<TitheAPIResp> {
+    return this.http.get<TitheAPIResp>(
+      baseUrl + `/tithes/user?page=${page}&limit=${limit}`
+    );
   }
 }

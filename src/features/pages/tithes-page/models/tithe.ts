@@ -7,6 +7,14 @@ export interface Tithe {
   encoder?: {
     id: number;
     emailAddress: string;
+    firstName: string;
+    lastName: string;
+  };
+  giver?: {
+    id: number;
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
   };
   dateReceived: string;
   createdAt: string;

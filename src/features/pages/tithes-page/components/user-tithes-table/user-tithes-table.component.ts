@@ -1,8 +1,9 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, viewChild } from '@angular/core';
 import { BaseComponent } from '../../../../../common/directives/base-component';
 import { TithesService } from '../../../../../common/services/tithes.service';
 import { Tithe } from '../../models/tithe';
 import { finalize, takeUntil } from 'rxjs';
+import { PaginationComponent } from '../../../../../common/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-user-tithes-table',
@@ -12,15 +13,24 @@ import { finalize, takeUntil } from 'rxjs';
 export class UserTithesTableComponent extends BaseComponent implements OnInit {
   tithes = signal<Tithe[]>([]);
   isFetching = signal<boolean>(false);
+  pagination = viewChild<PaginationComponent>('pagination');
+  dataCount = signal<number>(0);
 
   constructor(private titheSvc: TithesService) {
     super();
   }
 
   ngOnInit(): void {
+    this.fetchData();
+  }
+
+  fetchData() {
     this.isFetching.set(true);
     this.titheSvc
-      .getUserTithes()
+      .getUserTithes(
+        this.pagination()!.pageSize.toString(),
+        this.pagination()!.currentPage().toString()
+      )
       .pipe(
         finalize(() => {
           this.isFetching.set(false);
@@ -30,6 +40,7 @@ export class UserTithesTableComponent extends BaseComponent implements OnInit {
       .subscribe({
         next: (resp) => {
           this.tithes.set(resp.tithes.rows);
+          this.dataCount.set(resp.tithes.count);
         },
       });
   }
