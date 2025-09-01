@@ -21,27 +21,27 @@ export class UserTithesTableComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchData();
+  this.fetchData()
   }
 
-  fetchData() {
-    this.isFetching.set(true);
-    this.titheSvc
-      .getUserTithes(
-        this.pagination()!.pageSize.toString(),
-        this.pagination()!.currentPage().toString()
-      )
-      .pipe(
-        finalize(() => {
-          this.isFetching.set(false);
-        }),
-        takeUntil(this.unsubscribe)
-      )
-      .subscribe({
-        next: (resp) => {
-          this.tithes.set(resp.tithes.rows);
-          this.dataCount.set(resp.tithes.count);
-        },
-      });
+  fetchData(){
+      this.isFetching.set(true);
+      this.titheSvc
+        .getUserTithes(
+          this.pagination()!.pageSize.toString(),
+          this.pagination()!.currentPage().toString()
+        )
+        .pipe(
+          finalize(() => {
+            this.isFetching.set(false);
+          }),
+          takeUntil(this.unsubscribe)
+        )
+        .subscribe({
+          next: (resp) => {
+            this.tithes.set(resp.tithes.rows);
+            this.dataCount.set(resp.tithes.count);
+          },
+        });
   }
 }

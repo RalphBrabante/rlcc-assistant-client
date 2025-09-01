@@ -21,9 +21,6 @@
       class="card-header bg-white d-flex justify-content-between align-items-center"
     >
       <h5 class="mb-0 fw-semibold">Tithes</h5>
-      <button class="btn btn-primary btn-sm">
-        <i class="bi bi-plus-lg me-1"></i>Add New
-      </button>
     </div>
 
     <!-- Card Body -->
@@ -32,8 +29,10 @@
         <table class="table table-hover align-middle mb-0">
           <thead>
             <tr>
+              <th scope="col">ID</th>
               <th scope="col">Date Received</th>
               <th scope="col">Giver</th>
+              <th scope="col">Type</th>
               <th scope="col">Amount</th>
               <th scope="col">Encoded By</th>
               <th scope="col" class="text-center">Actions</th>
@@ -42,8 +41,10 @@
           <tbody>
             @for (tithe of tithes(); track tithe.id) {
             <tr>
+              <td>{{ tithe.id }}</td>
               <td>{{ tithe.dateReceived | date : "long" }}</td>
               <td>{{ tithe.giver?.firstName }} {{ tithe.giver?.lastName }}</td>
+              <td>{{ tithe.titheType?.name }}</td>
               <td>{{ tithe.amount | currency : "PHP" }}</td>
               <td>
                 {{ tithe.encoder?.firstName }} {{ tithe.encoder?.lastName }}

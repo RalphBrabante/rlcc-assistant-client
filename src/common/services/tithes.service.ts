@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { baseUrl } from '../../appConfig';
-import { TitheAPIResp } from '../../features/pages/tithes-page/models/tithe';
+import {
+  Tithe,
+  TitheAPIResp,
+} from '../../features/pages/tithes-page/models/tithe';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -20,5 +23,9 @@ export class TithesService {
     return this.http.get<TitheAPIResp>(
       baseUrl + `/tithes/user?page=${page}&limit=${limit}`
     );
+  }
+
+  createTithes(tithe: Tithe): Observable<TitheAPIResp> {
+    return this.http.post<TitheAPIResp>(baseUrl + `/tithes`, { tithe });
   }
 }

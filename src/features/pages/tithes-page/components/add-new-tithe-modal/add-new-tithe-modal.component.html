@@ -1,0 +1,75 @@
+<ng-template #addTitheModal let-modal>
+  <div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">Encode Tithe</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="titheForm">
+      <div class="mb-3">
+        <label class="form-label">Date Received</label>
+        <input
+          type="date"
+          class="form-control"
+          formControlName="dateReceived"
+        />
+
+        @if(dateReceived.invalid && dateReceived.touched){
+        <small style="color: Red">Date Received is required.</small>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Amount (PHP)</label>
+        <input
+          type="text"
+          class="form-control"
+          id="amount"
+          placeholder="0.00"
+          formControlName="amount"
+          (input)="formatToTwoDecimals($event)"
+        />
+
+        @if(amount.invalid && amount.touched){
+        <small style="color: Red">Amount is required.</small>
+        }
+      </div>
+
+      <app-active-tithe-type-dropdown (emitTitheTypeId)="setTitheType($event)"/>
+
+      @if(!memberId.value){
+      <app-active-members-lookup-dropdown
+        (emitMemberName)="onMemberSelect($event)"
+        (emitMemberId)="onMemberSelectId($event)"
+      />
+      } @if(memberId.value){
+      <div class="mb-3" style="position: relative">
+        <label class="form-label">Member Name</label>
+        <input
+          type="string"
+          class="form-control"
+          formControlName="memberName"
+        />
+        @if(memberId.value){
+        <div class="remove-icon" (click)="removeMemberNameAndId()">
+          <i class="bi bi-x-square-fill"></i>
+        </div>
+        }
+      </div>
+      } 
+      @if((memberName.invalid && memberName.touched) || memberId.invalid && memberId.touched){
+      <small style="color: Red">Member is required.</small>
+      }
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+    <button class="btn btn-primary" (click)="saveTithe(modal)">Save</button>
+  </div>
+</ng-template>

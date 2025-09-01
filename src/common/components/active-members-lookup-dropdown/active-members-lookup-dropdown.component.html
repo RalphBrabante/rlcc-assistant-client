@@ -1,0 +1,27 @@
+<div class="search-container position-relative w-100">
+
+  <form [formGroup]="form">
+    <label for="">Member Search</label>
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search..."
+      formControlName="searchWord"
+    />
+
+    <!-- Dropdown -->
+    <ul
+      *ngIf="showDropdown && results.length > 0"
+      class="dropdown-menu show w-100 position-absolute"
+      style="max-height: 200px; overflow-y: auto"
+    >
+      <li
+        *ngFor="let user of results"
+        class="dropdown-item"
+        (click)="selectItem(user)"
+      >
+        {{ user.firstName }} {{ user.lastName }} #{{ user.id }}
+      </li>
+    </ul>
+  </form>
+</div>

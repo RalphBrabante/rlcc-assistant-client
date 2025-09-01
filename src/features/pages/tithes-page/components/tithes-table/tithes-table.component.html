@@ -22,7 +22,7 @@
     >
       <h5 class="mb-0 fw-semibold">Tithes</h5>
       <!-- Search Bar -->
-      <div class="position-relative">
+      <!-- <div class="position-relative">
         <input
           type="text"
           class="form-control form-control-sm ps-5"
@@ -34,10 +34,11 @@
         <i
           class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
         ></i>
-      </div>
+      </div> -->
 
       <!-- Add Button -->
-      <button class="btn btn-primary btn-sm">
+      <app-add-new-tithe-modal #modal (fetchData)="fetchData()" />
+      <button class="btn btn-primary btn-sm" (click)="open()">
         <i class="bi bi-plus-lg me-1"></i>Add New
       </button>
     </div>
@@ -48,8 +49,10 @@
         <table class="table table-hover align-middle mb-0">
           <thead>
             <tr>
+               <th scope="col">ID</th>
               <th scope="col">Date Received</th>
               <th scope="col">Giver</th>
+               <th scope="col">Type</th>
               <th scope="col">Amount</th>
               <th scope="col">Encoded By</th>
               <th scope="col" class="text-center">Actions</th>
@@ -58,8 +61,10 @@
           <tbody>
             @for (tithe of tithes(); track tithe.id) {
             <tr>
+              <td>{{tithe.id}}</td>
               <td>{{ tithe.dateReceived | date : "long" }}</td>
               <td>{{ tithe.giver?.firstName }} {{ tithe.giver?.lastName }}</td>
+               <td>{{ tithe.titheType?.name}}</td>
               <td>{{ tithe.amount | currency : "PHP" }}</td>
               <td>
                 {{ tithe.encoder?.firstName }} {{ tithe.encoder?.lastName }}

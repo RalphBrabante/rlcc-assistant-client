@@ -2,7 +2,7 @@ export interface Tithe {
   id?: number;
   amount: string;
   userId: number;
-  isActive: boolean;
+  isActive?: boolean;
   titheTypeId: number;
   encoder?: {
     id: number;
@@ -16,9 +16,13 @@ export interface Tithe {
     firstName: string;
     lastName: string;
   };
+  titheType?: {
+    id: number;
+    name: string;
+  };
   dateReceived: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface TitheAPIResp {

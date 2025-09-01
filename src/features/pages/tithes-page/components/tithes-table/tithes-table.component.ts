@@ -4,6 +4,7 @@ import { TithesService } from '../../../../../common/services/tithes.service';
 import { Tithe } from '../../models/tithe';
 import { finalize, takeUntil } from 'rxjs';
 import { PaginationComponent } from '../../../../../common/components/pagination/pagination.component';
+import { AddNewTitheModalComponent } from '../add-new-tithe-modal/add-new-tithe-modal.component';
 
 @Component({
   selector: 'app-tithes-table',
@@ -14,6 +15,7 @@ export class TithesTableComponent extends BaseComponent implements OnInit {
   tithes = signal<Tithe[]>([]);
   isFetching = signal<boolean>(false);
   pagination = viewChild<PaginationComponent>('pagination');
+  modal = viewChild<AddNewTitheModalComponent>('modal');
   dataCount = signal<number>(0);
   searchTerm: string = '';
 
@@ -25,10 +27,7 @@ export class TithesTableComponent extends BaseComponent implements OnInit {
     this.fetchData();
   }
 
-  onSearch() {
-  
- 
-  }
+  onSearch() {}
 
   fetchData() {
     this.isFetching.set(true);
@@ -49,5 +48,9 @@ export class TithesTableComponent extends BaseComponent implements OnInit {
           this.dataCount.set(resp.tithes.count);
         },
       });
+  }
+
+  open(){
+    this.modal()?.openAddTitheModal()
   }
 }
