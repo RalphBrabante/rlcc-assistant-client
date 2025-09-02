@@ -6,6 +6,7 @@ import { finalize, takeUntil } from 'rxjs';
 import { PaginationComponent } from '../../../../../common/components/pagination/pagination.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteConfirmationModalComponent } from '../../../../../common/components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-tithes-table',
@@ -18,7 +19,7 @@ export class UserTithesTableComponent extends BaseComponent implements OnInit {
   pagination = viewChild<PaginationComponent>('pagination');
   dataCount = signal<number>(0);
 
-  constructor(private titheSvc: TithesService, private modalService: NgbModal) {
+  constructor(private titheSvc: TithesService, private modalService: NgbModal, private router:Router) {
     super();
   }
 
@@ -45,6 +46,13 @@ export class UserTithesTableComponent extends BaseComponent implements OnInit {
           this.dataCount.set(resp.tithes.count);
         },
       });
+  }
+
+  openPopup(id: number) {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/tithes', id])
+    );
+    window.open(url, '_blank', 'width=800,height=600');
   }
 
   onDeleteTithes(titheId: number) {

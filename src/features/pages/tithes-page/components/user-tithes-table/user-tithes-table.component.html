@@ -54,7 +54,8 @@
               <td class="text-center action-btns">
                 <button
                   class="btn btn-primary btn-sm me-1"
-                  [routerLink]="[tithe.id]"
+                 (click)="openPopup(tithe?.id!)"
+                  target="_blank"
                   ngbTooltip="View Details"
                   placement="top"
                   container="body"
