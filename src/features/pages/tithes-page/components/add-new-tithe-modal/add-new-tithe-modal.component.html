@@ -40,7 +40,11 @@
         }
       </div>
 
-      <app-active-tithe-type-dropdown (emitTitheTypeId)="setTitheType($event)"/>
+      <app-active-tithe-type-dropdown (emitTitheTypeId)="setTitheType($event)">
+        @if(titheTypeId.invalid && titheTypeId.touched){
+        <small style="color: Red">Type is required.</small>
+        }</app-active-tithe-type-dropdown
+      >
 
       @if(!memberId.value){
       <app-active-members-lookup-dropdown
@@ -61,8 +65,8 @@
         </div>
         }
       </div>
-      } 
-      @if((memberName.invalid && memberName.touched) || memberId.invalid && memberId.touched){
+      } @if((memberName.invalid && memberName.touched) || memberId.invalid &&
+      memberId.touched){
       <small style="color: Red">Member is required.</small>
       }
     </form>

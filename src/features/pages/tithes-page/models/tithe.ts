@@ -31,4 +31,5 @@ export interface TitheAPIResp {
     count: number;
     rows: Tithe[];
   };
+  tithe?: Tithe;
 }

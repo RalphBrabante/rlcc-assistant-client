@@ -1,0 +1,73 @@
+/* record-receipt.component.css */
+.receipt-card {
+  max-width: 420px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Skeleton Loader */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e4e4e4 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+.skeleton-title {
+  height: 24px;
+  width: 70%;
+  margin: auto;
+}
+
+.skeleton-text {
+  height: 16px;
+  width: 100%;
+}
+
+.skeleton-footer {
+  height: 40px;
+  width: 60%;
+  margin: auto;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.signature-line {
+  display: inline-block;
+  border-top: 1px solid #000;
+  width: 200px;
+  margin-bottom: 4px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px dashed #ccc;
+  margin: 10px 0;
+}
+
+.qr-code i {
+  display: block;
+}
+
+@media print {
+  nav,
+  nav.navbar,
+  button,
+  .skeleton {
+    display: none !important;
+    height: 0 !important;
+  }
+  .receipt-card {
+    box-shadow: none !important;
+    border: 1px dashed #000 !important;
+  }
+}

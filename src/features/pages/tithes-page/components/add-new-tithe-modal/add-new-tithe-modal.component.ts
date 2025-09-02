@@ -31,9 +31,6 @@ export class AddNewTitheModalComponent extends BaseComponent implements OnInit {
     private titheSvc: TithesService
   ) {
     super();
-  }
-
-  ngOnInit(): void {
     const today = new Date().toISOString().split('T')[0];
     this.titheForm = this.fb.group({
       dateReceived: [today, Validators.required],
@@ -43,6 +40,8 @@ export class AddNewTitheModalComponent extends BaseComponent implements OnInit {
       titheTypeId: ['', Validators.required],
     });
   }
+
+  ngOnInit(): void {}
 
   get amount() {
     return this.titheForm.get('amount') as FormControl;
@@ -101,7 +100,7 @@ export class AddNewTitheModalComponent extends BaseComponent implements OnInit {
         .createTithes(this.titheForm.value)
         .pipe(
           finalize(() => {
-            this.fetchData.emit(true) // reload table
+            this.fetchData.emit(true); // reload table
           }),
           takeUntil(this.unsubscribe)
         )
@@ -115,6 +114,4 @@ export class AddNewTitheModalComponent extends BaseComponent implements OnInit {
       // TODO: Call your backend service to save
     }
   }
-
-
 }

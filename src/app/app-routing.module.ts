@@ -29,6 +29,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'forbidden',
+    loadChildren: () =>
+      import('../features/pages/forbidden-page/forbidden-page.module').then(
+        (m) => m.ForbiddenPageModule
+      ),
+  },
+  {
     path: '**',
     loadChildren: () =>
       import(

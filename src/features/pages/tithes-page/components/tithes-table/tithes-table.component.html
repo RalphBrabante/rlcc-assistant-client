@@ -49,10 +49,10 @@
         <table class="table table-hover align-middle mb-0">
           <thead>
             <tr>
-               <th scope="col">ID</th>
+              <th scope="col">ID</th>
               <th scope="col">Date Received</th>
               <th scope="col">Giver</th>
-               <th scope="col">Type</th>
+              <th scope="col">Type</th>
               <th scope="col">Amount</th>
               <th scope="col">Encoded By</th>
               <th scope="col" class="text-center">Actions</th>
@@ -61,22 +61,44 @@
           <tbody>
             @for (tithe of tithes(); track tithe.id) {
             <tr>
-              <td>{{tithe.id}}</td>
+              <td>{{ tithe.id }}</td>
               <td>{{ tithe.dateReceived | date : "long" }}</td>
               <td>{{ tithe.giver?.firstName }} {{ tithe.giver?.lastName }}</td>
-               <td>{{ tithe.titheType?.name}}</td>
-              <td>{{ tithe.amount | currency : "PHP" }}</td>
+              <td>{{ tithe.titheType?.name }}</td>
+              <td>
+                {{ tithe.amount | currency : "PHP" : "symbol" : "1.2-2" }}
+              </td>
               <td>
                 {{ tithe.encoder?.firstName }} {{ tithe.encoder?.lastName }}
               </td>
               <td class="text-center action-btns">
-                <button class="btn btn-light btn-sm me-1">
+                <button
+                  class="btn btn-primary btn-sm me-1"
+                  [routerLink]="[tithe.id]"
+                  ngbTooltip="View Details"
+                  placement="top"
+                  container="body"
+                >
                   <i class="bi bi-eye"></i>
                 </button>
-                <button class="btn btn-light btn-sm me-1">
+
+                <button
+                  class="btn btn-light btn-sm me-1"
+                  ngbTooltip="Edit"
+                  placement="top"
+                  container="body"
+                  [routerLink]="['edit', tithe.id]"
+                >
                   <i class="bi bi-pencil"></i>
                 </button>
-                <button class="btn btn-light btn-sm">
+
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="onDeleteTithes(tithe.id!)"
+                  ngbTooltip="Delete"
+                  placement="top"
+                  container="body"
+                >
                   <i class="bi bi-trash"></i>
                 </button>
               </td>

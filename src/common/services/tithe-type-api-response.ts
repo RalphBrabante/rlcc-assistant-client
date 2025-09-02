@@ -1,4 +1,4 @@
-import { TitheType } from "../../features/pages/tithe-type/models/tithe-type";
+import { TitheType } from '../../features/pages/tithe-type/models/tithe-type';
 
 export interface TitheTypeApiResponse {
   status: number;
@@ -6,4 +6,9 @@ export interface TitheTypeApiResponse {
     count: number;
     rows: TitheType[];
   };
+}
+
+export interface TitheReportApiResponse {
+  status: number;
+  data: number[];
 }

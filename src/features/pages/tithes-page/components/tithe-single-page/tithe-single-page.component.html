@@ -1,0 +1,95 @@
+<main>
+  <!-- record-receipt.component.html -->
+  <div class="container py-4">
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-3 d-print-none">
+      <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
+        <li class="breadcrumb-item"><a routerLink="/dashboard">Home</a></li>
+        <li class="breadcrumb-item">
+          <a routerLink="/tithes">Tithes Records</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Receipt</li>
+      </ol>
+    </nav>
+
+    <!-- Skeleton Loader -->
+    <div *ngIf="isLoading" class="receipt-card shadow-sm mx-auto">
+      <div class="skeleton skeleton-title mb-3"></div>
+      <div class="skeleton skeleton-text mb-2"></div>
+      <div class="skeleton skeleton-text mb-2"></div>
+      <div class="skeleton skeleton-text mb-2"></div>
+      <div class="skeleton skeleton-text mb-2"></div>
+      <div class="skeleton skeleton-text mb-2"></div>
+      <div class="skeleton skeleton-footer mt-4"></div>
+    </div>
+
+    <app-verse-container />
+    <!-- Receipt -->
+    <div *ngIf="!isLoading" class="receipt-card shadow-lg mx-auto">
+      <div class="receipt-header text-center border-bottom pb-3">
+        <div class="logo-placeholder mb-2">
+          <i class="bi bi-receipt-cutoff display-6 text-primary"></i>
+        </div>
+        <h4 class="fw-bold mb-0">RLCC</h4>
+        <small class="text-muted">Receipt</small>
+      </div>
+
+      <div class="receipt-body py-3">
+        <div class="row mb-2">
+          <div class="col-6 text-muted">Transaction No:</div>
+          <div class="col-6 text-end fw-bold">#{{ tithe()?.id }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 text-muted">Date:</div>
+          <div class="col-6 text-end fw-bold">
+            {{ tithe()?.dateReceived | date : "long" }}
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 text-muted">Received From:</div>
+          <div class="col-6 text-end fw-bold">
+            {{ tithe()?.giver?.firstName }} {{ tithe()?.giver?.lastName }}
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 text-muted">Type:</div>
+          <div class="col-6 text-end fw-bold">
+            {{ tithe()?.titheType?.name }}
+          </div>
+        </div>
+        <hr />
+        <div class="row mb-3">
+          <div class="col-6 text-muted">Amount:</div>
+          <div class="col-6 text-end fw-bold text-success fs-5">
+            {{ tithe()?.amount | currency : "PHP" : "symbol" : "1.2-2" }}
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 text-muted">Encoded By:</div>
+          <div class="col-6 text-end fw-bold">
+            {{ tithe()?.encoder?.firstName }} {{ tithe()?.encoder?.lastName }}
+          </div>
+        </div>
+      </div>
+
+      <div class="receipt-footer border-top pt-3 text-center">
+        <small class="text-muted">Thank you for your generosity!</small>
+        <!-- <div class="mt-4">
+          <span class="signature-line"></span>
+          <p class="mb-0"><small>Authorized Signature</small></p>
+        </div>
+        <div class="qr-code mt-4">
+          <i class="bi bi-qr-code fs-2 text-muted"></i>
+          <p class="mb-0"><small>Scan to verify</small></p>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- Print Button -->
+    <div class="text-center mt-3 d-print-none" *ngIf="!isLoading">
+      <button class="btn btn-primary px-4" (click)="printPage()">
+        <i class="bi bi-printer"></i> Print Receipt
+      </button>
+    </div>
+  </div>
+</main>

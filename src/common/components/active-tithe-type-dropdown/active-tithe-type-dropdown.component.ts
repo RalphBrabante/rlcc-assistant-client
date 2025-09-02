@@ -1,4 +1,4 @@
-import { Component, OnInit, output, signal } from '@angular/core';
+import { Component, input, OnInit, output, signal } from '@angular/core';
 import { TitheType } from '../../../features/pages/tithe-type/models/tithe-type';
 import { BaseComponent } from '../../directives/base-component';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -17,6 +17,7 @@ export class ActiveTitheTypeDropdownComponent
   titheTypes = signal<TitheType[]>([]);
   emitTitheTypeId = output<string>();
   selectedTitheTypeId = signal<string>('');
+
 
   constructor(private titheTypeSvc: TitheTypeService) {
     super();

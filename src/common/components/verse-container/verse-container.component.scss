@@ -1,0 +1,58 @@
+  .scripture-card {
+      max-width: 760px;
+      margin: 2rem auto;
+      background: #fffdfa;
+      border: 1px solid rgba(180, 154, 106, 0.35);
+      border-radius: 1.2rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .scripture-header {
+      letter-spacing: 0.08em;
+      font-variant-caps: small-caps;
+      color: #6e5a3a;
+    }
+
+    .ornament {
+      height: 1px;
+      background-image: linear-gradient(to right, transparent, var(--accent), transparent);
+      margin: .75rem 0 1.25rem;
+    }
+
+    .verse {
+      font-size: 1rem;
+      line-height: 1.8;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    /* Drop cap for first letter */
+    .verse:first-letter {
+      float: left;
+      font-size: 2rem;
+      line-height: .9;
+      padding-right: .25rem;
+      padding-top: .15rem;
+      font-weight: 600;
+      color: #5b4526;
+    }
+
+    .quote-mark {
+      font-size: 2.2rem;
+      line-height: 0;
+      vertical-align: -0.35em;
+      opacity: .7;
+    }
+
+    .reference {
+      color: #7b6747;
+      font-variant-caps: small-caps;
+      letter-spacing: 0.06em;
+      font-size: .5rem;
+    }
+
+    .attribution {
+      color: #9a8666;
+      font-size: .5rem;
+    }

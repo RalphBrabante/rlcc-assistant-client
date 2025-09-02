@@ -11,15 +11,21 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddNewTitheModalComponent } from './components/add-new-tithe-modal/add-new-tithe-modal.component';
 import { ActiveMembersLookupDropdownModule } from '../../../common/components/active-members-lookup-dropdown/active-members-lookup-dropdown.module';
 import { ActiveTitheTypeDropdownModule } from "../../../common/components/active-tithe-type-dropdown/active-tithe-type-dropdown.module";
+import { DeleteConfirmationModalModule } from '../../../common/components/delete-confirmation-modal/delete-confirmation-modal.module';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { EditTithePageComponent } from './components/edit-tithe-page/edit-tithe-page.component';
 
 @NgModule({
   declarations: [
     TithesPageComponent,
     TithesTableComponent,
     UserTithesTableComponent,
-    AddNewTitheModalComponent
+    AddNewTitheModalComponent,
+    EditTithePageComponent
   ],
   imports: [
+    NgbTooltip,
+    DeleteConfirmationModalModule,
     ActiveMembersLookupDropdownModule,
     ActiveTitheTypeDropdownModule,
     ReactiveFormsModule,
