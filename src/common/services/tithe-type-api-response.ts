@@ -1,10 +1,17 @@
-import { TitheType } from '../../features/pages/tithe-type/models/tithe-type';
+import { TitheType } from '../../features/pages/tithe-type-page/models/tithe-type';
 
 export interface TitheTypeApiResponse {
   status: number;
   titheTypes: {
     count: number;
     rows: TitheType[];
+  };
+  titheType?: {
+    id?: number;
+    name?: number;
+    isActive?: boolean;
+    createdAt: string;
+    updatedAt: string;
   };
 }
 

@@ -1,0 +1,36 @@
+<div class="modal fade" id="titheCreateModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-3">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Create Tithe</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="titheModalClose"></button>
+      </div>
+      <form [formGroup]="titheForm" (ngSubmit)="submit()">
+        <div class="modal-body">
+          
+          <!-- Name -->
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input formControlName="name" type="text" class="form-control" placeholder="Enter tithe name">
+            <div class="text-danger small" *ngIf="titheForm.get('name')?.invalid && titheForm.get('name')?.touched">
+              Name is required.
+            </div>
+          </div>
+
+
+    
+          <!-- Active -->
+          <!-- <div class="form-check form-switch mb-3">
+            <input formControlName="isActive" class="form-check-input" type="checkbox" role="switch">
+            <label class="form-check-label">Active</label>
+          </div> -->
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="titheForm.invalid">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

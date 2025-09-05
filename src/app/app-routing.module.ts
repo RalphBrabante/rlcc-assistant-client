@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { loginPageGuard } from '../common/guards/login-page.guard';
 import { appDashboardGuard } from '../common/guards/app-dashboard.guard';
+import { adminGuard } from '../common/guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -26,6 +27,30 @@ const routes: Routes = [
     loadChildren: () =>
       import('../features/pages/tithes-page/tithes-page.module').then(
         (m) => m.TithesPageModule
+      ),
+  },
+  {
+    path: 'tithe-types',
+    canActivate: [appDashboardGuard, adminGuard],
+    loadChildren: () =>
+      import('../features/pages/tithe-type-page/tithe-type-page.module').then(
+        (m) => m.TitheTypePageModule
+      ),
+  },
+  {
+    path: 'life-group-types',
+    canActivate: [appDashboardGuard, adminGuard],
+    loadChildren: () =>
+      import(
+        '../features/pages/life-group-types-page/life-group-types-page.module'
+      ).then((m) => m.LifeGroupTypesPageModule),
+  },
+  {
+    path: 'settings',
+    canActivate: [appDashboardGuard, adminGuard],
+    loadChildren: () =>
+      import('../features/pages/settings-page/settings-page.module').then(
+        (m) => m.SettingsPageModule
       ),
   },
   {

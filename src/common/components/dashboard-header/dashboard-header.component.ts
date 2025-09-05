@@ -16,4 +16,16 @@ export class DashboardHeaderComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     this.loggedInUserName.set(this.authSvc.getFullName());
   }
+
+  isAdmin() {
+    const userRoles = this.authSvc.getRoles();
+    if (
+      userRoles.includes('SUPERUSER') ||
+      userRoles.includes('ADMINISTRATOR') ||
+      userRoles.includes('ACCOUNTANT')
+    ) {
+      return true;
+    }
+    return false;
+  }
 }

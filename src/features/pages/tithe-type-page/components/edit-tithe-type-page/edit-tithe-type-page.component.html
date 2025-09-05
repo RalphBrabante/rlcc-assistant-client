@@ -1,0 +1,71 @@
+<app-dashboard-header />
+
+<main class="container my-4">
+  <div class="card shadow-lg rounded-3 border-0">
+    <div class="card-body p-4">
+      <!-- Show this while loading -->
+      <div *ngIf="isLoading(); else formTemplate">
+        <!-- Date Received -->
+        <div class="mb-3">
+          <span class="placeholder col-4 mb-2"></span>
+          <span class="placeholder col-12 form-control"></span>
+        </div>
+
+        <!-- Amount -->
+        <div class="mb-3">
+          <span class="placeholder col-4 mb-2"></span>
+          <span class="placeholder col-12 form-control"></span>
+        </div>
+
+        <!-- Dropdown -->
+        <div class="mb-3">
+          <span class="placeholder col-4 mb-2"></span>
+          <span class="placeholder col-12 form-control"></span>
+        </div>
+
+        <!-- Button -->
+        <div class="d-grid">
+          <span class="placeholder col-12 btn btn-primary disabled"></span>
+        </div>
+      </div>
+
+      <!-- Actual Form -->
+      <ng-template #formTemplate>
+        <!-- your form code here -->
+        <h5 class="card-title mb-4 text-primary fw-bold">Update Tithe</h5>
+
+        <form [formGroup]="titheForm" novalidate>
+          <!-- Date Received -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              formControlName="name"
+              placeholder="Name"
+            />
+            <label for="name">Name</label>
+            @if(name.invalid && name.touched){
+            <div class="text-danger small mt-1">Name is required.</div>
+            }
+          </div>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            class="btn btn-primary w-100 py-2 mt-3"
+            (click)="saveTithe()"
+          >
+            Update
+          </button>
+        </form>
+      </ng-template>
+    </div>
+  </div>
+</main>
+
+<!-- <main class="container my-4">
+  <div class="card shadow-lg rounded-3 border-0">
+    <div class="card-body p-4"></div>
+  </div>
+</main> -->

@@ -1,5 +1,5 @@
 import { Component, input, OnInit, output, signal } from '@angular/core';
-import { TitheType } from '../../../features/pages/tithe-type/models/tithe-type';
+import { TitheType } from '../../../features/pages/tithe-type-page/models/tithe-type'
 import { BaseComponent } from '../../directives/base-component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TitheTypeService } from '../../services/tithe-type.service';

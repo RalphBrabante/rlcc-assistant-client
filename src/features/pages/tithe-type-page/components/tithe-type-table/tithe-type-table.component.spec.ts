@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TitheTypeComponent } from './tithe-type.component';
+import { TitheTypeTableComponent } from './tithe-type-table.component';
 
-describe('TitheTypeComponent', () => {
-  let component: TitheTypeComponent;
-  let fixture: ComponentFixture<TitheTypeComponent>;
+describe('TitheTypeTableComponent', () => {
+  let component: TitheTypeTableComponent;
+  let fixture: ComponentFixture<TitheTypeTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TitheTypeComponent]
+      imports: [TitheTypeTableComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TitheTypeComponent);
+    fixture = TestBed.createComponent(TitheTypeTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

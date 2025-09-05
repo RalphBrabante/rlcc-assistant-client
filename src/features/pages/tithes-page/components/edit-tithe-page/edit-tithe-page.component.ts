@@ -1,6 +1,5 @@
 import {
   Component,
-  effect,
   OnInit,
   output,
   signal,
@@ -16,11 +15,10 @@ import {
 } from '@angular/forms';
 import { TithesService } from '../../../../../common/services/tithes.service';
 import { formatToTwoDecimals } from '../../../../../utils/decimalFormatter';
-import { finalize, single, takeUntil } from 'rxjs';
-import { Tithe } from '../../models/tithe';
+import { finalize, takeUntil } from 'rxjs';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActiveTitheTypeDropdownComponent } from '../../../../../common/components/active-tithe-type-dropdown/active-tithe-type-dropdown.component';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-edit-tithe-page',
@@ -43,7 +41,7 @@ export class EditTithePageComponent extends BaseComponent implements OnInit {
     private fb: FormBuilder,
     private titheSvc: TithesService,
     private route: ActivatedRoute,
-    private router:Router
+    private router: Router
   ) {
     super();
 
@@ -75,7 +73,6 @@ export class EditTithePageComponent extends BaseComponent implements OnInit {
       )
       .subscribe({
         next: (resp) => {
-         
           this.amount.setValue(resp.tithe?.amount);
           this.memberId.setValue(resp.tithe?.giver?.id);
           this.dateReceived.setValue(
@@ -157,7 +154,7 @@ export class EditTithePageComponent extends BaseComponent implements OnInit {
         )
         .subscribe({
           next: (resp) => {
-            this.router.navigate(['/tithes',this.id])
+            this.fetchTitheData();
           },
         });
 

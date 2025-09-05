@@ -61,6 +61,43 @@ export class AuthService {
     return decoded.roles;
   }
 
+  isSuperUser() {
+    const token = this.getToken();
+
+    const decoded = jwtDecode<JwtPayload>(token!);
+
+    if (decoded.roles.includes('SUPERUSER')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isAdmin(): boolean {
+    const token = this.getToken();
+
+    const decoded = jwtDecode<JwtPayload>(token!);
+
+    if (decoded.roles.includes('ADMINISTRATOR')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isAccountant(): boolean {
+    const token = this.getToken();
+
+    const decoded = jwtDecode<JwtPayload>(token!);
+
+    console.log(decoded.roles);
+    if (decoded.roles.includes('ACCOUNTANT')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   getFullName(): string {
     const token = this.getToken();
 
