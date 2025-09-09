@@ -19,3 +19,9 @@
 #logo-text{
     color:#365133
 }
+
+/* Show submenu when hovering the parent */
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0; /* keeps alignment smooth */
+}

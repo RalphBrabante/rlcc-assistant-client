@@ -1,12 +1,6 @@
-import {
-  Component,
-  OnInit,
-  output,
-  signal,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, output, signal, ViewChild } from '@angular/core';
 import { BaseComponent } from '../../../../../common/directives/base-component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import {
   FormBuilder,
   FormControl,

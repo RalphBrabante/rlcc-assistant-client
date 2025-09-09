@@ -11,9 +11,10 @@ import {
   BaseChartDirective,
 } from 'ng2-charts';
 import { AllTitheChartComponent } from './components/all-tithe-chart/all-tithe-chart.component';
+import { AdminDashboardCardsComponent } from './components/admin-dashboard-cards/admin-dashboard-cards.component';
 
 @NgModule({
-  declarations: [DashboardPageComponent, UserTitheChartComponent, AllTitheChartComponent],
+  declarations: [DashboardPageComponent, UserTitheChartComponent, AllTitheChartComponent, AdminDashboardCardsComponent],
   imports: [
     BaseChartDirective,
     DashboardHeaderModule,

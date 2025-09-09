@@ -46,6 +46,14 @@ const routes: Routes = [
       ).then((m) => m.LifeGroupTypesPageModule),
   },
   {
+    path: 'circles',
+    canActivate: [appDashboardGuard],
+    loadChildren: () =>
+      import(
+        '../features/pages/circles-page/circles-page.module'
+      ).then((m) => m.CirclesPageModule),
+  },
+  {
     path: 'settings',
     canActivate: [appDashboardGuard, adminGuard],
     loadChildren: () =>

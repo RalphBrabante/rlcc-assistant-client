@@ -9,9 +9,17 @@ import { UserApiResponse } from './user-api-response';
   providedIn: 'root',
 })
 export class UserService {
+
+
   constructor(private http: HttpClient) {}
 
-  getAllActiveUsers(query:string): Observable<UserApiResponse> {
+  getAllActiveUsers(query: string): Observable<UserApiResponse> {
     return this.http.get<UserApiResponse>(baseUrl + '/users?name=' + query);
+  }
+
+  countAllActiveUsers(): Observable<{status:number, count:number}> {
+    return this.http.get<{ status: number; count: number }>(
+      baseUrl + '/users/count'
+    );
   }
 }

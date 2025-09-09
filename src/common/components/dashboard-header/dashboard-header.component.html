@@ -31,38 +31,57 @@
           <i class="bi bi-bar-chart me-1"></i> Dashboard
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item dropdown">
         <a
-          class="nav-link"
+          class="nav-link dropdown-toggle"
           routerLink="/tithes"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
           <i class="bi bi-people me-1"></i> Tithes
         </a>
+        @if(isAdmin()){
+        <ul class="dropdown-menu">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/tithe-types"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <i class="bi bi-card-list me-1"></i> Giving Types
+            </a>
+          </li>
+        </ul>
+        }
       </li>
-      @if(isAdmin()){
 
       <li class="nav-item">
         <a
           class="nav-link"
-          routerLink="/tithe-types"
+          routerLink="/circles"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
-          <i class="bi bi-card-list me-1"></i> Tithe Types
+          <i class="bi bi-universal-access-circle"></i> Circles
         </a>
+        @if(isAdmin()){
+        <ul class="dropdown-menu">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/life-group-types"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <i class="bi bi-card-list me-1"></i> Circles Types
+            </a>
+          </li>
+        </ul>
+        }
       </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          routerLink="/life-group-types"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          <i class="bi bi-card-list me-1"></i> Life Group Types
-        </a>
-      </li>
+      @if(isAdmin()){
+
       <li class="nav-item">
         <a
           class="nav-link"

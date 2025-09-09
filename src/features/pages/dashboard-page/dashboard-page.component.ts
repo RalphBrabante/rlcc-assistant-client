@@ -15,7 +15,20 @@ export class DashboardPageComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userRoles.set(this.authSvc.getRoles())
+    this.userRoles.set(this.authSvc.getRoles());
+  }
+
+  isAdmin() {
+    const roles = this.authSvc.getRoles();
+
+    if (
+      roles.includes('SUPERUSER') ||
+      roles.includes('ACCOUNTANT') ||
+      roles.includes('ADMINISTRATOR')
+    ) {
+      return true;
+    }
+    return false;
   }
 
 
