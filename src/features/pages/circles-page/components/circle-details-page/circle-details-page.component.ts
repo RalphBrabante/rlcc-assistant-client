@@ -1,10 +1,55 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Group } from '../../models/groups';
+import { GroupService } from '../../../../../common/services/group.service';
+import { BaseComponent } from '../../../../../common/directives/base-component';
+import { finalize, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-circle-details-page',
   templateUrl: './circle-details-page.component.html',
-  styleUrl: './circle-details-page.component.scss'
+  styleUrl: './circle-details-page.component.scss',
 })
-export class CircleDetailsPageComponent {
+export class CircleDetailsPageComponent
+  extends BaseComponent
+  implements OnInit
+{
+  group = signal<Group | null>(null);
+  id = signal<string | null>(null);
+  isLoading: boolean = false;
 
+  constructor(
+    private route: ActivatedRoute,
+    private grpSvc: GroupService,
+    private router: Router
+  ) {
+    super();
+  }
+
+  ngOnInit() {
+    // Simulate API call
+
+    this.route.paramMap.subscribe((params) => {
+      this.id.set(params.get('id')); // e.g. /receipt/123 → "123"
+      console.log('Record ID:', this.id());
+    });
+
+    this.isLoading = true;
+    this.grpSvc
+      .getGroupById(this.id()!)
+      .pipe(
+        finalize(() => (this.isLoading = false)),
+        takeUntil(this.unsubscribe)
+      )
+      .subscribe({
+        next: (resp) => {
+          this.group.set(resp.group!);
+        },
+        error: (err) => {
+          if (err.error.status === 403) {
+            this.router.navigate(['/forbidden']);
+          }
+        },
+      });
+  }
 }

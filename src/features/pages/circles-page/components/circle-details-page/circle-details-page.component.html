@@ -1,4 +1,104 @@
-<app-dashboard-header/>
+<app-dashboard-header />
 <main>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb" class="my-3">
+          <ol class="breadcrumb rounded-3 shadow-sm p-2 bg-white">
+            <li class="breadcrumb-item">
+              <a routerLink="/" class="d-flex align-items-center">
+                Dashboard
+              </a>
+            </li>
+            <li class="breadcrumb-item">
+              <a routerLink="/circles">Circles</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">ID</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- groups.component.html -->
+  <div class="container mt-4">
     <h2>Details</h2>
+    <div class="row g-4">
+      <!-- Left Column: Groups -->
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 mb-3">
+          <div class="card-body">
+            <h5 class="card-title fw-bold mb-1">Admins</h5>
+            <p class="mb-1 text-muted"><strong>ID:</strong> 1</p>
+            <p class="mb-1 text-muted"><strong>Members:</strong> 2</p>
+            <span class="badge bg-success">Active</span>
+          </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-3">
+          <div class="card-body">
+            <h5 class="card-title fw-bold mb-1">Editors</h5>
+            <p class="mb-1 text-muted"><strong>ID:</strong> 2</p>
+            <p class="mb-1 text-muted"><strong>Members:</strong> 3</p>
+            <span class="badge bg-primary">Active</span>
+          </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title fw-bold mb-1">Viewers</h5>
+            <p class="mb-1 text-muted"><strong>ID:</strong> 3</p>
+            <p class="mb-1 text-muted"><strong>Members:</strong> 5</p>
+            <span class="badge bg-secondary">Inactive</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Members Table -->
+      <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h4 class="fw-bold mb-3">Members of Admins</h4>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Status</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>101</td>
+                    <td>John</td>
+                    <td>Doe</td>
+                    <td><span class="badge bg-success">Active</span></td>
+                    <td class="text-center">
+                      <button class="btn btn-outline-danger btn-sm">
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>102</td>
+                    <td>Jane</td>
+                    <td>Smith</td>
+                    <td><span class="badge bg-secondary">Inactive</span></td>
+                    <td class="text-center">
+                      <button class="btn btn-outline-danger btn-sm">
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
