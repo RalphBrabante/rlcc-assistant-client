@@ -1,0 +1,22 @@
+<ng-template #assignCirclceMembersModal let-modal>
+  <div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">Assign Members to ({{group()?.name}})</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="circleForm">
+        <app-circle-member-search-field/>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+    <button class="btn btn-primary" (click)="saveGroup(modal)">Save</button>
+  </div>
+</ng-template>

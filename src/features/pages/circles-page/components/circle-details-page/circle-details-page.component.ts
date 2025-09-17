@@ -1,9 +1,11 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, viewChild, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Group } from '../../models/groups';
 import { GroupService } from '../../../../../common/services/group.service';
 import { BaseComponent } from '../../../../../common/directives/base-component';
 import { finalize, takeUntil } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AssignCirlceMembersModalComponent } from '../assign-cirlce-members-modal/assign-cirlce-members-modal.component';
 
 @Component({
   selector: 'app-circle-details-page',
@@ -14,6 +16,7 @@ export class CircleDetailsPageComponent
   extends BaseComponent
   implements OnInit
 {
+  modal = viewChild<AssignCirlceMembersModalComponent>('modal');
   group = signal<Group | null>(null);
   id = signal<string | null>(null);
   isLoading: boolean = false;
@@ -51,5 +54,9 @@ export class CircleDetailsPageComponent
           }
         },
       });
+  }
+
+  open() {
+    this.modal()?.openCreateCircleModal(this.group()!);
   }
 }

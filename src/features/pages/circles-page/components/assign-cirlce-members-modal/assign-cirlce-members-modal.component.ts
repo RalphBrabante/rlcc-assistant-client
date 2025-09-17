@@ -10,20 +10,18 @@ import {
 import { GroupService } from '../../../../../common/services/group.service';
 import { finalize, takeUntil } from 'rxjs';
 import { BaseComponent } from '../../../../../common/directives/base-component';
+import { Group } from '../../models/groups';
 
 @Component({
-  selector: 'app-create-circle-modal',
-  templateUrl: './create-circle-modal.component.html',
-  styleUrl: './create-circle-modal.component.scss',
+  selector: 'app-assign-cirlce-members-modal',
+  templateUrl: './assign-cirlce-members-modal.component.html',
+  styleUrl: './assign-cirlce-members-modal.component.scss',
 })
-export class CreateCircleModalComponent
-  extends BaseComponent
-  implements OnInit
-{
-  @ViewChild('createCircleModal') createCircleModal: any;
+export class AssignCirlceMembersModalComponent extends BaseComponent {
+  @ViewChild('assignCirclceMembersModal') assignCirclceMembersModal: any;
   circleForm!: FormGroup;
   isSaving = signal<boolean>(false);
-
+  group = signal<Group | null>(null);
   fetchData = output<boolean>();
 
   constructor(
@@ -43,10 +41,11 @@ export class CreateCircleModalComponent
     return this.circleForm.get('name') as FormControl;
   }
 
-  openCreateCircleModal() {
-    this.modalService.open(this.createCircleModal, {
+  openCreateCircleModal(payload: Group) {
+    this.group.set(payload);
+    this.modalService.open(this.assignCirclceMembersModal, {
       centered: true,
-      size: 'md',
+      size: 'lg',
     });
   }
 
