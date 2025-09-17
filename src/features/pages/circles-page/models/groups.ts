@@ -1,3 +1,5 @@
+import { GroupUser } from './user';
+
 export interface Group {
   id?: number;
   name: string;
@@ -12,4 +14,22 @@ export interface GroupsAPIResp {
   };
   group?: Group;
   id?: number;
+}
+
+export interface GroupUnassignedUsersAPIResp {
+  status: number;
+  data: {
+    count: number;
+    rows: GroupUser[];
+  };
+}
+
+export interface AssignUsersToGroupAPI {
+  status: number;
+  data: any[];
+}
+
+export interface GroupUsers {
+  userId: number;
+  groupId: number;
 }

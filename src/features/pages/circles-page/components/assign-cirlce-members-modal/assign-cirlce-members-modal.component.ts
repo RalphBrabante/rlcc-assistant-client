@@ -1,4 +1,12 @@
-import { Component, OnInit, output, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  input,
+  model,
+  OnInit,
+  output,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import {
@@ -10,7 +18,7 @@ import {
 import { GroupService } from '../../../../../common/services/group.service';
 import { finalize, takeUntil } from 'rxjs';
 import { BaseComponent } from '../../../../../common/directives/base-component';
-import { Group } from '../../models/groups';
+import { Group, GroupUsers } from '../../models/groups';
 
 @Component({
   selector: 'app-assign-cirlce-members-modal',
@@ -23,6 +31,8 @@ export class AssignCirlceMembersModalComponent extends BaseComponent {
   isSaving = signal<boolean>(false);
   group = signal<Group | null>(null);
   fetchData = output<boolean>();
+  groupId = input<number>();
+  userAndGroupIds = signal<GroupUsers[]>([]);
 
   constructor(
     private modalService: NgbModal,
@@ -31,7 +41,7 @@ export class AssignCirlceMembersModalComponent extends BaseComponent {
   ) {
     super();
     this.circleForm = this.fb.group({
-      name: ['', Validators.required],
+      name: [''],
     });
   }
 
@@ -49,30 +59,22 @@ export class AssignCirlceMembersModalComponent extends BaseComponent {
     });
   }
 
+  setDataset(data: any[]) {
+    this.userAndGroupIds.set(data);
+  }
   saveGroup(modal: any) {
-    console.log('saving');
-
     if (this.circleForm.invalid) {
       console.log('invalid');
       this.circleForm.markAllAsTouched(); // show errors on submit
       return;
     }
     if (this.circleForm.valid) {
-      const newTithe = this.circleForm.value;
-      console.log('Saving circle:', newTithe);
-
       this.groupSvc
-        .createGroup(this.circleForm.value)
-        .pipe(
-          finalize(() => {
-            this.fetchData.emit(true); // reload table
-          }),
-          takeUntil(this.unsubscribe)
-        )
+        .assignUsersToGroup(this.userAndGroupIds())
+        .pipe(takeUntil(this.unsubscribe))
         .subscribe({
-          next: (resp) => {
-            modal.close();
-            this.circleForm.reset();
+          next: () => {
+            modal.dismiss();
           },
         });
     }

@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import {
   Group,
   GroupsAPIResp,
+  GroupUnassignedUsersAPIResp,
+  GroupUsers,
 } from '../../features/pages/circles-page/models/groups';
 import { baseUrl } from '../../appConfig';
 import { Observable } from 'rxjs';
@@ -29,7 +31,17 @@ export class GroupService {
     return this.http.get<GroupsAPIResp>(baseUrl + `/groups/${id}`);
   }
 
-  getUnassignedUsers(searchKeyword:string): Observable<GroupsAPIResp> {
-    return this.http.get<GroupsAPIResp>(baseUrl + `/groups/unassigned-users?keyword=${searchKeyword}`);
+  getUnassignedUsers(
+    searchKeyword: string
+  ): Observable<GroupUnassignedUsersAPIResp> {
+    return this.http.get<GroupUnassignedUsersAPIResp>(
+      baseUrl + `/groups/unassigned-users?keyword=${searchKeyword}`
+    );
+  }
+
+  assignUsersToGroup(userAndGroupIds: GroupUsers[]): Observable<GroupsAPIResp> {
+    return this.http.post<GroupsAPIResp>(baseUrl + '/groups/assign', {
+      data: userAndGroupIds,
+    });
   }
 }

@@ -1,11 +1,17 @@
-.result{
- border: 1px solid #ededed;   
+.result {
+    border: 1px solid #ededed;
 }
-.data-row{
-    padding:7px;
+
+.data-row {
+    padding: 7px;
     border-bottom: 1px solid #ededed;
-    &:hover{
+
+    &:hover {
         background: #ededed;
+
+    }
+
+    & .bi {
         cursor: pointer;
     }
 }
