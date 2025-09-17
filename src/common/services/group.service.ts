@@ -25,7 +25,11 @@ export class GroupService {
     return this.http.delete<GroupsAPIResp>(baseUrl + `/groups/${id}`);
   }
 
-  getGroupById(id:string): Observable<GroupsAPIResp> {
+  getGroupById(id: string): Observable<GroupsAPIResp> {
     return this.http.get<GroupsAPIResp>(baseUrl + `/groups/${id}`);
+  }
+
+  getUnassignedUsers(searchKeyword:string): Observable<GroupsAPIResp> {
+    return this.http.get<GroupsAPIResp>(baseUrl + `/groups/unassigned-users?keyword=${searchKeyword}`);
   }
 }
