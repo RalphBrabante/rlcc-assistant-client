@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Group } from '../../models/groups';
 import { GroupService } from '../../../../../common/services/group.service';
 import { BaseComponent } from '../../../../../common/directives/base-component';
-import { finalize, takeUntil } from 'rxjs';
+import { finalize, takeUntil, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AssignCirlceMembersModalComponent } from '../assign-cirlce-members-modal/assign-cirlce-members-modal.component';
 
@@ -36,8 +36,11 @@ export class CircleDetailsPageComponent
       this.id.set(params.get('id')); // e.g. /receipt/123 → "123"
       console.log('Record ID:', this.id());
     });
+this.isLoading = true;
+    this.fetchData();
+  }
 
-    this.isLoading = true;
+  fetchData() {
     this.grpSvc
       .getGroupById(this.id()!)
       .pipe(

@@ -18,26 +18,43 @@
         </tr>
       </thead>
       <tbody>
-        @for (group of groupsData(); track $index) {
-        <tr>
-          <td>{{ group.id }}</td>
-          <td>{{ group.name }}</td>
-          <td>
-            <span class="badge" [ngClass]="group.isActive ? 'bg-success' : 'bg-secondary'">
-              {{ group.isActive ? "Active" : "Inactive" }}
-            </span>
-          </td>
-          <td class="text-end">
-            <button class="btn btn-sm btn-outline-primary me-1" ngbTooltip="View" [routerLink]="['./view', group.id]">
-              <i class="bi bi-eye"></i>
-            </button>
-         
-            <button class="btn btn-sm btn-outline-danger" ngbTooltip="Delete" (click)="onDeleteGroup(group.id!)">
-              <i class="bi bi-trash"></i>
-            </button>
-          </td>
-        </tr>
-        }
+        <!-- Placeholder row -->
+
+        <ng-content *ngIf="isLoading(); else groupData">
+
+          <tr class="placeholder-glow" *ngFor="let _ of [].constructor(10)">
+            <td><span class="placeholder  col-10"></span></td>
+            <td><span class="placeholder col-10"></span></td>
+            <td><span class="placeholder col-10"></span></td>
+            <td class="text-center"><span class="placeholder col-12"></span></td>
+          </tr>
+
+
+        </ng-content>
+
+
+        <ng-template #groupData>
+          @for (group of groupsData(); track $index) {
+          <tr>
+            <td>{{ group.id }}</td>
+            <td>{{ group.name }}</td>
+            <td>
+              <span class="badge" [ngClass]="group.isActive ? 'bg-success' : 'bg-secondary'">
+                {{ group.isActive ? "Active" : "Inactive" }}
+              </span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary me-1" ngbTooltip="View" [routerLink]="['./view', group.id]">
+                <i class="bi bi-eye"></i>
+              </button>
+
+              <button class="btn btn-sm btn-outline-danger" ngbTooltip="Delete" (click)="onDeleteGroup(group.id!)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+          }
+        </ng-template>
       </tbody>
     </table>
   </div>

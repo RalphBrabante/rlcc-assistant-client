@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, viewChild, ViewChild } from '@angular/core';
 import { BaseComponent } from '../../../../../common/directives/base-component';
 import { GroupService } from '../../../../../common/services/group.service';
-import { takeUntil } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs';
 import { Group } from '../../models/groups';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateCircleModalComponent } from '../create-circle-modal/create-circle-modal.component';
@@ -16,6 +16,7 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
   modal = viewChild<CreateCircleModalComponent>('modal');
   groupsData = signal<Group[]>([]);
   errorMessage = signal<string>('');
+  isLoading = signal<boolean>(false);
 
   constructor(private grpSvc: GroupService, private modalService: NgbModal) {
     super();
@@ -26,9 +27,15 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
   }
 
   fetchData() {
+    this.isLoading.set(true);
     this.grpSvc
       .getAllGroupsAndCount(1, 10)
-      .pipe(takeUntil(this.unsubscribe))
+      .pipe(
+        finalize(() => {
+          this.isLoading.set(false);
+        }),
+        takeUntil(this.unsubscribe)
+      )
       .subscribe({
         next: (resp) => {
           this.groupsData.set(resp.groups.rows);

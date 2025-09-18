@@ -59,6 +59,10 @@ export class AssignCirlceMembersModalComponent extends BaseComponent {
     });
   }
 
+  closeModal(modal: any) {
+    this.userAndGroupIds.set([]);
+    modal.dismiss();
+  }
   setDataset(data: any[]) {
     this.userAndGroupIds.set(data);
   }
@@ -71,7 +75,12 @@ export class AssignCirlceMembersModalComponent extends BaseComponent {
     if (this.circleForm.valid) {
       this.groupSvc
         .assignUsersToGroup(this.userAndGroupIds())
-        .pipe(takeUntil(this.unsubscribe))
+        .pipe(
+          finalize(() => {
+            this.fetchData.emit(true);
+          }),
+          takeUntil(this.unsubscribe)
+        )
         .subscribe({
           next: () => {
             modal.dismiss();

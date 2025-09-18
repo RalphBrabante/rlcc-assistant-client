@@ -3,6 +3,7 @@ import { GroupUser } from './user';
 export interface Group {
   id?: number;
   name: string;
+  groupMembers?: GroupUser[];
   isActive: boolean;
 }
 

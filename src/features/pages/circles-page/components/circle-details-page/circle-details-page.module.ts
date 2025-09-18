@@ -7,6 +7,7 @@ import { DashboardHeaderModule } from '../../../../../common/components/dashboar
 import { AssignCirlceMembersModalComponent } from '../assign-cirlce-members-modal/assign-cirlce-members-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CircleMemberSearchFieldComponent } from '../circle-member-search-field/circle-member-search-field.component';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { CircleMemberSearchFieldComponent } from '../circle-member-search-field/
     CircleDetailsPageComponent,
   ],
   imports: [
+    NgbTooltip,
     ReactiveFormsModule,
     CommonModule,
     CircleDetailsPageRoutingModule,

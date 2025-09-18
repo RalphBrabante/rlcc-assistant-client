@@ -1,80 +1,144 @@
 <app-dashboard-header />
-<app-assign-cirlce-members-modal #modal [groupId]="group()?.id"/>
+<app-assign-cirlce-members-modal #modal [groupId]="group()?.id" (fetchData)="fetchData()" />
 <main>
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <nav aria-label="breadcrumb" class="my-3">
-          <ol class="breadcrumb rounded-3 shadow-sm p-2 bg-white">
-            <li class="breadcrumb-item">
-              <a routerLink="/" class="d-flex align-items-center">
-                Dashboard
-              </a>
-            </li>
-            <li class="breadcrumb-item">
-              <a routerLink="/circles">Circles</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">ID</li>
-          </ol>
-        </nav>
-      </div>
-    </div>
-  </div>
 
-  <!-- groups.component.html -->
-  <div class="container mt-4">
-    <h2>Details</h2>
+  <!-- Placeholder -->
+  <div class="container mt-4" *ngIf="isLoading; else details">
+
+
     <div class="row g-4">
-      <!-- Left Column: Groups -->
       <div class="col-md-4">
-        <div class="card shadow-sm border-0 mb-3">
-          <div class="card-body">
-            <h5 class="card-title fw-bold mb-1">Circle Leader</h5>
-            <p class="mb-1 text-muted"><strong>Name:</strong> 2</p>
+        <!-- table-placeholder.component.html -->
+        <div class="p-4">
+
+          <div class="loader-overlay d-flex flex-column justify-content-center align-items-center">
+
+            <div class="w-75">
+              <div class="placeholder-glow mb-2">
+                <span class="placeholder col-12"></span>
+              </div>
+              <div class="placeholder-glow mb-2">
+                <span class="placeholder col-10"></span>
+              </div>
+              <div class="placeholder-glow">
+                <span class="placeholder col-8"></span>
+              </div>
+            </div>
           </div>
         </div>
 
-
       </div>
 
-      <!-- Right Column: Members Table -->
       <div class="col-md-8">
-        <div class="card shadow-sm border-0">
-          <div class="card-body">
-            <div class="d-flex justify-content-between mb-3">
-              <h4 class="fw-bold mb-3">Members</h4>
-              <button class="btn btn-sm btn-outline-primary" (click)="open()">Add Member <i class="bi bi-plus-circle"></i></button>
-            </div>
-            <div class="table-responsive">
-              <table class="table table-hover align-middle">
-                <thead class="table-light">
-                  <tr>
-                    <th>ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Status</th>
-                    <th class="text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>101</td>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td><span class="badge bg-success">Active</span></td>
-                    <td class="text-center">
-                      <button class="btn btn-outline-danger btn-sm">
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
+        <div class="p-4">
+          <div class="loader-overlay d-flex flex-column justify-content-center align-items-center">
 
-                </tbody>
-              </table>
+            <div class="w-75">
+              <div class="placeholder-glow mb-2">
+                <span class="placeholder col-12"></span>
+              </div>
+              <div class="placeholder-glow mb-2">
+                <span class="placeholder col-10"></span>
+              </div>
+              <div class="placeholder-glow">
+                <span class="placeholder col-8"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <ng-template #details>
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb" class="my-3">
+            <ol class="breadcrumb bg-light shadow-sm px-3 py-2 rounded-pill mb-0">
+              <li class="breadcrumb-item d-flex align-items-center">
+                <a routerLink="/" class="text-decoration-none d-flex align-items-center text-primary fw-semibold">
+                  <i class="bi bi-house-door me-1"></i> Dashboard
+                </a>
+              </li>
+              <li class="breadcrumb-item">
+                <a routerLink="/circles" class="text-decoration-none fw-semibold text-secondary">
+                  Circles
+                </a>
+              </li>
+              <li class="breadcrumb-item active fw-bold text-dark" aria-current="page">
+                {{group()?.name}}
+              </li>
+            </ol>
+          </nav>
+
+        </div>
+      </div>
+      <h2>Details</h2>
+
+      <div class="row g-4">
+        <!-- Left Column: Groups -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body">
+              <h5 class="card-title fw-bold mb-1">Members</h5>
+              <p class="mb-1 text-muted"><strong>Count:</strong> <span class="badge bg-success ms-2"
+                  style="font-size: 13px;">{{group()?.groupMembers?.length}}</span></p>
+            </div>
+          </div>
+
+
+        </div>
+
+        <!-- Right Column: Members Table -->
+        <div class="col-md-8">
+          <div class="card shadow-sm border-0">
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-3">
+                <h4 class="fw-bold mb-3">Members</h4>
+                <button class="btn btn-sm btn-outline-primary" (click)="open()">Add Member <i
+                    class="bi bi-plus-circle"></i></button>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>ID</th>
+                      <th>Full Name</th>
+                      <th>Status</th>
+                      <th class="text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (member of group()?.groupMembers; track $index) {
+                    <tr>
+                      <td>{{member.id}}</td>
+                      <td>{{member.firstName}} {{member.lastName}}</td>
+
+                      <td><span class="badge bg-success">Active</span></td>
+                      <td class="text-center">
+                        <button class="btn btn-sm btn-outline-danger me-1" ngbTooltip="Remove from Group">
+                          <i class="bi bi-person-x"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    }@empty {
+                    <tr>
+                      <td colspan="4" class="text-center text-muted">
+                        No members found
+                      </td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-template>
+
+
 </main>

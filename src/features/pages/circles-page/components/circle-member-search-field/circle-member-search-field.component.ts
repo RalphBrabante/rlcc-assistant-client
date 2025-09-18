@@ -47,7 +47,7 @@ export class CircleMemberSearchFieldComponent
     this.searchKeyword.valueChanges
       .pipe(
         debounceTime(1000),
-        filter((val: string) => val.length >= 3),
+        filter((val: string) => val.length >= 1),
         tap(() => {
           this.loading.set(true);
           this.searchKeyword.disable({ emitEvent: false });
@@ -92,6 +92,18 @@ export class CircleMemberSearchFieldComponent
 
     this.unassignedUsers.set([]);
     this.searchKeyword.setValue('');
+    this.emitIdDataSet.emit(this.membersToBeAdded.value);
+  }
+
+  removeToBeAddedMember(id: number) {
+    const index = this.membersToBeAdded.controls.findIndex(
+      (m) => m.value.userId == id
+    );
+
+    if (index !== -1) {
+      this.membersToBeAdded.removeAt(index);
+    }
+
     this.emitIdDataSet.emit(this.membersToBeAdded.value);
   }
 
