@@ -8,6 +8,13 @@ const routes: Routes = [
     component: TithesPageComponent,
   },
   {
+    path: 'add-bulk',
+    loadChildren: () =>
+      import(
+        './components/add-bulk-tithes-page/add-bulk-tithes-page-routing.module'
+      ).then((m) => m.AddBulkTithesPageRoutingModule),
+  },
+  {
     path: ':id',
     loadChildren: () =>
       import('./components/tithe-single-page/tithe-single-page.module').then(
