@@ -16,6 +16,7 @@ export class ActiveTitheTypeDropdownComponent
 {
   titheTypes = signal<TitheType[]>([]);
   emitTitheTypeId = output<string>();
+  emitTitheTypeName = output<string>();
   selectedTitheTypeId = signal<string>('');
 
 
@@ -25,7 +26,10 @@ export class ActiveTitheTypeDropdownComponent
 
   selectTitheType($event: Event) {
     this.emitTitheTypeId.emit(($event.target as HTMLSelectElement).value);
+     this.emitTitheTypeName.emit(($event.target as HTMLSelectElement).selectedOptions[0].text);
   }
+
+
 
   ngOnInit(): void {
     this.titheTypeSvc

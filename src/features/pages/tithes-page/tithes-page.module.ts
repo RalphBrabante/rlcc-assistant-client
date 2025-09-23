@@ -14,6 +14,8 @@ import { ActiveTitheTypeDropdownModule } from "../../../common/components/active
 import { DeleteConfirmationModalModule } from '../../../common/components/delete-confirmation-modal/delete-confirmation-modal.module';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { EditTithePageComponent } from './components/edit-tithe-page/edit-tithe-page.component';
+import { AddBulkTithesPageComponent } from './components/add-bulk-tithes-page/add-bulk-tithes-page.component';
+import { VerseContainerModule } from "../../../common/components/verse-container/verse-container.module";
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { EditTithePageComponent } from './components/edit-tithe-page/edit-tithe-
     TithesTableComponent,
     UserTithesTableComponent,
     AddNewTitheModalComponent,
-    EditTithePageComponent
+    EditTithePageComponent,
+    AddBulkTithesPageComponent
   ],
   imports: [
     NgbTooltip,
@@ -35,7 +38,8 @@ import { EditTithePageComponent } from './components/edit-tithe-page/edit-tithe-
     CommonModule,
     TithesPageRoutingModule,
     PaginationModule,
-    ActiveTitheTypeDropdownModule
+    ActiveTitheTypeDropdownModule,
+    VerseContainerModule
 ],
 })
 export class TithesPageModule {}

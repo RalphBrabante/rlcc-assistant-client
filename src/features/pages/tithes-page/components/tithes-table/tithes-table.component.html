@@ -37,10 +37,15 @@
       </div> -->
 
       <!-- Add Button -->
-      <app-add-new-tithe-modal #modal (fetchData)="fetchData()" />
-      <button class="btn btn-primary btn-sm" (click)="open()">
-        <i class="bi bi-plus-lg me-1"></i>Add New
+   <div>
+       <app-add-new-tithe-modal #modal (fetchData)="fetchData()" />
+       <button class="btn btn-primary btn-sm me-2" [routerLink]="['add-bulk']">
+        <i class="bi bi-plus-lg me-1"></i>Add Bulk
       </button>
+      <button class="btn btn-primary btn-sm" (click)="open()">
+        <i class="bi bi-plus-lg me-1"></i>Add One
+      </button>
+   </div>
     </div>
 
     <!-- Card Body -->

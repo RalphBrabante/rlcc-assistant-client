@@ -1,0 +1,27 @@
+ /* small transition for a nice fade */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .35rem .6rem;
+      border-radius: 999px; /* pill */
+      transition: opacity .18s ease, transform .18s ease;
+      will-change: opacity, transform;
+    }
+    .tag.removing {
+      opacity: 0;
+      transform: scale(.95);
+    }
+    /* adjust close button to be smaller inside badge */
+    .tag .btn-close {
+      --bs-btn-padding-x: 0;
+      --bs-btn-padding-y: 0;
+      width: 0.9rem;
+      height: 0.9rem;
+      margin-left: .15rem;
+      opacity: .95;
+    }
+    /* white close icon for dark badges (primary/dark) */
+    .btn-close-white {
+      filter: invert(1) sepia(0) saturate(0) hue-rotate(0deg) brightness(2);
+    }
