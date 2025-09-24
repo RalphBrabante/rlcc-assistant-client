@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { baseUrl } from '../../appConfig';
 import {
+  BulkTithePayload,
   Tithe,
   TitheAPIResp,
 } from '../../features/pages/tithes-page/models/tithe';
@@ -13,6 +14,15 @@ import { TitheReportApiResponse } from './tithe-type-api-response';
 })
 export class TithesService {
   constructor(private http: HttpClient) {}
+
+  /**
+   * 
+   * @param tithes - array of tithes []
+   * @returns - observable
+   */
+  createBulkTithes(tithes: BulkTithePayload[]) {
+    return this.http.post<TitheAPIResp>(baseUrl + `/tithes/bulk-create`, { tithes });
+  }
 
   getAllTithes(limit: string, page: string): Observable<TitheAPIResp> {
     return this.http.get<TitheAPIResp>(

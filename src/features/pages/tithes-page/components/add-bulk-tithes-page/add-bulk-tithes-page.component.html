@@ -2,82 +2,119 @@
 
 <main>
   <div class="container mx-auto p-6 ,t-25">
+
+
     <div>
-      <table class="min-w-full border border-gray-200 rounded-lg shadow-sm w-100">
-        <thead class="bg-gray-100 text-left">
-          <tr>
-            <th class="px-4 py-2 text-sm font-semibold text-gray-700">Member Name/ID</th>
-            <th class="px-4 py-2 text-sm font-semibold text-gray-700">Type of Giving</th>
-            <th class="px-4 py-2 text-sm font-semibold text-gray-700">Amount</th>
-            <th class="px-4 py-2 text-sm font-semibold text-gray-700">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
 
-          <tr>
-            <td class="px-4 py-3">
+      <div class="container my-3">
+        <div class="border rounded-3 shadow-sm bg-white p-3 mb-3">
+          <div class="row g-3 align-items-end">
 
+            @if(isSuccess()){
+            <ngb-alert type="success" class="mt-2 mb-2s">All Tithe Data is added to queue and will be genearated
+              shortly.</ngb-alert>
+            }
+
+            <!-- Member Name / ID -->
+            <div class="col-12 col ">
               @if(fullName.value){
-              <!-- Tag container -->
               <div id="tags" aria-live="polite">
-                <!-- Example tag -->
-                <span class="tag bg-primary text-white me-1" data-value="example">
-                  <span class="tag-label">{{fullName.value}}</span>
-                  <button type="button" class="btn-close btn-close-white" aria-label="Remove tag"
+                <span class="badge bg-primary d-inline-flex align-items-center me-1" data-value="example">
+                  <span class="me-2">{{ fullName.value }}</span>
+                  <button type="button" class="btn-close btn-close-white btn-sm" aria-label="Remove tag"
                     (click)="clearMemberIdAndName()"></button>
                 </span>
-
               </div>
-              }@else {
-              <app-active-members-lookup-dropdown (emitMemberId)="setUserId($event)"
+              }@else{
+              <app-active-members-lookup-dropdown (emitMemberId)="setMemberId($event)"
                 (emitMemberName)="setFullName($event)" />
               }
-            </td>
-            <td class="px-4 py-3">
+            </div>
+
+            <!-- Type of Giving -->
+            <div class="col-12 col">
               <app-active-tithe-type-dropdown (emitTitheTypeId)="setTitheTypeId($event)"
                 (emitTitheTypeName)="setTitheTypeName($event)" />
-            </td>
-            <td class="px-4 py-3">
+            </div>
+
+
+            <!-- Date Received -->
+            <div class="col-12 col">
               <form [formGroup]="form">
-                <input type="text" placeholder="0.00" (input)="formatToTwoDecimals($event)"
-                  class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                <label for="">Date Received</label>
+                <input type="date" class="form-control" formControlName="dateReceived">
+              </form>
+            </div>
+
+            <!-- Amount -->
+            <div class="col-12 col">
+              <form [formGroup]="form">
+                <label for="">Amount</label>
+                <input type="text" placeholder="0.00" (input)="formatToTwoDecimals($event)" class="form-control"
                   formControlName="amount">
               </form>
-            </td>
-            <td class="px-4 py-3">
-              <button class="btn btn-success" (click)="addToList()" [disabled]="this.form.invalid"><i
-                  class="bi bi-plus-circle-fill"></i></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
 
-      <div class="table-responsive mt-4" *ngIf="tithesArray().length">
-        <table class="table table-hover align-middle text-center rounded-3 ">
-          <thead class="bg-gradient text-white" style="background: linear-gradient(90deg, #0d6efd, #6610f2);">
-            <tr>
-              <th scope="col">Full Name</th>
-              <th scope="col">Tithe Type</th>
-              <th scope="col">Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (tithe of tithesArray(); track $index) {
-            <tr>
-              <td class="fw-semibold">{{ tithe.fullName }}</td>
-              <td>
-                <span class="badge bg-default text-dark px-3 py-2 rounded-pill">
-                  {{ tithe.titheTypeName }}
+            <!-- Actions -->
+            <div class="col-12 col text-end">
+              <button class="btn btn-success" (click)="addToList()" [disabled]="this.form.invalid">
+                <i class="bi bi-plus-circle-fill"></i>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mt-4" *ngIf="tithesArray().length">
+
+        <div class=" border-0 rounded-3 w-100 mb-3">
+          <div class="card-body">
+            <div class="row text-center text-md-start g-2">
+              <div class="col-6 col-md-3 fw-semibold fw-bold">Member Name</div>
+              <div class="col-6 col-md-3 text-muted fw-bold">Tithe Type</div>
+              <div class="col-6 col-md-3 text-secondary fw-bold">Date Received</div>
+              <div class="col-6 col-md-3 fw-bold">
+                Amount
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        @for (tithe of tithesArray(); track $index) {
+
+        <div class="card shadow-sm border-0 rounded-3 w-100 mb-3">
+          <div class="card-body">
+            <div class="row align-items-center g-2">
+
+              <!-- Member -->
+              <div class="col-6 col-md-3 fw-semibold">{{ tithe.fullName }}</div>
+
+              <!-- Tithe Type -->
+              <div class="col-6 col-md-3 text-muted">{{ tithe.titheTypeName }}</div>
+
+              <!-- Date -->
+              <div class="col-6 col-md-3 text-secondary">{{ tithe.dateReceived }}</div>
+
+              <!-- Amount + Remove button -->
+              <div class="col-6 col-md-3 d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-success">
+                  {{ tithe.amount | currency :"PHP" }}
                 </span>
-              </td>
-              <td class="fw-bold text-success">{{ tithe.amount | currency :"PHP" }}</td>
-            </tr>
-            }
-          </tbody>
-        </table>
+                <button class="btn btn-sm btn-outline-danger ms-2" (click)="removeTithe(tithe.index)">
+                  <i class="bi bi-trash-fill"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+
 
         <div class="d-flex justify-content-center">
-          <button class="btn btn-primary">Process All <i class="bi bi-send-plus"></i></button>
+          <button class="btn btn-primary" (click)="processTithes()">Process All <i class="bi bi-send-plus"></i></button>
         </div>
       </div>
 

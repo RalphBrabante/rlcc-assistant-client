@@ -33,3 +33,13 @@ export interface TitheAPIResp {
   };
   tithe?: Tithe;
 }
+
+export interface BulkTithePayload {
+  index: number;
+  userId: number;
+  titheTypeId: number;
+  titheTypeName: string;
+  dateReceived: string;
+  amount: string;
+  fullName: string;
+}

@@ -9,14 +9,7 @@ import { ActiveTitheTypeDropdownModule } from '../../../../../common/components/
 @NgModule({
   declarations: [],
   imports: [
-    ActiveTitheTypeDropdownModule,
-    ActiveMembersLookupDropdownModule,
-    DashboardHeaderModule,
-    CommonModule,
     AddBulkTithesPageRoutingModule,
   ],
 })
-export class AddBulkTithesPageModule {
-
-  
-}
+export class AddBulkTithesPageModule {}
