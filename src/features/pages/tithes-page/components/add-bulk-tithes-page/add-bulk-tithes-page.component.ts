@@ -20,6 +20,7 @@ export class AddBulkTithesPageComponent extends BaseComponent {
   formatToTwoDecimals = formatToTwoDecimals;
   form!: FormGroup;
   isSuccess = signal<boolean>(false);
+  isProcessing = signal<boolean>(false);
 
   constructor(private fb: FormBuilder, private titheSvc: TithesService) {
     super();
@@ -93,6 +94,7 @@ export class AddBulkTithesPageComponent extends BaseComponent {
   }
 
   processTithes() {
+    this.isProcessing.set(true);
     this.isSuccess.set(false);
     this.titheSvc
       .createBulkTithes(this.tithesArray())
@@ -100,6 +102,7 @@ export class AddBulkTithesPageComponent extends BaseComponent {
       .subscribe({
         next: (resp) => {
           this.isSuccess.set(true);
+          this.isProcessing.set(false);
           this.tithesArray.set([]);
           this.form.reset();
         },

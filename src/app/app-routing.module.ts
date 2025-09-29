@@ -49,9 +49,9 @@ const routes: Routes = [
     path: 'circles',
     canActivate: [appDashboardGuard],
     loadChildren: () =>
-      import(
-        '../features/pages/circles-page/circles-page.module'
-      ).then((m) => m.CirclesPageModule),
+      import('../features/pages/circles-page/circles-page.module').then(
+        (m) => m.CirclesPageModule
+      ),
   },
   {
     path: 'settings',
@@ -60,6 +60,14 @@ const routes: Routes = [
       import('../features/pages/settings-page/settings-page.module').then(
         (m) => m.SettingsPageModule
       ),
+  },
+  {
+    path: 'profile',
+    canActivate: [appDashboardGuard],
+    loadChildren: () =>
+      import(
+        '../features/pages/edit-profile-page/edit-profile-page.module'
+      ).then((m) => m.EditProfilePageModule),
   },
   {
     path: 'forbidden',

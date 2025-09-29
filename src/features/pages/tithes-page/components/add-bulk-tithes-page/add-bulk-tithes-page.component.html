@@ -114,7 +114,16 @@
 
 
         <div class="d-flex justify-content-center">
-          <button class="btn btn-primary" (click)="processTithes()">Process All <i class="bi bi-send-plus"></i></button>
+          <!-- Normal Button -->
+          <button class="btn btn-primary" *ngIf="!isProcessing()" (click)="processTithes()">
+            Process All <i class="bi bi-send-plus"></i>
+          </button>
+
+          <!-- Loading Button -->
+          <button class="btn btn-primary" *ngIf="isProcessing()" disabled>
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Loading...
+          </button>
         </div>
       </div>
 
