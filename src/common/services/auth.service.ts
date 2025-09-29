@@ -10,6 +10,7 @@ import {
 import { jwtDecode } from 'jwt-decode';
 
 interface JwtPayload {
+  id: number;
   exp: number; // expiration timestamp in seconds
   roles: string[];
   name: string;
@@ -104,6 +105,14 @@ export class AuthService {
     const decoded = jwtDecode<JwtPayload>(token!);
 
     return decoded.name;
+  }
+
+  getId(): number {
+    const token = this.getToken();
+
+    const decoded = jwtDecode<JwtPayload>(token!);
+
+    return decoded.id;
   }
 
   isTokenExpired(): boolean {

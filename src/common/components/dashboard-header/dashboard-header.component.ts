@@ -9,6 +9,9 @@ import { AuthService } from '../../services/auth.service';
 })
 export class DashboardHeaderComponent extends BaseComponent implements OnInit {
   loggedInUserName = signal<string>('');
+
+  showSubmenu = signal<boolean>(false);
+
   constructor(private authSvc: AuthService) {
     super();
   }
@@ -27,5 +30,9 @@ export class DashboardHeaderComponent extends BaseComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  toggleSubmenu() {
+    this.showSubmenu.update((prevVal)=> !prevVal)
   }
 }

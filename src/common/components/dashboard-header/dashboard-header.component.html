@@ -6,15 +6,8 @@
   </a>
 
   <!-- Toggler for mobile -->
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-bs-toggle="collapse"
-    data-bs-target="#navbarNav"
-    aria-controls="navbarNav"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -22,33 +15,21 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav mx-auto">
       <li class="nav-item">
-        <a
-          class="nav-link"
-          routerLink="/dashboard"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
+        <a class="nav-link" routerLink="/dashboard" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
           <i class="bi bi-bar-chart me-1"></i> Dashboard
         </a>
       </li>
       <li class="nav-item dropdown">
-        <a
-          class="nav-link dropdown-toggle"
-          routerLink="/tithes"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
+        <a class="nav-link dropdown-toggle" routerLink="/tithes" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
           <i class="bi bi-people me-1"></i> Tithes
         </a>
         @if(isAdmin()){
         <ul class="dropdown-menu">
           <li class="nav-item">
-            <a
-              class="nav-link"
-              routerLink="/tithe-types"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-            >
+            <a class="nav-link" routerLink="/tithe-types" routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }">
               <i class="bi bi-card-list me-1"></i> Giving Types
             </a>
           </li>
@@ -57,23 +38,14 @@
       </li>
 
       <li class="nav-item">
-        <a
-          class="nav-link"
-          routerLink="/circles"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
+        <a class="nav-link" routerLink="/circles" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <i class="bi bi-universal-access-circle"></i> Circles
         </a>
         @if(isAdmin()){
         <ul class="dropdown-menu">
           <li class="nav-item">
-            <a
-              class="nav-link"
-              routerLink="/life-group-types"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-            >
+            <a class="nav-link" routerLink="/life-group-types" routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }">
               <i class="bi bi-card-list me-1"></i> Circles Types
             </a>
           </li>
@@ -83,12 +55,8 @@
       @if(isAdmin()){
 
       <li class="nav-item">
-        <a
-          class="nav-link"
-          routerLink="/settings"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
+        <a class="nav-link" routerLink="/settings" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
           <i class="bi bi-gear me-1"></i> Settings
         </a>
       </li>
@@ -96,25 +64,23 @@
     </ul>
 
     <!-- User profile -->
-    <ul class="navbar-nav ms-auto">
-      <li class="nav-item dropdown">
-        <a
-          class="nav-link dropdown-toggle d-flex align-items-center"
-          href="#"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <img
-            src="https://i.pravatar.cc/40"
-            alt="Profile"
-            class="rounded-circle me-2"
-            width="32"
-            height="32"
-          />
+    <ul class="navbar-nav ms-auto position-relative">
+      <li class="nav-item dropdown" (click)="toggleSubmenu()">
+        <a class="nav-link  d-flex align-items-center" [class.dropdown-toggle]="!showSubmenu()" role="button"
+          aria-expanded="false">
+          <img src="https://i.pravatar.cc/40" alt="Profile" class="rounded-circle me-2" width="32" height="32" />
           <span class="fw-semibold">{{ loggedInUserName() }}</span>
         </a>
       </li>
+      @if(showSubmenu()){
+
+      <ul class="navbar-nav ms-auto position-absolute profile-sub-items">
+        <li class="nav-item dropdown">
+          <a class="nav-link d-flex align-items-center" routerLink="/profile">Edit Profile</a>
+        </li>
+      </ul>
+      }
+
     </ul>
   </div>
 </nav>
