@@ -21,7 +21,7 @@ export class LoginPageComponent extends BaseComponent {
   formData = viewChild<LoginFormComponent>('formData');
   errorMessage = signal<string>('');
 
-  constructor(private authSvc: AuthService, private router:Router) {
+  constructor(private authSvc: AuthService, private router: Router) {
     super();
   }
 
@@ -44,12 +44,14 @@ export class LoginPageComponent extends BaseComponent {
       )
       .subscribe({
         next: (resp) => {
-           localStorage.setItem('RLCCAT', resp.data.token);
-  
-           this.router.navigate(['/dashboard']);
+          localStorage.setItem('RLCCAT', resp.data.token);
+
+          this.router.navigate(['/dashboard']).then(() => {
+            window.location.reload(); // optional: ensures complete app reinit
+          });
         },
         error: (error) => {
-          this.errorMessage.set(error.error.message)
+          this.errorMessage.set(error.error.message);
         },
       });
   }

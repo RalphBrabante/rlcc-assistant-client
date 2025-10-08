@@ -10,7 +10,7 @@ import {
 import { UserService } from '../../../common/services/user.service';
 import { BaseComponent } from '../../../common/directives/base-component';
 import { AuthService } from '../../../common/services/auth.service';
-import { delay, takeUntil } from 'rxjs';
+import { delay, single, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-edit-profile-page',
@@ -21,6 +21,8 @@ export class EditProfilePageComponent extends BaseComponent implements OnInit {
   profileForm!: FormGroup;
   loading = signal<boolean>(false);
   userId = signal<string>('');
+  avatar = signal<string>('');
+  pcoId = signal<string>('')
 
   constructor(
     private fb: FormBuilder,
@@ -107,6 +109,8 @@ export class EditProfilePageComponent extends BaseComponent implements OnInit {
           this.loading.set(false);
 
           this.userId.set(resp.data.id.toString());
+          this.avatar.set(resp.data.avatar!);
+          this.pcoId.set(resp.data.pcoId!);
         },
       });
   }

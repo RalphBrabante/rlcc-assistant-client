@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
 import { baseUrl } from '../../appConfig';
 import {
   AuthApiResponse,
   VerifyTokenResponse,
 } from '../../features/pages/login-page/models/auth-api-response';
 import { jwtDecode } from 'jwt-decode';
+import { ApiResponseWithoutData } from './api-response-without-data';
 
 interface JwtPayload {
   id: number;
@@ -134,7 +135,7 @@ export class AuthService {
     return !this.isTokenExpired();
   }
 
-  logout() {
-    localStorage.removeItem('RLCCAT');
+  logout(token:string): Observable<ApiResponseWithoutData> {
+    return this.http.delete<ApiResponseWithoutData>(`${baseUrl}/auth?token=${token}`);
   }
 }

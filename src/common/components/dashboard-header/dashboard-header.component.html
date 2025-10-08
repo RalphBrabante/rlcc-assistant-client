@@ -17,20 +17,20 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/dashboard" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }">
-          <i class="bi bi-bar-chart me-1"></i> Dashboard
+          <i class="bi bi-bar-chart me-1"></i> Analytics
         </a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" routerLink="/tithes" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }">
-          <i class="bi bi-people me-1"></i> Tithes
+          <i class="bi bi-people me-1"></i> Giving
         </a>
         @if(isAdmin()){
         <ul class="dropdown-menu">
           <li class="nav-item">
             <a class="nav-link" routerLink="/tithe-types" routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }">
-              <i class="bi bi-card-list me-1"></i> Giving Types
+              <i class="bi bi-card-list me-1"></i> Types
             </a>
           </li>
         </ul>
@@ -68,15 +68,19 @@
       <li class="nav-item dropdown" (click)="toggleSubmenu()">
         <a class="nav-link  d-flex align-items-center" [class.dropdown-toggle]="!showSubmenu()" role="button"
           aria-expanded="false">
-          <img src="https://i.pravatar.cc/40" alt="Profile" class="rounded-circle me-2" width="32" height="32" />
+          <img [src]="avatarSrc()" alt="Profile" class="rounded-circle me-2" width="32" height="32"
+            *ngIf="avatarSrc()" />
           <span class="fw-semibold">{{ loggedInUserName() }}</span>
         </a>
       </li>
       @if(showSubmenu()){
 
-      <ul class="navbar-nav ms-auto position-absolute profile-sub-items">
-        <li class="nav-item dropdown">
+      <ul class="navbar-nav ms-auto position-absolute profile-sub-items d-flex flex-column">
+        <li class="nav-item ">
           <a class="nav-link d-flex align-items-center" routerLink="/profile">Edit Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center" (click)="onLogout()" style="color:red;">Logout</a>
         </li>
       </ul>
       }

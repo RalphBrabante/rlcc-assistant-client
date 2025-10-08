@@ -8,6 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpInterceptor } from '../common/interceptors/http.interceptor';
+import { DashboardHeaderModule } from "../common/components/dashboard-header/dashboard-header.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,7 +18,8 @@ import { httpInterceptor } from '../common/interceptors/http.interceptor';
     CommonModule,
     AppRoutingModule,
     NgbModule,
-  ],
+    DashboardHeaderModule
+],
   providers:[provideHttpClient(withInterceptors([httpInterceptor]))],
   bootstrap: [AppComponent],
 })
