@@ -15,6 +15,12 @@ import { Observable } from 'rxjs';
 export class GroupService {
   constructor(private http: HttpClient) {}
 
+  countAllActiveGroups(): Observable<{ status: number; count: number }> {
+    return this.http.get<{ status: number; count: number }>(
+      baseUrl + '/groups/count'
+    );
+  }
+
   getAllGroupsAndCount(page: number, limit: number): Observable<GroupsAPIResp> {
     return this.http.get<GroupsAPIResp>(baseUrl + '/groups?limit=10&page=1');
   }

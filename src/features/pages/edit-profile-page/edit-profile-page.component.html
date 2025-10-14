@@ -168,6 +168,26 @@
                 </ng-template>
             </div>
         </div>
+
+
+        <div class="row mt-3">
+            <div class="col">
+                <h3>Roles</h3>
+                <div class="d-flex">
+                    @for (role of userRoles(); track $index) {
+
+
+<button type="button" class="btn btn-outline-secondary btn-sm rounded-pill me-2 d-flex align-items-center">
+  {{ role.name }}
+  <i class="bi bi-x-circle-fill ms-2 text-danger" style="font-size: 0.9rem;"></i>
+</button>
+
+
+                    }
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </main>

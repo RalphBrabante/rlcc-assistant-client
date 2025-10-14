@@ -3,6 +3,7 @@ import { BaseComponent } from '../../../../../common/directives/base-component';
 import { UserService } from '../../../../../common/services/user.service';
 import { takeUntil } from 'rxjs';
 import { AuthService } from '../../../../../common/services/auth.service';
+import { GroupService } from '../../../../../common/services/group.service';
 
 @Component({
   selector: 'app-admin-dashboard-cards',
@@ -14,8 +15,13 @@ export class AdminDashboardCardsComponent
   implements OnInit
 {
   activeUsersCount = signal<number>(0);
+  activeGroupsCount = signal<number>(0);
 
-  constructor(private usrSvc: UserService, private authSvc: AuthService) {
+  constructor(
+    private usrSvc: UserService,
+    private authSvc: AuthService,
+    private grpSvc: GroupService
+  ) {
     super();
   }
 
@@ -30,6 +36,15 @@ export class AdminDashboardCardsComponent
       .subscribe({
         next: (resp) => {
           this.activeUsersCount.set(resp.count);
+        },
+      });
+
+    this.grpSvc
+      .countAllActiveGroups()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: (resp) => {
+          this.activeGroupsCount.set(resp.count);
         },
       });
   }
