@@ -1,6 +1,6 @@
 <form [formGroup]="form">
     <div class="mb-3 text-start">
-        <ngb-alert type="danger">{{errorMessage()}}</ngb-alert>
+        <ngb-alert type="danger" *ngIf="errorMessage()">{{errorMessage()}}</ngb-alert>
     </div>
   <!-- Email -->
   <div class="mb-3 text-start">

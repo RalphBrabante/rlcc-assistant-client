@@ -77,7 +77,7 @@
 
       <ul class="navbar-nav ms-auto position-absolute profile-sub-items d-flex flex-column">
         <li class="nav-item ">
-          <a class="nav-link d-flex align-items-center" routerLink="/profile">Edit Profile</a>
+          <a class="nav-link d-flex align-items-center" routerLink="/profile" (click)="toggleSubmenu()">Edit Profile</a>
         </li>
         <li class="nav-item">
           <a class="nav-link d-flex align-items-center" (click)="onLogout()" style="color:red;">Logout</a>
