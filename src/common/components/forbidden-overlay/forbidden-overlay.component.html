@@ -1,0 +1,26 @@
+<ng-container *ngIf="forbiddenOverlaySvc.state$ | async as state">
+  <div class="forbidden-overlay" *ngIf="state.visible" (click)="dismiss()">
+    <section class="forbidden-panel" (click)="$event.stopPropagation()">
+      <button
+        type="button"
+        class="btn-close panel-close"
+        aria-label="Close"
+        (click)="dismiss()"
+      ></button>
+
+      <div class="icon-wrap">
+        <i class="bi bi-shield-lock-fill"></i>
+      </div>
+
+      <h3>{{ state.title }}</h3>
+      <p>{{ state.message }}</p>
+
+      <div class="panel-actions">
+        <button type="button" class="btn btn-primary px-4" (click)="dismiss()">
+          Okay
+        </button>
+      </div>
+    </section>
+  </div>
+</ng-container>
+

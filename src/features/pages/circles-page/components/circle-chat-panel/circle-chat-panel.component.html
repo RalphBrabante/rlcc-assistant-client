@@ -53,12 +53,13 @@
         [formControl]="messageControl"
         placeholder="Type your message..."
         [disabled]="sending()"
+        (keydown.enter)="onComposerEnter($event)"
       ></textarea>
       <button type="submit" class="btn btn-primary" [disabled]="sending() || messageControl.invalid">
         @if (sending()) {
           Sending...
         } @else {
-          Send
+          <i class="bi bi-send-fill"></i>
         }
       </button>
     </form>

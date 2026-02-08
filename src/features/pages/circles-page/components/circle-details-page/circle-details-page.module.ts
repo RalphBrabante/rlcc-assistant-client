@@ -19,6 +19,7 @@ import { CircleChatPanelComponent } from '../circle-chat-panel/circle-chat-panel
   ],
   imports: [
     NgbTooltip,
+    FormsModule,
     ReactiveFormsModule,
     CommonModule,
     CircleDetailsPageRoutingModule,

@@ -13,9 +13,10 @@ import {
 } from '@angular/common/http';
 import { httpInterceptor } from '../common/interceptors/http.interceptor';
 import { DashboardHeaderModule } from "../common/components/dashboard-header/dashboard-header.module";
+import { ForbiddenOverlayComponent } from '../common/components/forbidden-overlay/forbidden-overlay.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ForbiddenOverlayComponent],
   imports: [
     BrowserModule,
     RouterModule,

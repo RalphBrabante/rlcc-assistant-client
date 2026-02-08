@@ -41,6 +41,7 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
 
   private activeGroupId: number | null = null;
   private listenersBound = false;
+  private audioContext: AudioContext | null = null;
 
   constructor(
     private groupChatSvc: GroupChatService,
@@ -60,6 +61,8 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
   override ngOnDestroy(): void {
     this.leaveCurrentRoom();
     this.groupChatSocketSvc.disconnect();
+    this.audioContext?.close().catch(() => {});
+    this.audioContext = null;
     super.ngOnDestroy();
   }
 
@@ -155,6 +158,13 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
       });
   }
 
+  onComposerEnter(event: Event) {
+    const keyboardEvent = event as KeyboardEvent;
+    if (keyboardEvent.shiftKey) return;
+    event.preventDefault();
+    this.sendMessage();
+  }
+
   deleteMessage(messageId: number) {
     if (!this.activeGroupId || !this.canAccess) return;
 
@@ -196,12 +206,13 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
           (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
         )
       );
-      return;
+      return true;
     }
 
     const updated = [...current];
     updated[existingIndex] = message;
     this.messages.set(updated);
+    return false;
   }
 
   private scrollToBottom() {
@@ -217,11 +228,28 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
     this.listenersBound = true;
 
     this.groupChatSocketSvc
+      .onConnect()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(() => {
+        this.socketConnected.set(true);
+      });
+
+    this.groupChatSocketSvc
+      .onDisconnect()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(() => {
+        this.socketConnected.set(false);
+      });
+
+    this.groupChatSocketSvc
       .onNewMessage()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((payload) => {
         if (payload.groupId !== this.activeGroupId) return;
-        this.upsertMessage(payload.message);
+        const isNewMessage = this.upsertMessage(payload.message);
+        if (isNewMessage) {
+          this.playNewMessageSound();
+        }
         this.scrollToBottom();
       });
 
@@ -239,6 +267,42 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
       return this.authSvc.getId();
     } catch (error) {
       return 0;
+    }
+  }
+
+  private playNewMessageSound() {
+    try {
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as typeof window & { webkitAudioContext?: typeof AudioContext })
+          .webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      if (!this.audioContext) {
+        this.audioContext = new AudioContextClass();
+      }
+
+      if (this.audioContext.state === 'suspended') {
+        this.audioContext.resume().catch(() => {});
+      }
+
+      const now = this.audioContext.currentTime;
+      const oscillator = this.audioContext.createOscillator();
+      const gain = this.audioContext.createGain();
+
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(880, now);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+
+      oscillator.connect(gain);
+      gain.connect(this.audioContext.destination);
+
+      oscillator.start(now);
+      oscillator.stop(now + 0.22);
+    } catch (error) {
+      // Ignore notification sound errors to avoid impacting chat interactions.
     }
   }
 }
