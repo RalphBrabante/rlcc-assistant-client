@@ -6,6 +6,10 @@ import {
   GroupUnassignedUsersAPIResp,
   GroupUsers,
 } from '../../features/pages/circles-page/models/groups';
+import {
+  GroupTopicApiResponse,
+  GroupTopicsApiResponse,
+} from '../../features/pages/circles-page/models/group-topic';
 import { baseUrl } from '../../appConfig';
 import { Observable } from 'rxjs';
 
@@ -63,5 +67,22 @@ export class GroupService {
       baseUrl + `/groups/${groupId}/administrator/${userId}`,
       {}
     );
+  }
+
+  getGroupTopics(groupId: number | string): Observable<GroupTopicsApiResponse> {
+    return this.http.get<GroupTopicsApiResponse>(baseUrl + `/groups/${groupId}/topics`);
+  }
+
+  createGroupTopic(
+    groupId: number | string,
+    topic: { title: string; description?: string | null }
+  ): Observable<GroupTopicApiResponse> {
+    return this.http.post<GroupTopicApiResponse>(baseUrl + `/groups/${groupId}/topics`, {
+      topic,
+    });
+  }
+
+  getAllGroupTopics(): Observable<GroupTopicsApiResponse> {
+    return this.http.get<GroupTopicsApiResponse>(baseUrl + `/groups/topics`);
   }
 }

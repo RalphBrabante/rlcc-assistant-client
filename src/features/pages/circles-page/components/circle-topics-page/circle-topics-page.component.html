@@ -1,0 +1,35 @@
+<main class="app-page circle-topics-page">
+  <div class="app-shell">
+    <section class="app-shell-head">
+      <h2>All Circle Topics</h2>
+      <p class="app-shell-subtitle">Central view of discussion topics across all circles.</p>
+    </section>
+    <section class="app-shell-body">
+      @if (loading()) {
+      <p class="text-muted mb-0">Loading topics...</p>
+      } @else if (errorMessage()) {
+      <div class="alert alert-danger py-2 mb-0">{{ errorMessage() }}</div>
+      } @else {
+      <div class="topic-grid">
+        @for (topic of topics(); track topic.id) {
+        <article class="topic-card">
+          <div class="topic-card-head">
+            <h5 class="mb-0">{{ topic.title }}</h5>
+            <span class="circle-pill">{{ topic.group?.name }}</span>
+          </div>
+          @if (topic.description) {
+          <p class="mb-2">{{ topic.description }}</p>
+          }
+          <small class="text-muted">
+            {{ topic.creator?.firstName }} {{ topic.creator?.lastName }} ·
+            {{ topic.createdAt | date: 'medium' }}
+          </small>
+        </article>
+        } @empty {
+        <p class="text-muted mb-0">No circle topics available.</p>
+        }
+      </div>
+      }
+    </section>
+  </div>
+</main>

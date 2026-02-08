@@ -175,6 +175,36 @@
   margin-top: 1rem;
 }
 
+.topics-card {
+  border: 1px solid #dbe8ff;
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(19, 44, 87, 0.06);
+  padding: 1rem;
+}
+
+.topic-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.topic-item {
+  border: 1px solid #e3ecff;
+  border-radius: 0.75rem;
+  padding: 0.7rem 0.8rem;
+  background: #fafdff;
+}
+
+.topic-title {
+  font-weight: 700;
+  color: #14315b;
+}
+
+.topic-description {
+  color: #475b78;
+  font-size: 0.92rem;
+}
+
 @media (max-width: 991px) {
   .content-grid {
     grid-template-columns: 1fr;

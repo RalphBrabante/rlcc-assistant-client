@@ -32,8 +32,8 @@ export class RoleManagementService {
   updateRolePermissions(
     roleId: number,
     permissionIds: number[]
-  ): Observable<ApiResponse<{ role: ManagedRole }>> {
-    return this.http.patch<ApiResponse<{ role: ManagedRole }>>(
+  ): Observable<ApiResponse<{ role: ManagedRole; token?: string | null }>> {
+    return this.http.patch<ApiResponse<{ role: ManagedRole; token?: string | null }>>(
       `${baseUrl}/roles/${roleId}/permissions`,
       { permissionIds }
     );
@@ -62,8 +62,8 @@ export class RoleManagementService {
   updateUserRoles(
     userId: number,
     roleIds: number[]
-  ): Observable<ApiResponse<{ user: RoleAssignmentUser }>> {
-    return this.http.patch<ApiResponse<{ user: RoleAssignmentUser }>>(
+  ): Observable<ApiResponse<{ user: RoleAssignmentUser; token?: string | null }>> {
+    return this.http.patch<ApiResponse<{ user: RoleAssignmentUser; token?: string | null }>>(
       `${baseUrl}/roles/user-roles/users/${userId}`,
       { roleIds }
     );

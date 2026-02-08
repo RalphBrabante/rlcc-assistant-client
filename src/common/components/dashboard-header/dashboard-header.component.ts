@@ -98,6 +98,10 @@ export class DashboardHeaderComponent extends BaseComponent implements OnInit {
     return this.authSvc.getRoles().includes('SUPERUSER');
   }
 
+  isSuperOrAdministrator() {
+    return this.authSvc.isSuperUser() || this.authSvc.isAdmin();
+  }
+
   toggleSubmenu() {
     this.showSubmenu.update((prevVal) => !prevVal);
   }

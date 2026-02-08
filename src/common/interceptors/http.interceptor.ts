@@ -1,7 +1,7 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpEventType, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 import { baseUrl } from '../../appConfig';
 import { ForbiddenOverlayService } from '../services/forbidden-overlay.service';
 
@@ -27,6 +27,16 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   });
 
   return next(req).pipe(
+    tap((event) => {
+      if (event.type !== HttpEventType.Response) {
+        return;
+      }
+
+      const maybeToken = (event.body as any)?.data?.token;
+      if (typeof maybeToken === 'string' && maybeToken.trim()) {
+        localStorage.setItem('RLCCAT', maybeToken);
+      }
+    }),
     catchError((err) => {
       if (err?.status === 401) {
         localStorage.removeItem('RLCCAT');

@@ -150,6 +150,9 @@ export class RolesPermissionsPageComponent extends BaseComponent implements OnIn
       )
       .subscribe({
         next: (resp) => {
+          if (resp.data.token) {
+            localStorage.setItem('RLCCAT', resp.data.token);
+          }
           const updatedRole = resp.data.role;
           this.roles.set(
             this.roles().map((role) => (role.id === updatedRole.id ? updatedRole : role))

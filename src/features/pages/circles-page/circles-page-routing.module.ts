@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CirclesPageComponent } from './circles-page.component';
+import { superadminAdminGuard } from '../../../common/guards/superadmin-admin.guard';
 
 const routes: Routes = [
   {
@@ -13,6 +14,14 @@ const routes: Routes = [
       import(
         './components/circle-details-page/circle-details-page.module'
       ).then((m) => m.CircleDetailsPageModule),
+  },
+  {
+    path: 'topics',
+    canActivate: [superadminAdminGuard],
+    loadChildren: () =>
+      import(
+        './components/circle-topics-page/circle-topics-page.module'
+      ).then((m) => m.CircleTopicsPageModule),
   },
 ];
 

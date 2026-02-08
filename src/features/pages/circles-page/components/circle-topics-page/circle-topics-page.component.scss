@@ -1,0 +1,31 @@
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.9rem;
+}
+
+.topic-card {
+  border: 1px solid #dbe8ff;
+  border-radius: 0.85rem;
+  background: #ffffff;
+  padding: 0.9rem;
+  box-shadow: 0 8px 24px rgba(18, 43, 84, 0.07);
+}
+
+.topic-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+
+.circle-pill {
+  border: 1px solid #bed6ff;
+  border-radius: 999px;
+  background: #edf4ff;
+  color: #1e579d;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+}

@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { AuthService } from '../common/services/auth.service';
 import { filter } from 'rxjs';
 import { ConfigurationService } from '../common/services/configuration.service';
+import { GroupChatSocketService } from '../common/services/group-chat-socket.service';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ export class AppComponent implements OnInit {
   constructor(
     private authSvc: AuthService,
     private router: Router,
-    private configurationSvc: ConfigurationService
+    private configurationSvc: ConfigurationService,
+    private groupChatSocketSvc: GroupChatSocketService
   ) {}
 
   ngOnInit(): void {
@@ -32,6 +34,14 @@ export class AppComponent implements OnInit {
 
     refreshHeaderVisibility();
     this.fetchRuntimeSettings();
+    if (this.authSvc.isLoggedIn()) {
+      this.groupChatSocketSvc.connect();
+      this.groupChatSocketSvc.onAuthTokenUpdated().subscribe((payload) => {
+        if (payload?.token) {
+          localStorage.setItem('RLCCAT', payload.token);
+        }
+      });
+    }
 
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))

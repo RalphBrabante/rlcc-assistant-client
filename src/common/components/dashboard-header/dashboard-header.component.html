@@ -55,6 +55,13 @@
                     Circle Types
                   </a>
                 </li>
+                @if (isSuperOrAdministrator()) {
+                <li>
+                  <a class="dropdown-item" routerLink="/circles/topics" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    Circle Topics
+                  </a>
+                </li>
+                }
               </ul>
             }
           </li>

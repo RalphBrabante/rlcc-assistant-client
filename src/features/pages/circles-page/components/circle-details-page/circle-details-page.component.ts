@@ -9,6 +9,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteConfirmationModalComponent } from '../../../../../common/components/delete-confirmation-modal/delete-confirmation-modal.component';
 import { AuthService } from '../../../../../common/services/auth.service';
 import { GroupUser } from '../../models/user';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { GroupTopic } from '../../models/group-topic';
 
 @Component({
   selector: 'app-circle-details-page',
@@ -24,20 +26,32 @@ export class CircleDetailsPageComponent
   id = signal<string | null>(null);
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
+  topicErrorMessage = signal<string>('');
+  topicSuccessMessage = signal<string>('');
+  topics = signal<GroupTopic[]>([]);
+  topicsLoading = signal<boolean>(false);
+  creatingTopic = signal<boolean>(false);
   hasChatAccess = signal<boolean>(false);
   canRemoveMembers = signal<boolean>(false);
+  canCreateTopics = signal<boolean>(false);
   leaderAvatarFailed = signal<boolean>(false);
   currentUserId = 0;
+  topicForm!: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private grpSvc: GroupService,
     private modalService: NgbModal,
-    private authSvc: AuthService
+    private authSvc: AuthService,
+    private fb: FormBuilder
   ) {
     super();
     this.currentUserId = this.safeGetUserId();
     this.canRemoveMembers.set(this.authSvc.isAdmin() || this.authSvc.isSuperUser());
+    this.topicForm = this.fb.group({
+      title: ['', [Validators.required, Validators.maxLength(120)]],
+      description: ['', [Validators.maxLength(2000)]],
+    });
   }
 
   ngOnInit() {
@@ -62,11 +76,20 @@ export class CircleDetailsPageComponent
           const group = resp.data.group!;
           this.group.set(group);
           this.hasChatAccess.set(this.checkChatAccess(group));
+          this.canCreateTopics.set(
+            this.authSvc.isSuperUser() ||
+              this.authSvc.isAdmin() ||
+              group.leaderId === this.currentUserId ||
+              group.userId === this.currentUserId
+          );
           this.leaderAvatarFailed.set(false);
           this.errorMessage.set('');
+          this.fetchTopics();
         },
         error: (err) => {
           this.group.set(null);
+          this.topics.set([]);
+          this.canCreateTopics.set(false);
           this.hasChatAccess.set(false);
           this.leaderAvatarFailed.set(false);
           if (err?.status === 403) {
@@ -78,6 +101,76 @@ export class CircleDetailsPageComponent
           }
           this.errorMessage.set(
             err?.error?.message || 'Unable to load circle details.'
+          );
+        },
+      });
+  }
+
+  fetchTopics() {
+    const groupId = this.id();
+    if (!groupId) return;
+
+    this.topicsLoading.set(true);
+    this.topicErrorMessage.set('');
+    this.grpSvc
+      .getGroupTopics(groupId)
+      .pipe(
+        finalize(() => this.topicsLoading.set(false)),
+        takeUntil(this.unsubscribe)
+      )
+      .subscribe({
+        next: (resp) => {
+          this.topics.set(resp.data.topics || []);
+        },
+        error: (err) => {
+          this.topics.set([]);
+          this.topicErrorMessage.set(
+            err?.error?.message || 'Unable to load topics for this circle.'
+          );
+        },
+      });
+  }
+
+  get topicTitle() {
+    return this.topicForm.get('title') as FormControl;
+  }
+
+  get topicDescription() {
+    return this.topicForm.get('description') as FormControl;
+  }
+
+  onCreateTopic() {
+    if (!this.canCreateTopics()) return;
+    if (this.topicForm.invalid) {
+      this.topicForm.markAllAsTouched();
+      return;
+    }
+
+    const groupId = this.id();
+    if (!groupId) return;
+
+    this.creatingTopic.set(true);
+    this.topicErrorMessage.set('');
+    this.topicSuccessMessage.set('');
+
+    this.grpSvc
+      .createGroupTopic(groupId, {
+        title: String(this.topicTitle.value || '').trim(),
+        description: String(this.topicDescription.value || '').trim() || null,
+      })
+      .pipe(
+        finalize(() => this.creatingTopic.set(false)),
+        takeUntil(this.unsubscribe)
+      )
+      .subscribe({
+        next: () => {
+          this.topicForm.reset();
+          this.topicSuccessMessage.set('Topic created successfully.');
+          this.fetchTopics();
+        },
+        error: (err) => {
+          this.topicErrorMessage.set(
+            err?.error?.message || 'Unable to create topic.'
           );
         },
       });

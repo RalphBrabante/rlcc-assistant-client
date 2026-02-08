@@ -14,6 +14,12 @@ interface DeletedMessagePayload {
   messageId: number;
 }
 
+interface AuthTokenUpdatedPayload {
+  token: string;
+  userId: number;
+  reason?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -113,6 +119,18 @@ export class GroupChatSocketService {
 
       return () => {
         this.socket?.off('disconnect', handler);
+      };
+    });
+  }
+
+  onAuthTokenUpdated(): Observable<AuthTokenUpdatedPayload> {
+    return new Observable((observer) => {
+      this.connect();
+      const handler = (payload: AuthTokenUpdatedPayload) => observer.next(payload);
+      this.socket?.on('auth:token-updated', handler);
+
+      return () => {
+        this.socket?.off('auth:token-updated', handler);
       };
     });
   }

@@ -127,6 +127,74 @@
     </section>
 
     <section class="chat-section">
+      <article class="topics-card mb-3">
+        <div class="members-head">
+          <h3>Circle Topics</h3>
+        </div>
+
+        @if (canCreateTopics()) {
+        <form [formGroup]="topicForm" (ngSubmit)="onCreateTopic()" class="topic-form mb-3">
+          <div class="row g-2">
+            <div class="col-md-5">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Topic title"
+                formControlName="title"
+              />
+              @if (topicTitle.invalid && topicTitle.touched) {
+              <small class="text-danger">Title is required and must be 120 chars or fewer.</small>
+              }
+            </div>
+            <div class="col-md-5">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Description (optional)"
+                formControlName="description"
+              />
+              @if (topicDescription.invalid && topicDescription.touched) {
+              <small class="text-danger">Description must be 2000 chars or fewer.</small>
+              }
+            </div>
+            <div class="col-md-2 d-grid">
+              <button class="btn btn-primary" type="submit" [disabled]="creatingTopic()">
+                {{ creatingTopic() ? 'Creating...' : 'Create Topic' }}
+              </button>
+            </div>
+          </div>
+        </form>
+        }
+
+        @if (topicSuccessMessage()) {
+        <div class="alert alert-success py-2">{{ topicSuccessMessage() }}</div>
+        }
+        @if (topicErrorMessage()) {
+        <div class="alert alert-danger py-2">{{ topicErrorMessage() }}</div>
+        }
+
+        @if (topicsLoading()) {
+        <p class="text-muted mb-0">Loading topics...</p>
+        } @else {
+        <div class="topic-list">
+          @for (topic of topics(); track topic.id) {
+          <div class="topic-item">
+            <div class="topic-title">{{ topic.title }}</div>
+            @if (topic.description) {
+            <p class="topic-description mb-1">{{ topic.description }}</p>
+            }
+            <small class="text-muted">
+              {{ topic.creator?.firstName }} {{ topic.creator?.lastName }} ·
+              {{ topic.createdAt | date: 'medium' }}
+            </small>
+          </div>
+          } @empty {
+          <p class="text-muted mb-0">No topics yet for this circle.</p>
+          }
+        </div>
+        }
+      </article>
+
       <app-circle-chat-panel [groupId]="group()?.id || null" [canAccess]="hasChatAccess()" />
     </section>
   }

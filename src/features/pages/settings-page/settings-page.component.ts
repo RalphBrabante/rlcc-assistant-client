@@ -221,6 +221,9 @@ export class SettingsPageComponent extends BaseComponent implements OnInit {
       .subscribe({
         next: (resp) => {
           this.roleSaving.set(false);
+          if (resp.data.token) {
+            localStorage.setItem('RLCCAT', resp.data.token);
+          }
           this.selectedUser.set(resp.data.user);
           this.selectedRoleIds.set(resp.data.user.roles.map((role) => role.id));
           this.roleSearchResults.set(
