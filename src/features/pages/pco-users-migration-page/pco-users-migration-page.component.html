@@ -1,0 +1,129 @@
+<main class="pco-page">
+  <section class="pco-shell">
+    <header class="hero-card">
+      <p class="eyebrow mb-1">SUPERUSER ONLY</p>
+      <h1 class="mb-2">Planning Center User Processing</h1>
+      <p class="subtitle mb-0">
+        Fetch users from Planning Center by last name and enqueue them for migration.
+      </p>
+    </header>
+
+    <article class="panel mt-3">
+      <form [formGroup]="form" class="process-form">
+        <label for="lastName" class="form-label">Last Name</label>
+        <div class="input-row">
+          <input
+            id="lastName"
+            type="text"
+            class="form-control"
+            formControlName="lastName"
+            placeholder="e.g. Brabante"
+          />
+          <button
+            class="btn btn-outline-primary"
+            type="button"
+            (click)="previewUsersByLastName()"
+            [disabled]="isPreviewing() || isProcessing()"
+          >
+            @if (isPreviewing()) { Previewing... } @else { Preview Data }
+          </button>
+          <button class="btn btn-primary" type="button" (click)="processUsers()" [disabled]="isProcessing() || !previewUsers().length">
+            @if (isProcessing()) { Processing... } @else { Process to Queue }
+          </button>
+        </div>
+        <div class="bulk-action-row mt-2">
+          <button
+            class="btn btn-outline-secondary btn-sm"
+            type="button"
+            (click)="previewAllUsers()"
+            [disabled]="isPreviewing() || isProcessing() || isProcessingAll()"
+          >
+            @if (isPreviewing()) { Previewing All... } @else { Preview ALL Members }
+          </button>
+          <button
+            class="btn btn-outline-danger btn-sm"
+            type="button"
+            (click)="processAllUsers()"
+            [disabled]="isProcessingAll() || isProcessing() || isPreviewing()"
+          >
+            @if (isProcessingAll()) { Processing All... } @else { Process ALL PCO Members }
+          </button>
+        </div>
+
+        @if (lastName.invalid && lastName.touched) {
+          <small class="text-danger">Last name is required (minimum 2 characters).</small>
+        }
+      </form>
+
+      @if (successMessage()) {
+        <div class="alert alert-success mt-3 mb-0">{{ successMessage() }}</div>
+      }
+
+      @if (errorMessage()) {
+        <div class="alert alert-danger mt-3 mb-0">{{ errorMessage() }}</div>
+      }
+
+      <div class="endpoint-note mt-3">
+        Preview: <code>GET /api/v1/pco/previewUsers?lastName=...&page=...&limit=...</code><br />
+        Queue: <code>POST /api/v1/pco/migrateUsers?lastName=...</code><br />
+        Queue All: <code>POST /api/v1/pco/migrateAllUsers</code>
+      </div>
+    </article>
+
+    <article class="panel mt-3">
+      <header class="preview-head">
+        <h3 class="mb-0">Preview Results ({{ previewCount() }})</h3>
+      </header>
+
+      @if (!previewUsers().length && !isPreviewing()) {
+        <p class="text-muted mb-0">No preview data yet. Search by last name to load users.</p>
+      } @else {
+        <div class="table-responsive mt-3">
+          <table class="table table-sm align-middle mb-0">
+            <thead>
+              <tr>
+                <th>PCO ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of previewUsers(); track user.id) {
+                <tr>
+                  <td>{{ user.id }}</td>
+                  <td>
+                    {{ user.attributes.name || ((user.attributes.first_name || '') + ' ' + (user.attributes.last_name || '')) }}
+                  </td>
+                  <td>{{ user.attributes.status || '-' }}</td>
+                  <td>{{ user.attributes.created_at ? (user.attributes.created_at | date : 'medium') : '-' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        @if (previewTotalPages() > 1) {
+          <div class="preview-pagination mt-3">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-secondary"
+              (click)="previewPreviousPage()"
+              [disabled]="isPreviewing() || previewPage() <= 1"
+            >
+              Previous
+            </button>
+            <span class="page-text">Page {{ previewPage() }} of {{ previewTotalPages() }}</span>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-secondary"
+              (click)="previewNextPage()"
+              [disabled]="isPreviewing() || previewPage() >= previewTotalPages()"
+            >
+              Next
+            </button>
+          </div>
+        }
+      }
+    </article>
+  </section>
+</main>

@@ -90,7 +90,22 @@ export class AddBulkTithesPageComponent extends BaseComponent {
     this.index.setValue(this.index.value + 1);
     if (this.form.valid) {
       this.tithesArray.update((prevValue) => [this.form.value, ...prevValue]);
+      this.fullName.reset();
+      this.memberId.reset();
+      this.titheTypeId.reset();
+      this.titheTypeName.reset();
+      this.amount.reset();
     }
+  }
+
+  queuedCount() {
+    return this.tithesArray().length;
+  }
+
+  queuedTotalAmount() {
+    return this.tithesArray().reduce((sum, tithe) => {
+      return sum + Number(tithe.amount || 0);
+    }, 0);
   }
 
   processTithes() {
@@ -104,7 +119,14 @@ export class AddBulkTithesPageComponent extends BaseComponent {
           this.isSuccess.set(true);
           this.isProcessing.set(false);
           this.tithesArray.set([]);
-          this.form.reset();
+          this.form.patchValue({
+            index: 0,
+            memberId: null,
+            titheTypeId: null,
+            titheTypeName: null,
+            amount: null,
+            fullName: null,
+          });
         },
       });
   }

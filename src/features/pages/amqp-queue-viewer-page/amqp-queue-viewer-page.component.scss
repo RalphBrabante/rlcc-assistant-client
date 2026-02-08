@@ -1,0 +1,108 @@
+.queue-page {
+  padding: 1rem;
+}
+
+.queue-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero-card {
+  border: 1px solid #e0e8e2;
+  border-radius: 14px;
+  padding: 1.1rem 1.2rem;
+  background: linear-gradient(135deg, #eef7ef 0%, #f8fbf8 100%);
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #2f6f42;
+}
+
+.hero-card h1 {
+  font-size: 1.45rem;
+  margin: 0;
+  color: #183621;
+}
+
+.subtitle {
+  color: #4f6b56;
+}
+
+.panel {
+  border: 1px solid #e3ece4;
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  background: #ffffff;
+  box-shadow: 0 10px 28px -24px rgba(16, 39, 24, 0.95);
+}
+
+.lookup-form .form-label {
+  font-weight: 600;
+  color: #2d4d35;
+}
+
+.input-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.input-row .btn {
+  min-width: 145px;
+}
+
+.messages-head {
+  margin-bottom: 0.8rem;
+}
+
+.messages-head h3 {
+  font-size: 1.1rem;
+  color: #2d4d35;
+}
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.message-item {
+  border: 1px solid #e9efea;
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: #fcfefd;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.4rem;
+  font-size: 0.85rem;
+  color: #48634f;
+  margin-bottom: 0.55rem;
+}
+
+.payload {
+  margin: 0;
+  padding: 0.65rem;
+  border-radius: 8px;
+  background: #f4f7f4;
+  color: #26412d;
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 220px;
+  overflow: auto;
+}
+
+@media (max-width: 767.98px) {
+  .input-row {
+    flex-direction: column;
+  }
+
+  .input-row .btn {
+    width: 100%;
+  }
+}

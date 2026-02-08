@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class DashboardHeaderComponent extends BaseComponent implements OnInit {
   loggedInUserName = signal<string>('');
   avatarSrc = signal<string>('');
+  avatarLoadFailed = signal<boolean>(false);
   showSubmenu = signal<boolean>(false);
 
   constructor(
@@ -31,9 +32,32 @@ export class DashboardHeaderComponent extends BaseComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: (resp) => {
-          this.avatarSrc.set(resp.data.avatar!);
+          this.avatarSrc.set(resp.data.avatar || '');
+          this.avatarLoadFailed.set(false);
         },
       });
+  }
+
+  hasAvatar() {
+    return !!this.avatarSrc() && !this.avatarLoadFailed();
+  }
+
+  onAvatarError() {
+    this.avatarLoadFailed.set(true);
+  }
+
+  getAvatarInitials() {
+    const fullName = this.loggedInUserName().trim();
+    if (!fullName) {
+      return 'U';
+    }
+
+    const parts = fullName.split(/\s+/).filter(Boolean);
+    if (parts.length === 1) {
+      return parts[0].slice(0, 2).toUpperCase();
+    }
+
+    return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
   }
 
   onLogout() {

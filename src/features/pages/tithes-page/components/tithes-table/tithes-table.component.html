@@ -16,35 +16,23 @@
     }
 
     <!-- Card Header -->
-    <div
-      class="card-header bg-white d-flex justify-content-between align-items-center"
-    >
-      <h5 class="mb-0 fw-semibold">Tithes</h5>
-      <!-- Search Bar -->
-      <!-- <div class="position-relative">
-        <input
-          type="text"
-          class="form-control form-control-sm ps-5"
-          placeholder="Search tithes..."
-          [(ngModel)]="searchTerm"
-          (input)="onSearch()"
-          style="min-width: 220px; border-radius: 30px"
-        />
-        <i
-          class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
-        ></i>
-      </div> -->
+    <div class="card-header bg-white tithe-toolbar">
+      <div class="toolbar-copy">
+        <h5 class="mb-1 fw-semibold">Tithes</h5>
+        <p class="mb-0 text-muted">Add one record quickly or queue multiple entries in bulk.</p>
+      </div>
 
-      <!-- Add Button -->
-   <div>
-       <app-add-new-tithe-modal #modal (fetchData)="fetchData()" />
-       <button class="btn btn-primary btn-sm me-2" [routerLink]="['add-bulk']">
-        <i class="bi bi-plus-lg me-1"></i>Add Bulk
-      </button>
-      <button class="btn btn-primary btn-sm" (click)="open()">
-        <i class="bi bi-plus-lg me-1"></i>Add One
-      </button>
-   </div>
+      <div class="toolbar-actions">
+        <app-add-new-tithe-modal #modal (fetchData)="fetchData()" />
+        <button class="btn btn-outline-primary btn-sm toolbar-btn" [routerLink]="['add-bulk']">
+          <i class="bi bi-collection me-1"></i>
+          Add Bulk Tithes
+        </button>
+        <button class="btn btn-primary btn-sm toolbar-btn" (click)="open()">
+          <i class="bi bi-plus-circle me-1"></i>
+          Add One Tithe
+        </button>
+      </div>
     </div>
 
     <!-- Card Body -->

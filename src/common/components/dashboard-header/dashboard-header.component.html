@@ -1,98 +1,123 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
-  <!-- Logo -->
-  <a class="navbar-brand d-flex align-items-center" href="#">
-    <img src="rlcc-logo.png" alt="Logo" height="32" class="me-2" />
-    <span class="fw-bold" id="logo-text">RLCC Assistant</span>
-  </a>
+<header class="app-header">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid px-2 px-lg-3">
+      <a class="navbar-brand" routerLink="/dashboard">
+        <img src="rlcc-logo.png" alt="RLCC logo" width="36" height="36" />
+        <span class="brand-text">RLCC Assistant</span>
+      </a>
 
-  <!-- Toggler for mobile -->
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#dashboardNav"
+        aria-controls="dashboardNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-  <!-- Nav links -->
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav mx-auto">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/dashboard" routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }">
-          <i class="bi bi-bar-chart me-1"></i> Analytics
-        </a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" routerLink="/tithes" routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }">
-          <i class="bi bi-people me-1"></i> Giving
-        </a>
-        @if(isAdmin()){
-        <ul class="dropdown-menu">
+      <div class="collapse navbar-collapse" id="dashboardNav">
+        <ul class="navbar-nav nav-links mx-auto">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/tithe-types" routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }">
-              <i class="bi bi-card-list me-1"></i> Types
+            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+              <i class="bi bi-bar-chart"></i>
+              Analytics
             </a>
           </li>
-        </ul>
-        }
-      </li>
 
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/circles" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <i class="bi bi-universal-access-circle"></i> Circles
-        </a>
-        @if(isAdmin()){
-        <ul class="dropdown-menu">
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/life-group-types" routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }">
-              <i class="bi bi-card-list me-1"></i> Circles Types
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" routerLink="/tithes" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+              <i class="bi bi-people"></i>
+              Giving
             </a>
+            @if (isAdmin()) {
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" routerLink="/tithe-types" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    Types
+                  </a>
+                </li>
+              </ul>
+            }
           </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" routerLink="/circles" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+              <i class="bi bi-universal-access-circle"></i>
+              Circles
+            </a>
+            @if (isAdmin()) {
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" routerLink="/life-group-types" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    Circle Types
+                  </a>
+                </li>
+              </ul>
+            }
+          </li>
+
+          @if (isAdmin()) {
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" role="button">
+                <i class="bi bi-tools"></i>
+                Administrator Tools
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" routerLink="/settings" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    Settings
+                  </a>
+                </li>
+                @if (isSuperUser()) {
+                  <li>
+                    <a class="dropdown-item" routerLink="/roles-permissions" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                      Roles & Permissions
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" routerLink="/pco-users-migration" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                      PCO Users
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" routerLink="/amqp-queues" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                      AMQP Queues
+                    </a>
+                  </li>
+                }
+              </ul>
+            </li>
+          }
         </ul>
-        }
-      </li>
-      @if(isAdmin()){
 
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/settings" routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }">
-          <i class="bi bi-gear me-1"></i> Settings
-        </a>
-      </li>
-      }
-      @if(isSuperUser()){
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/roles-permissions" routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }">
-          <i class="bi bi-shield-lock me-1"></i> Roles
-        </a>
-      </li>
-      }
-    </ul>
+        <div class="profile-menu" [class.open]="showSubmenu()">
+          <button class="profile-trigger" type="button" (click)="toggleSubmenu()" [attr.aria-expanded]="showSubmenu()">
+            @if (hasAvatar()) {
+              <img [src]="avatarSrc()" alt="Profile" class="avatar" width="34" height="34" (error)="onAvatarError()" />
+            } @else {
+              <span class="avatar avatar-fallback">
+                {{ getAvatarInitials() }}
+              </span>
+            }
+            <span class="profile-name">{{ loggedInUserName() }}</span>
+            <i class="bi bi-chevron-down"></i>
+          </button>
 
-    <!-- User profile -->
-    <ul class="navbar-nav ms-auto position-relative" id="sub-items">
-      <li class="nav-item dropdown" (click)="toggleSubmenu()">
-        <a class="nav-link  d-flex align-items-center" [class.dropdown-toggle]="!showSubmenu()" role="button"
-          aria-expanded="false">
-          <img [src]="avatarSrc()" alt="Profile" class="rounded-circle me-2" width="32" height="32"
-            *ngIf="avatarSrc()" />
-          <span class="fw-semibold">{{ loggedInUserName() }}</span>
-        </a>
-      </li>
-      @if(showSubmenu()){
-
-      <ul class="navbar-nav ms-auto position-absolute profile-sub-items d-flex flex-column">
-        <li class="nav-item ">
-          <a class="nav-link d-flex align-items-center" routerLink="/profile" (click)="toggleSubmenu()">Edit Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center" (click)="onLogout()" style="color:red;">Logout</a>
-        </li>
-      </ul>
-      }
-
-    </ul>
-  </div>
-</nav>
+          @if (showSubmenu()) {
+            <ul class="profile-dropdown">
+              <li>
+                <a routerLink="/profile" (click)="toggleSubmenu()">Edit Profile</a>
+              </li>
+              <li>
+                <a class="danger" (click)="onLogout()">Logout</a>
+              </li>
+            </ul>
+          }
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

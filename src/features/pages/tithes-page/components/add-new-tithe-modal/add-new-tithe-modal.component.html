@@ -1,6 +1,9 @@
 <ng-template #addTitheModal let-modal>
-  <div class="modal-header bg-primary text-white">
-    <h5 class="modal-title">Encode Tithe</h5>
+  <div class="modal-header tithe-modal-header">
+    <div>
+      <h5 class="modal-title mb-1">Add One Tithe</h5>
+      <p class="modal-subtitle mb-0">Record a single giving entry quickly.</p>
+    </div>
     <button
       type="button"
       class="btn-close"
@@ -15,12 +18,12 @@
         <label class="form-label">Date Received</label>
         <input
           type="date"
-          class="form-control"
+          class="form-control form-control-lg"
           formControlName="dateReceived"
         />
 
         @if(dateReceived.invalid && dateReceived.touched){
-        <small style="color: Red">Date Received is required.</small>
+        <small class="field-error">Date Received is required.</small>
         }
       </div>
 
@@ -28,7 +31,7 @@
         <label class="form-label">Amount (PHP)</label>
         <input
           type="text"
-          class="form-control"
+          class="form-control form-control-lg"
           id="amount"
           placeholder="0.00"
           formControlName="amount"
@@ -36,13 +39,13 @@
         />
 
         @if(amount.invalid && amount.touched){
-        <small style="color: Red">Amount is required.</small>
+        <small class="field-error">Amount is required.</small>
         }
       </div>
 
       <app-active-tithe-type-dropdown (emitTitheTypeId)="setTitheType($event)">
         @if(titheTypeId.invalid && titheTypeId.touched){
-        <small style="color: Red">Type is required.</small>
+        <small class="field-error">Type is required.</small>
         }</app-active-tithe-type-dropdown
       >
 
@@ -56,7 +59,7 @@
         <label class="form-label">Member Name</label>
         <input
           type="string"
-          class="form-control"
+          class="form-control form-control-lg"
           formControlName="memberName"
         />
         @if(memberId.value){
@@ -67,13 +70,13 @@
       </div>
       } @if((memberName.invalid && memberName.touched) || memberId.invalid &&
       memberId.touched){
-      <small style="color: Red">Member is required.</small>
+      <small class="field-error">Member is required.</small>
       }
     </form>
   </div>
 
-  <div class="modal-footer">
-    <button class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
-    <button class="btn btn-primary" (click)="saveTithe(modal)">Save</button>
+  <div class="modal-footer border-0 pt-0">
+    <button class="btn btn-light rounded-pill px-4" (click)="modal.dismiss()">Cancel</button>
+    <button class="btn btn-primary rounded-pill px-4" (click)="saveTithe(modal)">Save Tithe</button>
   </div>
 </ng-template>

@@ -81,6 +81,22 @@ const routes: Routes = [
       ).then((m) => m.RolesPermissionsPageModule),
   },
   {
+    path: 'pco-users-migration',
+    canActivate: [appDashboardGuard, superuserGuard],
+    loadChildren: () =>
+      import(
+        '../features/pages/pco-users-migration-page/pco-users-migration-page.module'
+      ).then((m) => m.PcoUsersMigrationPageModule),
+  },
+  {
+    path: 'amqp-queues',
+    canActivate: [appDashboardGuard, superuserGuard],
+    loadChildren: () =>
+      import(
+        '../features/pages/amqp-queue-viewer-page/amqp-queue-viewer-page.module'
+      ).then((m) => m.AmqpQueueViewerPageModule),
+  },
+  {
     path: 'profile',
     canActivate: [appDashboardGuard],
     loadChildren: () =>

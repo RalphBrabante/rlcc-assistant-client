@@ -1,27 +1,162 @@
- /* small transition for a nice fade */
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      padding: .35rem .6rem;
-      border-radius: 999px; /* pill */
-      transition: opacity .18s ease, transform .18s ease;
-      will-change: opacity, transform;
-    }
-    .tag.removing {
-      opacity: 0;
-      transform: scale(.95);
-    }
-    /* adjust close button to be smaller inside badge */
-    .tag .btn-close {
-      --bs-btn-padding-x: 0;
-      --bs-btn-padding-y: 0;
-      width: 0.9rem;
-      height: 0.9rem;
-      margin-left: .15rem;
-      opacity: .95;
-    }
-    /* white close icon for dark badges (primary/dark) */
-    .btn-close-white {
-      filter: invert(1) sepia(0) saturate(0) hue-rotate(0deg) brightness(2);
-    }
+.bulk-page {
+  background: linear-gradient(180deg, #f8fbf8 0%, #f3f7f4 100%);
+  min-height: 100vh;
+}
+
+.bulk-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.bulk-head h2 {
+  color: #233828;
+  font-weight: 700;
+}
+
+.bulk-head p {
+  font-size: 0.95rem;
+}
+
+.bulk-alert {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.bulk-form {
+  border-radius: 14px;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #355339;
+}
+
+.selected-member {
+  min-height: 38px;
+}
+
+.member-pill {
+  background: #2f6f42;
+  border-radius: 999px;
+  font-weight: 600;
+  padding: 0.42rem 0.65rem;
+}
+
+.add-row-btn {
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.queue-summary {
+  margin-top: 1.15rem;
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.summary-item {
+  background: #ffffff;
+  border: 1px solid #e4ece5;
+  border-radius: 12px;
+  padding: 0.75rem 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.summary-label {
+  color: #6a7f6d;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.summary-value {
+  color: #21412a;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.queue-table-head {
+  grid-template-columns: 1.2fr 1fr 0.85fr 0.75fr;
+  gap: 1rem;
+  color: #5f7263;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0 0.35rem;
+  margin-bottom: 0.55rem;
+}
+
+.queue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.queue-item {
+  border-radius: 12px;
+}
+
+.queue-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 0.85fr 0.75fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.queue-value {
+  font-size: 0.95rem;
+}
+
+.queue-amount {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.queue-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6f8373;
+}
+
+.process-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.process-btn {
+  min-width: 210px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.btn-close-white {
+  filter: invert(1) sepia(0) saturate(0) hue-rotate(0deg) brightness(2);
+}
+
+@media (max-width: 991.98px) {
+  .queue-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+  }
+
+  .queue-amount {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .queue-grid {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  .add-row-btn {
+    width: 100%;
+  }
+}

@@ -1,0 +1,46 @@
+.app-version-note {
+  position: fixed;
+  right: 0.85rem;
+  bottom: 0.85rem;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.65rem;
+  border: 1px solid #d8e7da;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 22px -18px rgba(20, 46, 25, 0.9);
+  backdrop-filter: blur(4px);
+}
+
+.version-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  background: #2f6f42;
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.version-text {
+  color: #31573a;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+@media (max-width: 575.98px) {
+  .app-version-note {
+    right: 0.5rem;
+    bottom: 0.5rem;
+    padding: 0.35rem 0.55rem;
+  }
+
+  .version-text {
+    font-size: 0.72rem;
+  }
+}

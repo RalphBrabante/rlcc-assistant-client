@@ -1,7 +1,21 @@
-.remove-icon{
-    position: absolute;
-    right:15px;
-    bottom:7px;
-    color:red;
-    cursor: pointer;
+.tithe-modal-header {
+  background: linear-gradient(135deg, #2f6f42 0%, #3f8353 100%);
+  color: #ffffff;
+}
+
+.modal-subtitle {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.88rem;
+}
+
+.field-error {
+  color: #c03535;
+}
+
+.remove-icon {
+  position: absolute;
+  right: 15px;
+  bottom: 10px;
+  color: #c03535;
+  cursor: pointer;
 }

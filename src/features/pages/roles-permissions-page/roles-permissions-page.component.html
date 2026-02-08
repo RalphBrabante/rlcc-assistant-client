@@ -36,7 +36,7 @@
               (click)="selectRole(role.id)"
             >
               <span>{{ role.name }}</span>
-              <small>{{ role.permissions?.length || 0 }} permissions</small>
+              <small>{{ role.permissions.length || 0 }} permissions</small>
             </button>
           } @empty {
             <p class="text-muted mb-0">No roles available.</p>

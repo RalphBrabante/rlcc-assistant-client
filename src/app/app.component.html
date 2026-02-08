@@ -1,4 +1,11 @@
 <app-dashboard-header *ngIf="showHeader()"/>
 <router-outlet />
 <app-forbidden-overlay />
-  
+
+<section class="app-version-note" aria-label="Application version status">
+  <span class="version-pill">
+    <i class="bi bi-beaker"></i>
+    Version 0
+  </span>
+  <span class="version-text">Beta App</span>
+</section>

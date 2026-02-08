@@ -1,0 +1,57 @@
+<main class="queue-page">
+  <section class="queue-shell">
+    <header class="hero-card">
+      <p class="eyebrow mb-1">Administrator Tools</p>
+      <h1 class="mb-2">AMQP Queue Viewer</h1>
+      <p class="subtitle mb-0">Inspect messages in a RabbitMQ queue from the client.</p>
+    </header>
+
+    <article class="panel mt-3">
+      <form class="lookup-form" [formGroup]="form" (ngSubmit)="fetchQueue()">
+        <label for="queueName" class="form-label">Queue Name</label>
+        <div class="input-row">
+          <input
+            id="queueName"
+            type="text"
+            class="form-control"
+            formControlName="queueName"
+            placeholder="usersMigrationQueue"
+          />
+          <button class="btn btn-primary" [disabled]="isFetching()" type="submit">
+            @if (isFetching()) { Loading... } @else { Fetch Queue }
+          </button>
+        </div>
+        @if (queueName.invalid && queueName.touched) {
+          <small class="text-danger">Queue name is required.</small>
+        }
+      </form>
+
+      @if (errorMessage()) {
+        <div class="alert alert-danger mt-3 mb-0">{{ errorMessage() }}</div>
+      }
+    </article>
+
+    <article class="panel mt-3">
+      <header class="messages-head">
+        <h3 class="mb-0">Messages ({{ messages().length }})</h3>
+      </header>
+
+      @if (!messages().length && !isFetching()) {
+        <p class="text-muted mb-0">No messages found for this queue.</p>
+      } @else {
+        <div class="message-list">
+          @for (msg of messages(); track $index) {
+            <div class="message-item">
+              <div class="meta-row">
+                <span><strong>Exchange:</strong> {{ msg.exchange || '-' }}</span>
+                <span><strong>Routing Key:</strong> {{ msg.routing_key || '-' }}</span>
+                <span><strong>Redelivered:</strong> {{ msg.redelivered ? 'Yes' : 'No' }}</span>
+              </div>
+              <pre class="payload">{{ msg.payload }}</pre>
+            </div>
+          }
+        </div>
+      }
+    </article>
+  </section>
+</main>
