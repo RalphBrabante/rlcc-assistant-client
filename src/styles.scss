@@ -3,6 +3,60 @@
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 
+:root {
+  --app-font: "Poppins", "Segoe UI", sans-serif;
+  --app-bg: #f4f8ff;
+  --app-surface: #ffffff;
+  --app-ink: #14243a;
+  --app-muted: #5d6d86;
+  --app-primary: #1f6feb;
+  --app-border: #dbe7ff;
+}
+
+body {
+  font-family: var(--app-font);
+  background: radial-gradient(circle at top right, #eaf2ff 0%, #f7faff 35%, #f3f7ff 100%);
+  color: var(--app-ink);
+}
+
+.app-page {
+  padding: 1rem;
+}
+
+.app-shell {
+  border: 1px solid var(--app-border);
+  background: var(--app-surface);
+  border-radius: 1rem;
+  box-shadow: 0 14px 34px rgba(20, 40, 78, 0.06);
+  overflow: hidden;
+}
+
+.app-shell-head {
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid #e5edff;
+  background: linear-gradient(135deg, #eef4ff 0%, #f8fbff 100%);
+}
+
+.app-shell-head h1,
+.app-shell-head h2,
+.app-shell-head h3,
+.app-shell-head h4,
+.app-shell-head h5 {
+  margin: 0;
+  font-weight: 700;
+  color: var(--app-ink);
+}
+
+.app-shell-subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--app-muted);
+  font-size: 0.92rem;
+}
+
+.app-shell-body {
+  padding: 1rem 1.1rem;
+}
+
 .loader-overlay {
   position: absolute;
   inset: 0;

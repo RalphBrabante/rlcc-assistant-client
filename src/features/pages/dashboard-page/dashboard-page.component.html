@@ -1,18 +1,23 @@
 
+<main class="app-page dashboard-page">
+  <div class="app-shell">
+    <section class="app-shell-head">
+      <h2>Dashboard</h2>
+      <p class="app-shell-subtitle">Overview of giving, circles, and activity.</p>
+    </section>
+    <section class="app-shell-body">
+      <app-admin-dashboard-cards *ngIf="isAdmin()" />
 
-<main>
-  <div class="container-fluid mt-4">
-    <app-admin-dashboard-cards *ngIf="isAdmin()"/>
-
-    <div class="row mt-5">
-      @if((this.userRoles().includes('SUPERUSER') ||
-      this.userRoles().includes('ADMIN') ||
-      this.userRoles().includes('ACCOUNTANT'))){
-      <div allTitheChart class="col-12 col-md-6 col-lg-6"></div>
-      <div userTitheChart class="col-12 col-md-6 col-lg-6"></div>
-      } @if(this.userRoles().includes('ENDUSER')){
-      <div userTitheChart class="col-12 col-md-6 col-lg-6"></div>
-      }
-    </div>
+      <div class="row mt-3 g-3">
+        @if((this.userRoles().includes('SUPERUSER') ||
+        this.userRoles().includes('ADMIN') ||
+        this.userRoles().includes('ACCOUNTANT'))){
+        <div allTitheChart class="col-12 col-md-6"></div>
+        <div userTitheChart class="col-12 col-md-6"></div>
+        } @if(this.userRoles().includes('ENDUSER')){
+        <div userTitheChart class="col-12 col-md-6"></div>
+        }
+      </div>
+    </section>
   </div>
 </main>

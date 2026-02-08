@@ -1,0 +1,65 @@
+.circles-page {
+  --surface: #ffffff;
+  --surface-soft: #f4f8ff;
+  --ink: #132238;
+  --muted: #5d6b82;
+  --primary: #1f6feb;
+  --primary-soft: #dbe9ff;
+
+  padding: 1.25rem 1rem 2rem;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+}
+
+.page-hero {
+  position: relative;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #e8f1ff 0%, #f8fcff 100%);
+  border: 1px solid #d9e8ff;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.hero-glow {
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(31, 111, 235, 0.18) 0%, rgba(31, 111, 235, 0) 70%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0.25rem 0 0.25rem;
+  color: var(--ink);
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  font-weight: 700;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+  max-width: 640px;
+}
+
+.table-section {
+  background: var(--surface-soft);
+  border: 1px solid #e2ecff;
+  border-radius: 1rem;
+  padding: 0.75rem;
+}

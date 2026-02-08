@@ -1,10 +1,17 @@
 
-
-<main>
-  @if(this.roles().includes('SUPERUSER') ||
-  this.roles().includes('ADMINISTRATOR')){
-  <app-tithes-table />
-  }@else {
-  <app-user-tithes-table />
-  }
+<main class="app-page">
+  <div class="app-shell">
+    <section class="app-shell-head">
+      <h2>Tithes</h2>
+      <p class="app-shell-subtitle">Track contributions and review giving records.</p>
+    </section>
+    <section class="app-shell-body">
+      @if(this.roles().includes('SUPERUSER') ||
+      this.roles().includes('ADMIN')){
+      <app-tithes-table />
+      } @else {
+      <app-user-tithes-table />
+      }
+    </section>
+  </div>
 </main>

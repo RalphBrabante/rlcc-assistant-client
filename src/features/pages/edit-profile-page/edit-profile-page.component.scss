@@ -1,5 +1,22 @@
-button .bi-x-circle-fill:hover {
-  color: #c82333; /* darker red */
+.profile-pic-container {
+  width: 160px;
+  height: 160px;
+  overflow: hidden;
+  background: #f8f9fa;
+  border-radius: 0.75rem;
+}
+
+.roles-wrap {
+  margin-top: 1rem;
+}
+
+.id-label {
+  color: #44608a;
+  font-weight: 600;
+}
+
+button:hover .bi-x-circle-fill {
+  color: #c82333;
   transform: scale(1.1);
   transition: all 0.2s ease;
 }

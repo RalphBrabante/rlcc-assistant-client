@@ -50,4 +50,8 @@ export class GroupService {
       data: userAndGroupIds,
     });
   }
+
+  removeUserFromGroup(groupId: number, userId: number): Observable<GroupsAPIResp> {
+    return this.http.delete<GroupsAPIResp>(baseUrl + `/groups/${groupId}/user/${userId}`);
+  }
 }

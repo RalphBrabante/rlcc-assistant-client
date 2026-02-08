@@ -24,7 +24,7 @@ export class DashboardPageComponent extends BaseComponent implements OnInit {
     if (
       roles.includes('SUPERUSER') ||
       roles.includes('ACCOUNTANT') ||
-      roles.includes('ADMINISTRATOR')
+      roles.includes('ADMIN')
     ) {
       return true;
     }

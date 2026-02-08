@@ -1,193 +1,142 @@
-<main>
+<main class="app-page edit-profile-page">
+  <div class="app-shell">
+    <section class="app-shell-head">
+      <h2>My Profile</h2>
+      <p class="app-shell-subtitle">Update account and contact details.</p>
+    </section>
+    <section class="app-shell-body">
+      <ng-container *ngIf="loading(); else formTemplate">
+        <div class="p-3 border rounded shadow-sm">
+          <h4 class="mb-3 placeholder-glow">
+            <span class="placeholder col-6"></span>
+          </h4>
 
-    <div class="container">
-        <div class="row mt-3">
-            <div class="col">
-                <ng-container *ngIf="loading(); else formTemplate">
-
-
-                    <div *ngIf="loading" class="p-3 border rounded shadow-sm">
-                        <h4 class="mb-3 placeholder-glow">
-                            <span class="placeholder col-6"></span>
-                        </h4>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label placeholder-glow">
-                                    <span class="placeholder col-4"></span>
-                                </label>
-                                <span class="form-control placeholder col-12"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label placeholder-glow">
-                                    <span class="placeholder col-4"></span>
-                                </label>
-                                <span class="form-control placeholder col-12"></span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label placeholder-glow">
-                                    <span class="placeholder col-4"></span>
-                                </label>
-                                <span class="form-control placeholder col-12"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label placeholder-glow">
-                                    <span class="placeholder col-4"></span>
-                                </label>
-                                <span class="form-control placeholder col-12"></span>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label placeholder-glow">
-                                <span class="placeholder col-5"></span>
-                            </label>
-                            <span class="form-control placeholder col-12"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label placeholder-glow">
-                                <span class="placeholder col-5"></span>
-                            </label>
-                            <span class="form-control placeholder col-12"></span>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label placeholder-glow">
-                                    <span class="placeholder col-4"></span>
-                                </label>
-                                <span class="form-control placeholder col-12"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label placeholder-glow">
-                                    <span class="placeholder col-4"></span>
-                                </label>
-                                <span class="form-control placeholder col-12"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label placeholder-glow">
-                                    <span class="placeholder col-6"></span>
-                                </label>
-                                <span class="form-control placeholder col-12"></span>
-                            </div>
-                        </div>
-
-                        <div class="d-grid">
-                            <button class="btn btn-primary disabled placeholder col-12"></button>
-                        </div>
-                    </div>
-                </ng-container>
-
-                <ng-template #formTemplate>
-                    <h3 *ngIf="pcoId()"> ID: {{pcoId()}}</h3>
-                    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="p-3 border rounded shadow-sm">
-                        <h4 class="mb-3">Update Profile</h4>
-
-                        <!-- First Name & Last Name -->
-                        <div class="row align-items-center mb-3">
-                            <!-- Left side: form fields -->
-                            <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3 mb-md-0">
-                                        <label for="firstName" class="form-label">First Name</label>
-                                        <input id="firstName" type="text" class="form-control"
-                                            formControlName="firstName" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="lastName" class="form-label">Last Name</label>
-                                        <input id="lastName" type="text" class="form-control"
-                                            formControlName="lastName" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Right side: profile picture -->
-                            <div class="col-md-4 text-center">
-                                <div class="profile-pic-container border  mx-auto d-flex align-items-center justify-content-center"
-                                    style="width: 160px; height: 160px; overflow: hidden; background-color: #f8f9fa;">
-                                    <img *ngIf="avatar()" [src]="avatar()" alt="Profile" class="img-fluid" />
-                                    <span *ngIf="!avatar()" class="text-muted small">No Image</span>
-                                </div>
-
-                                <!-- Optional Upload Button -->
-
-                            </div>
-                        </div>
-
-
-                        <!-- Password & Confirm Password -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="password" class="form-label">Password</label>
-                                <input id="password" type="password" class="form-control" formControlName="password"
-                                    placeholder="*****************************">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="confirmPassword" class="form-label">Confirm Password</label>
-                                <input id="confirmPassword" type="password" class="form-control"
-                                    placeholder="*****************************" formControlName="confirmPassword">
-                            </div>
-                        </div>
-
-                        <!-- Address -->
-                        <div class="mb-3">
-                            <label for="address1" class="form-label">Address Line 1</label>
-                            <input id="address1" type="text" class="form-control" formControlName="addressLine1">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="address2" class="form-label">Address Line 2</label>
-                            <input id="address2" type="text" class="form-control" formControlName="addressLine2">
-                        </div>
-
-                        <!-- City, Province, Postal Code -->
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="city" class="form-label">City</label>
-                                <input id="city" type="text" class="form-control" formControlName="city">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="province" class="form-label">Province</label>
-                                <input id="province" type="text" class="form-control" formControlName="province">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="postalCode" class="form-label">Postal Code</label>
-                                <input id="postalCode" type="text" class="form-control" formControlName="postalCode">
-                            </div>
-                        </div>
-
-                        <!-- Submit -->
-                        <button type="submit" class="btn btn-primary w-100" [disabled]="!this.profileForm.valid">
-                            Update Profile
-                        </button>
-                    </form>
-                </ng-template>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label placeholder-glow"><span class="placeholder col-4"></span></label>
+              <span class="form-control placeholder col-12"></span>
             </div>
+            <div class="col-md-6">
+              <label class="form-label placeholder-glow"><span class="placeholder col-4"></span></label>
+              <span class="form-control placeholder col-12"></span>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label placeholder-glow"><span class="placeholder col-4"></span></label>
+              <span class="form-control placeholder col-12"></span>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label placeholder-glow"><span class="placeholder col-4"></span></label>
+              <span class="form-control placeholder col-12"></span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label placeholder-glow"><span class="placeholder col-5"></span></label>
+            <span class="form-control placeholder col-12"></span>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label placeholder-glow"><span class="placeholder col-5"></span></label>
+            <span class="form-control placeholder col-12"></span>
+          </div>
         </div>
+      </ng-container>
 
+      <ng-template #formTemplate>
+        <h5 *ngIf="pcoId()" class="id-label">ID: {{ pcoId() }}</h5>
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="p-3 border rounded shadow-sm profile-form">
+          <h4 class="mb-3">Update Profile</h4>
 
-        <div class="row mt-3">
-            <div class="col">
-                <h3>Roles</h3>
-                <div class="d-flex">
-                    @for (role of userRoles(); track $index) {
-
-
-<button type="button" class="btn btn-outline-secondary btn-sm rounded-pill me-2 d-flex align-items-center">
-  {{ role.name }}
-  <i class="bi bi-x-circle-fill ms-2 text-danger" style="font-size: 0.9rem;"></i>
-</button>
-
-
-                    }
+          <div class="row align-items-center mb-3">
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                  <label for="firstName" class="form-label">First Name</label>
+                  <input id="firstName" type="text" class="form-control" formControlName="firstName" />
                 </div>
+                <div class="col-md-6">
+                  <label for="lastName" class="form-label">Last Name</label>
+                  <input id="lastName" type="text" class="form-control" formControlName="lastName" />
+                </div>
+              </div>
             </div>
 
-        </div>
-    </div>
+            <div class="col-md-4 text-center">
+              <div class="profile-pic-container border mx-auto d-flex align-items-center justify-content-center">
+                <img *ngIf="avatar()" [src]="avatar()" alt="Profile" class="img-fluid" />
+                <span *ngIf="!avatar()" class="text-muted small">No Image</span>
+              </div>
+            </div>
+          </div>
 
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="password" class="form-label">Password</label>
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                formControlName="password"
+                placeholder="*****************************"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <input
+                id="confirmPassword"
+                type="password"
+                class="form-control"
+                placeholder="*****************************"
+                formControlName="confirmPassword"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="address1" class="form-label">Address Line 1</label>
+            <input id="address1" type="text" class="form-control" formControlName="addressLine1" />
+          </div>
+
+          <div class="mb-3">
+            <label for="address2" class="form-label">Address Line 2</label>
+            <input id="address2" type="text" class="form-control" formControlName="addressLine2" />
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="city" class="form-label">City</label>
+              <input id="city" type="text" class="form-control" formControlName="city" />
+            </div>
+            <div class="col-md-4">
+              <label for="province" class="form-label">Province</label>
+              <input id="province" type="text" class="form-control" formControlName="province" />
+            </div>
+            <div class="col-md-4">
+              <label for="postalCode" class="form-label">Postal Code</label>
+              <input id="postalCode" type="text" class="form-control" formControlName="postalCode" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100" [disabled]="!this.profileForm.valid">
+            Update Profile
+          </button>
+        </form>
+      </ng-template>
+
+      <div class="roles-wrap">
+        <h5>Roles</h5>
+        <div class="d-flex flex-wrap gap-2">
+          @for (role of userRoles(); track $index) {
+          <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill d-flex align-items-center">
+            {{ role.name }}
+            <i class="bi bi-x-circle-fill ms-2 text-danger" style="font-size: 0.9rem;"></i>
+          </button>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
 </main>

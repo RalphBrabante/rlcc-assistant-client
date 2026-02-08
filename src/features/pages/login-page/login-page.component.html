@@ -1,21 +1,22 @@
-<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-  <div class="card shadow p-4 rounded-4 position-relative" style="max-width: 400px; width: 100%">
+<main class="login-page">
+  <div class="login-card position-relative">
     <div class="card-body text-center">
       <div class="logo-container">
-        <img src="rlcc-logo.png" alt="" class="img-fluid" />
+        <img src="rlcc-logo.png" alt="RLCC logo" class="img-fluid" />
       </div>
 
       <h2>Welcome to RLCC Assistant</h2>
-      <!-- Loader Overlay -->
+      <p class="subtitle">Secure sign in for your ministry workspace.</p>
+
       @if(isLoggingIn()){
-        <div class="loader-overlay" id="loader">
-          <div class="loader-panel">
-            <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="loader-text">Signing you in...</div>
+      <div class="loader-overlay" id="loader">
+        <div class="loader-panel">
+          <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem">
+            <span class="visually-hidden">Loading...</span>
           </div>
+          <div class="loader-text">Signing you in...</div>
         </div>
+      </div>
       }
       <app-login-form
         #formData
@@ -25,4 +26,4 @@
       />
     </div>
   </div>
-</div>
+</main>

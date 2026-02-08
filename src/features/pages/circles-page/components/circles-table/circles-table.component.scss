@@ -1,0 +1,72 @@
+.circles-card {
+  border: 1px solid #d8e7ff;
+  border-radius: 1rem;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(18, 48, 92, 0.06);
+}
+
+.card-header {
+  border-bottom: 1px solid #e7efff;
+  background: linear-gradient(135deg, #f5f9ff 0%, #ffffff 100%);
+  padding: 0.85rem 1rem;
+}
+
+.card-header h5 {
+  color: #15233a;
+  font-weight: 700;
+}
+
+.circles-table thead th {
+  border-bottom: 1px solid #e3ebfc;
+  background: #f8fbff;
+  color: #51617a;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+.circles-table tbody tr {
+  transition: background-color 120ms ease;
+}
+
+.circles-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+.empty-state {
+  text-align: center;
+  color: #63738b;
+  padding: 1.5rem 0.75rem;
+}
+
+.empty-state i {
+  font-size: 1.2rem;
+}
+
+.empty-state p {
+  margin: 0.35rem 0 0;
+}
+
+.loader-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(1.5px);
+  z-index: 4;
+  display: grid;
+  place-items: center;
+}
+
+.loader-panel {
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+}
+
+.loader-text {
+  font-size: 0.88rem;
+  color: #4f6078;
+  font-weight: 600;
+}

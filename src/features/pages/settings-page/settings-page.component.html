@@ -1,22 +1,21 @@
 
-
-<main>
-  <div class="container py-4">
-    <h2 class="mb-4">System Settings</h2>
-
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
+<main class="app-page settings-page">
+  <div class="app-shell">
+    <section class="app-shell-head">
+      <h2>System Settings</h2>
+      <p class="app-shell-subtitle">Control runtime features and maintenance behavior.</p>
+    </section>
+    <section class="app-shell-body">
+      <div class="settings-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
           <div>
             <h5 class="card-title mb-1">Maintenance Mode</h5>
             <p class="text-muted mb-0">
-              Enable this to temporarily disable user access while performing
-              updates.
+              Enable this to temporarily disable user access while performing updates.
             </p>
           </div>
 
           <form [formGroup]="form">
-            <!-- Bootstrap Switch -->
             <div class="form-check form-switch ms-3">
               <input
                 class="form-check-input"
@@ -29,10 +28,9 @@
           </form>
         </div>
       </div>
-
-      <div class="card-footer text-end">
-        <button class="btn btn-primary">Save Settings</button>
+      <div class="text-end mt-3">
+        <button class="btn btn-primary" type="button">Save Settings</button>
       </div>
-    </div>
+    </section>
   </div>
 </main>

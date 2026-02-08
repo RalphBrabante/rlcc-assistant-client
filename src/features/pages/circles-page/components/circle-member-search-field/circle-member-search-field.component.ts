@@ -11,8 +11,8 @@ import { GroupService } from '../../../../../common/services/group.service';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   debounceTime,
-  filter,
   finalize,
+  of,
   switchMap,
   takeUntil,
   tap,
@@ -46,40 +46,54 @@ export class CircleMemberSearchFieldComponent
   ngOnInit(): void {
     this.searchKeyword.valueChanges
       .pipe(
-        debounceTime(1000),
-        filter((val: string) => val.length >= 1),
+        debounceTime(350),
         tap(() => {
-          this.loading.set(true);
-          this.searchKeyword.disable({ emitEvent: false });
           this.errorMessage.set('');
+          this.unassignedUsers.set([]);
         }),
-        switchMap((searchKeyword) => {
-          return this.grpSvc.getUnassignedUsers(searchKeyword);
-        }),
+        switchMap((searchKeyword: string) => {
+          const keyword = (searchKeyword || '').trim();
+          if (!keyword.length) {
+            return of(null);
+          }
 
+          this.loading.set(true);
+          return this.grpSvc.getUnassignedUsers(keyword).pipe(
+            finalize(() => this.loading.set(false))
+          );
+        }),
         takeUntil(this.unsubscribe)
       )
       .subscribe({
         next: (resp) => {
+          if (!resp) {
+            this.errorMessage.set('');
+            return;
+          }
+
           const rows = resp.data.rows;
-          const excludeIds = this.membersToBeAdded.value.map((m: any) => m.id);
+          const excludeIds = this.membersToBeAdded.value.map((m: any) => m.userId);
           const filtered = rows.filter((row) => !excludeIds.includes(row.id));
 
           if (!filtered.length) {
-            this.errorMessage.set('Unassigned users not found.');
+            this.errorMessage.set('No unassigned users found for this search.');
           }
 
           this.unassignedUsers.set(filtered);
-          this.loading.set(false);
-          this.searchKeyword.enable({ emitEvent: false });
         },
         error: (err) => {
-          this.errorMessage.set(err.error.message);
+          this.loading.set(false);
+          this.errorMessage.set(
+            err?.error?.message || 'Unable to fetch unassigned users.'
+          );
         },
       });
   }
 
   addMemberToArray(user: GroupUser) {
+    const exists = this.membersToBeAdded.value.some((m: any) => m.userId === user.id);
+    if (exists) return;
+
     this.membersToBeAdded.push(
       this.fb.group({
         userId: user.id,
@@ -107,11 +121,22 @@ export class CircleMemberSearchFieldComponent
     this.emitIdDataSet.emit(this.membersToBeAdded.value);
   }
 
+  clearSelectedMembers() {
+    while (this.membersToBeAdded.length) {
+      this.membersToBeAdded.removeAt(0);
+    }
+    this.emitIdDataSet.emit(this.membersToBeAdded.value);
+  }
+
   get searchKeyword() {
     return this.form.get('searchKeyword') as FormControl;
   }
 
   get membersToBeAdded(): FormArray {
     return this.form.get('membersToBeAdded') as FormArray;
+  }
+
+  get hasSearchKeyword() {
+    return !!(this.searchKeyword.value || '').trim().length;
   }
 }

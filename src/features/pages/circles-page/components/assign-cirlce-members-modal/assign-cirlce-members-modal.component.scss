@@ -1,0 +1,26 @@
+.modal-head {
+  background: linear-gradient(135deg, #f0f6ff 0%, #fbfdff 100%);
+  border-bottom: 1px solid #deebff;
+}
+
+.modal-head .modal-title {
+  color: #142742;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: #5d6f89;
+  font-size: 0.9rem;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.modal-foot {
+  border-top: 1px solid #e5eeff;
+}

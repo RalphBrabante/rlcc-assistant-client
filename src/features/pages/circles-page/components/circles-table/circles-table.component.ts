@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, viewChild, ViewChild } from '@angular/core';
+import { Component, OnInit, signal, viewChild } from '@angular/core';
 import { BaseComponent } from '../../../../../common/directives/base-component';
 import { GroupService } from '../../../../../common/services/group.service';
 import { finalize, takeUntil } from 'rxjs';
@@ -17,6 +17,7 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
   groupsData = signal<Group[]>([]);
   errorMessage = signal<string>('');
   isLoading = signal<boolean>(false);
+  private errorTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(private grpSvc: GroupService, private modalService: NgbModal) {
     super();
@@ -38,7 +39,12 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
       )
       .subscribe({
         next: (resp) => {
-          this.groupsData.set(resp.data.groups.rows);
+          this.groupsData.set(resp.data?.groups?.rows ?? []);
+          this.errorMessage.set('');
+        },
+        error: (err) => {
+          this.groupsData.set([]);
+          this.setErrorMessage(err?.error?.message || 'Unable to load circles.', 3000);
         },
       });
   }
@@ -49,10 +55,11 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
 
   setErrorMessage(message: string, ms: number) {
     this.errorMessage.set(message);
-
-    // setTimeout(() => {
-    //   this.errorMessage.set();
-    // }, ms);
+    if (this.errorTimer) clearTimeout(this.errorTimer);
+    this.errorTimer = setTimeout(() => {
+      this.errorMessage.set('');
+      this.errorTimer = null;
+    }, ms);
   }
   onDeleteGroup(groupId: number) {
     const modalRef = this.modalService.open(DeleteConfirmationModalComponent, {
@@ -67,68 +74,23 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
     modalRef.result.then(
       (result) => {
         if (result) {
-          console.log('Deleting group with id:', groupId);
-          // 🔥 call your delete service here
-
           this.grpSvc
             .deleteGroup(groupId)
             .pipe(takeUntil(this.unsubscribe))
             .subscribe({
               next: (resp) => {
                 if (resp.data.id) {
-                  console.log(close);
                   modalRef.close();
                   this.fetchData();
                 }
               },
               error: (err) => {
-                this.setErrorMessage(err.error.message, 2500);
+                this.setErrorMessage(err?.error?.message || 'Unable to delete circle.', 2500);
               },
             });
         }
       },
-      () => {
-        console.log('Delete canceled');
-      }
-    );
-  }
-
-  onEditGroup(groupId: number) {
-    const modalRef = this.modalService.open(DeleteConfirmationModalComponent, {
-      centered: true,
-      backdrop: 'static',
-    });
-
-    modalRef.componentInstance.title = 'Delete Group';
-    modalRef.componentInstance.message =
-      'Are you sure you want to delete this group? Please take note that all members will get detached.';
-
-    modalRef.result.then(
-      (result) => {
-        if (result) {
-          console.log('Deleting group with id:', groupId);
-          // 🔥 call your delete service here
-
-          this.grpSvc
-            .deleteGroup(groupId)
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe({
-              next: (resp) => {
-                if (resp.data.id) {
-                  console.log(close);
-                  modalRef.close();
-                  this.fetchData();
-                }
-              },
-              error: (err) => {
-                this.setErrorMessage(err.error.message, 2500);
-              },
-            });
-        }
-      },
-      () => {
-        console.log('Delete canceled');
-      }
+      () => {}
     );
   }
 }

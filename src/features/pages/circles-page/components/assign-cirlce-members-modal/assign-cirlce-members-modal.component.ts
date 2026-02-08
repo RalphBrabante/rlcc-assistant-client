@@ -30,6 +30,7 @@ export class AssignCirlceMembersModalComponent extends BaseComponent {
   circleForm!: FormGroup;
   isSaving = signal<boolean>(false);
   group = signal<Group | null>(null);
+  errorMessage = signal<string>('');
   fetchData = output<boolean>();
   groupId = input<number>();
   userAndGroupIds = signal<GroupUsers[]>([]);
@@ -53,30 +54,41 @@ export class AssignCirlceMembersModalComponent extends BaseComponent {
 
   openCreateCircleModal(payload: Group) {
     this.group.set(payload);
+    this.errorMessage.set('');
+    this.userAndGroupIds.set([]);
     this.modalService.open(this.assignCirclceMembersModal, {
       centered: true,
       size: 'lg',
+      scrollable: true,
     });
   }
 
   closeModal(modal: any) {
     this.userAndGroupIds.set([]);
+    this.errorMessage.set('');
     modal.dismiss();
   }
   setDataset(data: any[]) {
     this.userAndGroupIds.set(data);
   }
   saveGroup(modal: any) {
+    if (!this.userAndGroupIds().length) {
+      this.errorMessage.set('Please select at least one member.');
+      return;
+    }
+
     if (this.circleForm.invalid) {
-      console.log('invalid');
       this.circleForm.markAllAsTouched(); // show errors on submit
       return;
     }
     if (this.circleForm.valid) {
+      this.isSaving.set(true);
+      this.errorMessage.set('');
       this.groupSvc
         .assignUsersToGroup(this.userAndGroupIds())
         .pipe(
           finalize(() => {
+            this.isSaving.set(false);
             this.fetchData.emit(true);
           }),
           takeUntil(this.unsubscribe)
@@ -84,6 +96,11 @@ export class AssignCirlceMembersModalComponent extends BaseComponent {
         .subscribe({
           next: () => {
             modal.dismiss();
+          },
+          error: (err) => {
+            this.errorMessage.set(
+              err?.error?.message || 'Unable to assign members right now.'
+            );
           },
         });
     }
