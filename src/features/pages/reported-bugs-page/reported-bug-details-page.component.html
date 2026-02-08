@@ -1,0 +1,65 @@
+<main class="app-page reported-bug-details-page">
+  <div class="app-shell">
+    <section class="app-shell-head details-head">
+      <button type="button" class="btn btn-link px-0 back-btn" (click)="onBack()">
+        <i class="bi bi-arrow-left"></i>
+        Back to Reported Bugs
+      </button>
+      <h2>Bug Report Details</h2>
+      <p class="app-shell-subtitle mb-0">Full report information and full description.</p>
+    </section>
+
+    <section class="app-shell-body">
+      @if (loading()) {
+      <p class="text-muted mb-0">Loading details...</p>
+      } @else if (errorMessage()) {
+      <div class="alert alert-danger py-2 mb-0">{{ errorMessage() }}</div>
+      } @else {
+      <ng-container *ngIf="bugReport() as report">
+      <article class="details-card">
+        <header class="details-card-head">
+          <div>
+            <h4 class="mb-1">#{{ report.id }} - {{ report.title }}</h4>
+            <small class="text-muted">{{ report.createdAt | date: 'full' }}</small>
+          </div>
+          <span class="status-pill" [attr.data-status]="report.status">
+            {{ formatStatus(report.status) }}
+          </span>
+        </header>
+
+        <div class="meta-grid mt-3">
+          <div>
+            <small class="label">Scope</small>
+            <div>{{ report.scope }}</div>
+          </div>
+          <div>
+            <small class="label">Severity</small>
+            <div>{{ report.severity }}</div>
+          </div>
+          <div>
+            <small class="label">Page URL</small>
+            <div class="text-break">{{ report.pageUrl || 'N/A' }}</div>
+          </div>
+          <div>
+            <small class="label">Reporter</small>
+            <div>
+              @if (report.reporter) {
+              {{ report.reporter.firstName }} {{ report.reporter.lastName }}
+              <small class="text-muted">({{ report.reporter.emailAddress }})</small>
+              } @else {
+              Unknown
+              }
+            </div>
+          </div>
+        </div>
+
+        <section class="description-section mt-4">
+          <h6 class="mb-2">Full Description</h6>
+          <p class="description mb-0">{{ report.description }}</p>
+        </section>
+      </article>
+      </ng-container>
+      }
+    </section>
+  </div>
+</main>

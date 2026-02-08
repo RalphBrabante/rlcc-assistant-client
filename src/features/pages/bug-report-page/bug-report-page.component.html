@@ -1,0 +1,104 @@
+<main class="app-page bug-report-page">
+  <div class="container py-4">
+    <div class="card shadow-sm border-0 report-card">
+      <div class="card-body p-4 p-md-5">
+        <h2 class="h4 mb-1">Report a Bug</h2>
+        <p class="text-muted mb-4">
+          Share details about issues you find so we can investigate and fix them.
+        </p>
+
+        <form [formGroup]="reportForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input
+              id="title"
+              type="text"
+              class="form-control"
+              formControlName="title"
+              maxlength="160"
+              [class.is-invalid]="showFieldError('title')"
+              placeholder="Short summary of the issue"
+            />
+            <div class="invalid-feedback" *ngIf="showFieldError('title')">
+              Title is required and must be 160 characters or fewer.
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="scope" class="form-label">Issue Area</label>
+              <select
+                id="scope"
+                class="form-select"
+                formControlName="scope"
+                [class.is-invalid]="showFieldError('scope')"
+              >
+                @for (option of scopeOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="severity" class="form-label">Severity</label>
+              <select
+                id="severity"
+                class="form-select"
+                formControlName="severity"
+                [class.is-invalid]="showFieldError('severity')"
+              >
+                @for (option of severityOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="pageUrl" class="form-label">Page URL (optional)</label>
+            <input
+              id="pageUrl"
+              type="url"
+              class="form-control"
+              formControlName="pageUrl"
+              maxlength="500"
+              [class.is-invalid]="showFieldError('pageUrl')"
+              placeholder="https://..."
+            />
+            <div class="invalid-feedback" *ngIf="showFieldError('pageUrl')">
+              URL must be 500 characters or fewer.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea
+              id="description"
+              class="form-control"
+              rows="7"
+              formControlName="description"
+              maxlength="5000"
+              [class.is-invalid]="showFieldError('description')"
+              placeholder="Steps to reproduce, expected result, actual result, and any relevant details."
+            ></textarea>
+            <div class="invalid-feedback" *ngIf="showFieldError('description')">
+              Description is required and must be 5000 characters or fewer.
+            </div>
+          </div>
+
+          <div class="alert alert-danger py-2 mb-3" *ngIf="submitError()">
+            {{ submitError() }}
+          </div>
+
+          <div class="alert alert-success py-2 mb-3" *ngIf="submitSuccess()">
+            {{ submitSuccess() }}
+          </div>
+
+          <button type="submit" class="btn btn-primary" [disabled]="submitting()">
+            {{ submitting() ? 'Submitting...' : 'Submit Report' }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>

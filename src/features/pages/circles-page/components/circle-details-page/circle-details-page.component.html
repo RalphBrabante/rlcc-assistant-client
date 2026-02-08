@@ -179,7 +179,19 @@
         <div class="topic-list">
           @for (topic of topics(); track topic.id) {
           <div class="topic-item">
-            <div class="topic-title">{{ topic.title }}</div>
+            <div class="d-flex justify-content-between align-items-start gap-2">
+              <div class="topic-title">{{ topic.title }}</div>
+              @if (canDeleteTopics()) {
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-danger"
+                (click)="onDeleteTopic(topic.id)"
+                ngbTooltip="Delete topic"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+              }
+            </div>
             @if (topic.description) {
             <p class="topic-description mb-1">{{ topic.description }}</p>
             }

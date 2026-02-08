@@ -34,6 +34,7 @@ export class CircleDetailsPageComponent
   hasChatAccess = signal<boolean>(false);
   canRemoveMembers = signal<boolean>(false);
   canCreateTopics = signal<boolean>(false);
+  canDeleteTopics = signal<boolean>(false);
   leaderAvatarFailed = signal<boolean>(false);
   currentUserId = 0;
   topicForm!: FormGroup;
@@ -79,8 +80,12 @@ export class CircleDetailsPageComponent
           this.canCreateTopics.set(
             this.authSvc.isSuperUser() ||
               this.authSvc.isAdmin() ||
-              group.leaderId === this.currentUserId ||
-              group.userId === this.currentUserId
+              group.leaderId === this.currentUserId
+          );
+          this.canDeleteTopics.set(
+            this.authSvc.isAdmin() ||
+              this.authSvc.isSuperUser() ||
+              group.leaderId === this.currentUserId
           );
           this.leaderAvatarFailed.set(false);
           this.errorMessage.set('');
@@ -90,6 +95,7 @@ export class CircleDetailsPageComponent
           this.group.set(null);
           this.topics.set([]);
           this.canCreateTopics.set(false);
+          this.canDeleteTopics.set(false);
           this.hasChatAccess.set(false);
           this.leaderAvatarFailed.set(false);
           if (err?.status === 403) {
@@ -171,6 +177,31 @@ export class CircleDetailsPageComponent
         error: (err) => {
           this.topicErrorMessage.set(
             err?.error?.message || 'Unable to create topic.'
+          );
+        },
+      });
+  }
+
+  onDeleteTopic(topicId: number) {
+    if (!this.canDeleteTopics()) return;
+
+    const groupId = this.id();
+    if (!groupId) return;
+
+    this.topicErrorMessage.set('');
+    this.topicSuccessMessage.set('');
+
+    this.grpSvc
+      .deleteGroupTopic(groupId, topicId)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: () => {
+          this.topicSuccessMessage.set('Topic deleted successfully.');
+          this.fetchTopics();
+        },
+        error: (err) => {
+          this.topicErrorMessage.set(
+            err?.error?.message || 'Unable to delete topic.'
           );
         },
       });

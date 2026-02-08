@@ -4,6 +4,7 @@ import { loginPageGuard } from '../common/guards/login-page.guard';
 import { appDashboardGuard } from '../common/guards/app-dashboard.guard';
 import { adminGuard } from '../common/guards/admin.guard';
 import { superuserGuard } from '../common/guards/superuser.guard';
+import { superadminAdminGuard } from '../common/guards/superadmin-admin.guard';
 
 const routes: Routes = [
   {
@@ -97,12 +98,28 @@ const routes: Routes = [
       ).then((m) => m.AmqpQueueViewerPageModule),
   },
   {
+    path: 'reported-bugs',
+    canActivate: [appDashboardGuard, superadminAdminGuard],
+    loadChildren: () =>
+      import('../features/pages/reported-bugs-page/reported-bugs-page.module').then(
+        (m) => m.ReportedBugsPageModule
+      ),
+  },
+  {
     path: 'profile',
     canActivate: [appDashboardGuard],
     loadChildren: () =>
       import(
         '../features/pages/edit-profile-page/edit-profile-page.module'
       ).then((m) => m.EditProfilePageModule),
+  },
+  {
+    path: 'report-bug',
+    canActivate: [appDashboardGuard],
+    loadChildren: () =>
+      import('../features/pages/bug-report-page/bug-report-page.module').then(
+        (m) => m.BugReportPageModule
+      ),
   },
   {
     path: 'forbidden',

@@ -82,6 +82,12 @@ export class GroupService {
     });
   }
 
+  deleteGroupTopic(groupId: number | string, topicId: number): Observable<{ code: number; data: { id: number; deleted: boolean } }> {
+    return this.http.delete<{ code: number; data: { id: number; deleted: boolean } }>(
+      baseUrl + `/groups/${groupId}/topics/${topicId}`
+    );
+  }
+
   getAllGroupTopics(): Observable<GroupTopicsApiResponse> {
     return this.http.get<GroupTopicsApiResponse>(baseUrl + `/groups/topics`);
   }

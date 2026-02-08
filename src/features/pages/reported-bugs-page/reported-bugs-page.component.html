@@ -1,0 +1,132 @@
+<main class="app-page reported-bugs-page">
+  <div class="app-shell">
+    <section class="app-shell-head">
+      <h2>Reported Bugs</h2>
+      <p class="app-shell-subtitle">Minimal queue for triage and status updates.</p>
+    </section>
+
+    <section class="app-shell-body">
+      <form class="filter-form" [formGroup]="filterForm" (ngSubmit)="onFilterSubmit()">
+        <div class="filter-grid">
+          <div class="filter-item search-item">
+            <i class="bi bi-search" aria-hidden="true"></i>
+            <input
+              id="bug-search"
+              type="text"
+              class="form-control"
+              formControlName="q"
+              maxlength="120"
+              placeholder="Search ID, title, description"
+              aria-label="Search bug reports"
+            />
+          </div>
+
+          <div class="filter-item select-item">
+            <i class="bi bi-funnel" aria-hidden="true"></i>
+            <select
+              id="bug-status"
+              class="form-select"
+              formControlName="status"
+              aria-label="Filter by status"
+            >
+              @for (option of statusOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+
+          <button class="btn btn-dark apply-btn" [disabled]="loading() || refreshing()" type="submit">
+            <i class="bi bi-filter"></i>
+            Apply
+          </button>
+        </div>
+      </form>
+
+      @if (errorMessage()) {
+      <div class="alert alert-danger py-2 mt-3 mb-0">{{ errorMessage() }}</div>
+      }
+
+      @if (successMessage()) {
+      <div class="alert alert-success py-2 mt-3 mb-0">{{ successMessage() }}</div>
+      }
+
+      @if (loading()) {
+      <p class="text-muted mt-3 mb-0">Loading bug reports...</p>
+      } @else {
+      <div class="meta-row mt-3">
+        <div>
+          <strong>{{ meta().total }}</strong> total
+        </div>
+        <div>
+          <strong>{{ meta().page }}</strong> / {{ meta().totalPages }}
+        </div>
+      </div>
+
+      <div class="bug-list mt-3">
+        @for (report of bugReports(); track report.id) {
+        <article class="bug-card">
+          <header class="bug-card-head">
+            <div class="title-wrap">
+              <h5 class="mb-1">#{{ report.id }} {{ report.title }}</h5>
+              <small class="text-muted">
+                {{ report.createdAt | date: 'medium' }}
+                @if (report.reporter) {
+                · {{ report.reporter.firstName }} {{ report.reporter.lastName }}
+                }
+              </small>
+            </div>
+            <span class="status-pill" [attr.data-status]="report.status">
+              {{ formatStatus(report.status) }}
+            </span>
+          </header>
+
+          <div class="bug-meta mt-2">
+            <span><strong>{{ report.scope }}</strong></span>
+            <span><strong>{{ report.severity }}</strong></span>
+            <span class="url" title="{{ report.pageUrl || 'N/A' }}">{{ report.pageUrl || 'N/A' }}</span>
+          </div>
+
+          <p class="mt-3 mb-3 description">{{ report.description }}</p>
+
+          <div class="actions-row">
+            <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/reported-bugs', report.id]">
+              <i class="bi bi-eye"></i>
+              Details
+            </a>
+
+            <div class="status-update-row">
+              <select
+                class="form-select form-select-sm"
+                [id]="'status-' + report.id"
+                [value]="report.status"
+                [disabled]="isUpdating(report.id)"
+                (change)="updateStatus(report.id, $event)"
+              >
+                <option value="open">Open</option>
+                <option value="in_progress">In Progress</option>
+                <option value="resolved">Resolved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+              @if (isUpdating(report.id)) {
+              <small class="text-muted">Saving...</small>
+              }
+            </div>
+          </div>
+        </article>
+        } @empty {
+        <p class="text-muted mb-0">No bug reports found.</p>
+        }
+      </div>
+
+      <div class="pagination-row mt-3">
+        <button class="btn btn-outline-secondary" [disabled]="!canGoPrev()" (click)="goPrevPage()" type="button">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <button class="btn btn-outline-secondary" [disabled]="!canGoNext()" (click)="goNextPage()" type="button">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+      }
+    </section>
+  </div>
+</main>

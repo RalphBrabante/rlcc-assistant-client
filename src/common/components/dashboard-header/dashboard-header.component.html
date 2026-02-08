@@ -78,6 +78,13 @@
                     Settings
                   </a>
                 </li>
+                @if (isSuperOrAdministrator()) {
+                  <li>
+                    <a class="dropdown-item" routerLink="/reported-bugs" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                      Reported Bugs
+                    </a>
+                  </li>
+                }
                 @if (isSuperUser()) {
                   <li>
                     <a class="dropdown-item" routerLink="/roles-permissions" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
@@ -117,6 +124,9 @@
             <ul class="profile-dropdown">
               <li>
                 <a routerLink="/profile" (click)="toggleSubmenu()">Edit Profile</a>
+              </li>
+              <li>
+                <a routerLink="/report-bug" (click)="toggleSubmenu()">Report a Bug</a>
               </li>
               <li>
                 <a class="danger" (click)="onLogout()">Logout</a>
