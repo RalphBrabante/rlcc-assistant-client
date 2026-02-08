@@ -1,4 +1,16 @@
+<section class="maintenance-lockout" *ngIf="maintenanceLockout(); else appContent">
+  <div class="maintenance-lockout-card">
+    <h2 class="mb-2">Maintenance Mode</h2>
+    <p class="mb-0">The system is temporarily unavailable. Please try again later.</p>
+  </div>
+</section>
+
+<ng-template #appContent>
 <app-dashboard-header *ngIf="showHeader()"/>
+<section class="maintenance-banner" *ngIf="maintenanceMode()">
+  <i class="bi bi-tools me-2"></i>
+  Maintenance mode is active. Access is restricted for non-administrative users.
+</section>
 <router-outlet />
 <app-forbidden-overlay />
 
@@ -9,3 +21,4 @@
   </span>
   <span class="version-text">Beta App</span>
 </section>
+</ng-template>

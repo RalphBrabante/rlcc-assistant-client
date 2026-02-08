@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { baseUrl } from '../../appConfig';
 import { ApiResponse } from './api-response';
-import { ManagedRole, RolePermission } from './role-management';
+import { ManagedRole, RoleAssignmentUser, RolePermission } from './role-management';
 
 @Injectable({
   providedIn: 'root',
@@ -42,6 +42,30 @@ export class RoleManagementService {
   deleteRole(roleId: number): Observable<ApiResponse<{ id: number; deleted: boolean }>> {
     return this.http.delete<ApiResponse<{ id: number; deleted: boolean }>>(
       `${baseUrl}/roles/${roleId}`
+    );
+  }
+
+  getAssignableRoles(): Observable<ApiResponse<{ roles: Array<Pick<ManagedRole, 'id' | 'name'>> }>> {
+    return this.http.get<ApiResponse<{ roles: Array<Pick<ManagedRole, 'id' | 'name'>> }>>(
+      `${baseUrl}/roles/assignable`
+    );
+  }
+
+  searchUsersForRoleAssignment(
+    query: string
+  ): Observable<ApiResponse<{ users: RoleAssignmentUser[] }>> {
+    return this.http.get<ApiResponse<{ users: RoleAssignmentUser[] }>>(
+      `${baseUrl}/roles/user-roles/users/search?q=${encodeURIComponent(query)}`
+    );
+  }
+
+  updateUserRoles(
+    userId: number,
+    roleIds: number[]
+  ): Observable<ApiResponse<{ user: RoleAssignmentUser }>> {
+    return this.http.patch<ApiResponse<{ user: RoleAssignmentUser }>>(
+      `${baseUrl}/roles/user-roles/users/${userId}`,
+      { roleIds }
     );
   }
 }

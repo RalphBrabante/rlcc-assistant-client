@@ -6,6 +6,18 @@ import { ApiResponse } from './api-response';
 import { UserApiResponse, UserCountApiResponse } from './user-api-response';
 import { User } from './user';
 
+export interface UpdateUserPayload {
+  firstName?: string | null;
+  lastName?: string | null;
+  addressLine1?: string | null;
+  addressLine2?: string | null;
+  city?: string | null;
+  province?: string | null;
+  postalCode?: string | null;
+  password?: string;
+  confirmPassword?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -28,7 +40,7 @@ export class UserService {
     );
   }
 
-  updateUser(id: string, user: User): Observable<ApiResponse<{ id: number }>> {
+  updateUser(id: string, user: UpdateUserPayload): Observable<ApiResponse<{ id: number }>> {
     return this.http.patch<ApiResponse<{ id: number }>>(
       baseUrl + `/users/${id}`,
       { user }

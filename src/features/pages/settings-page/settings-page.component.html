@@ -23,13 +23,126 @@
                 role="switch"
                 id="maintenanceMode"
                 formControlName="maintenanceMode"
+                [disabled]="!canUpdateSystemSettings()"
               />
             </div>
           </form>
         </div>
       </div>
+
+      <div class="settings-card mt-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div>
+            <h5 class="card-title mb-1">Dev Mode</h5>
+            <p class="text-muted mb-0">
+              When enabled, all notification emails are disabled.
+            </p>
+          </div>
+
+          <form [formGroup]="form">
+            <div class="form-check form-switch ms-3">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="devMode"
+                formControlName="devMode"
+                [disabled]="!canUpdateSystemSettings()"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="alert alert-success py-2 mt-3 mb-0" *ngIf="settingsSaveMessage()">
+        {{ settingsSaveMessage() }}
+      </div>
+      <div class="alert alert-danger py-2 mt-3 mb-0" *ngIf="settingsSaveError()">
+        {{ settingsSaveError() }}
+      </div>
       <div class="text-end mt-3">
-        <button class="btn btn-primary" type="button">Save Settings</button>
+        <button
+          class="btn btn-primary"
+          type="button"
+          (click)="saveSettings()"
+          [disabled]="saveSettingsLoading() || !canUpdateSystemSettings()"
+        >
+          {{ saveSettingsLoading() ? 'Saving...' : 'Save Settings' }}
+        </button>
+      </div>
+
+      <div class="settings-card mt-4" *ngIf="canManageUserRoles()">
+        <h5 class="card-title mb-2">User Role Assignment</h5>
+        <p class="text-muted mb-3">
+          Search by username/email, numeric user ID, or PCOID and assign or unassign roles.
+        </p>
+
+        <form [formGroup]="roleSearchForm" (ngSubmit)="onSearchUsers()" class="row g-2 align-items-end">
+          <div class="col-md-9">
+            <label for="userRoleSearch" class="form-label">User Search</label>
+            <input
+              id="userRoleSearch"
+              type="text"
+              class="form-control"
+              formControlName="query"
+              placeholder="Example: jane, 42, or 110231"
+            />
+          </div>
+          <div class="col-md-3 d-grid">
+            <button class="btn btn-outline-primary" type="submit" [disabled]="roleManagementLoading()">
+              {{ roleManagementLoading() ? 'Searching...' : 'Search User' }}
+            </button>
+          </div>
+        </form>
+
+        <div class="alert alert-secondary py-2 mt-3 mb-0" *ngIf="roleSearchMessage()">
+          {{ roleSearchMessage() }}
+        </div>
+
+        <div class="search-results mt-3" *ngIf="roleSearchResults().length">
+          <div
+            class="search-result-item"
+            [class.active]="selectedUser()?.id === user.id"
+            *ngFor="let user of roleSearchResults()"
+            (click)="selectUser(user)"
+          >
+            <div>
+              <div class="fw-semibold">{{ user.firstName }} {{ user.lastName }}</div>
+              <div class="small text-muted">{{ user.emailAddress || 'No email' }}</div>
+            </div>
+            <div class="small text-muted text-end">
+              <div>ID: {{ user.id }}</div>
+              <div>PCOID: {{ user.pcoId || 'N/A' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="role-editor mt-3" *ngIf="selectedUser() as user">
+          <h6 class="mb-2">Assign Roles for {{ user.firstName }} {{ user.lastName }}</h6>
+          <div class="role-grid">
+            <label class="role-option" *ngFor="let role of roleOptions()">
+              <input
+                type="checkbox"
+                [checked]="isRoleSelected(role.id)"
+                (change)="toggleRole(role.id, $any($event.target).checked)"
+              />
+              <span>{{ role.name }}</span>
+            </label>
+          </div>
+
+          <div class="alert alert-success py-2 mt-3 mb-0" *ngIf="roleSaveMessage()">
+            {{ roleSaveMessage() }}
+          </div>
+          <div class="alert alert-danger py-2 mt-3 mb-0" *ngIf="roleSaveError()">
+            {{ roleSaveError() }}
+          </div>
+
+          <div class="text-end mt-3">
+            <button class="btn btn-primary" type="button" (click)="saveUserRoles()" [disabled]="roleSaving()">
+              {{ roleSaving() ? 'Saving...' : 'Save User Roles' }}
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   </div>

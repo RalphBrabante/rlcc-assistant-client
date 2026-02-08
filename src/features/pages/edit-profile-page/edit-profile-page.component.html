@@ -2,7 +2,7 @@
   <div class="app-shell">
     <section class="app-shell-head">
       <h2>My Profile</h2>
-      <p class="app-shell-subtitle">Update account and contact details.</p>
+      <p class="app-shell-subtitle">Manage your personal details and account security.</p>
     </section>
     <section class="app-shell-body">
       <ng-container *ngIf="loading(); else formTemplate">
@@ -46,97 +46,166 @@
       </ng-container>
 
       <ng-template #formTemplate>
-        <h5 *ngIf="pcoId()" class="id-label">ID: {{ pcoId() }}</h5>
-        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="p-3 border rounded shadow-sm profile-form">
-          <h4 class="mb-3">Update Profile</h4>
+        <div class="profile-layout">
+          <aside class="profile-side-card">
+            <div class="profile-pic-container border d-flex align-items-center justify-content-center">
+              <img *ngIf="avatar()" [src]="avatar()" alt="Profile" class="img-fluid" />
+              <span *ngIf="!avatar()" class="text-muted small">No Image</span>
+            </div>
+            <h5 class="mt-3 mb-1">{{ firstName.value }} {{ lastName.value }}</h5>
+            <p class="id-label mb-3" *ngIf="pcoId()">ID: {{ pcoId() }}</p>
+            <div class="roles-wrap">
+              <h6>Roles</h6>
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                @for (role of userRoles(); track role.id) {
+                <span class="role-pill">{{ role.name }}</span>
+                }
+              </div>
+            </div>
+          </aside>
 
-          <div class="row align-items-center mb-3">
-            <div class="col-md-8">
-              <div class="row">
-                <div class="col-md-6 mb-3 mb-md-0">
-                  <label for="firstName" class="form-label">First Name</label>
-                  <input id="firstName" type="text" class="form-control" formControlName="firstName" />
+          <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
+            <h4 class="mb-3">Update Profile</h4>
+            <div class="row g-3 mb-2">
+              <div class="col-md-6">
+                <label for="firstName" class="form-label">First Name</label>
+                <input
+                  id="firstName"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="showFieldError('firstName')"
+                  formControlName="firstName"
+                />
+                <div class="invalid-feedback" *ngIf="showFieldError('firstName')">
+                  Enter a valid first name (2-60 letters).
                 </div>
-                <div class="col-md-6">
-                  <label for="lastName" class="form-label">Last Name</label>
-                  <input id="lastName" type="text" class="form-control" formControlName="lastName" />
+              </div>
+              <div class="col-md-6">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input
+                  id="lastName"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="showFieldError('lastName')"
+                  formControlName="lastName"
+                />
+                <div class="invalid-feedback" *ngIf="showFieldError('lastName')">
+                  Enter a valid last name (2-60 letters).
                 </div>
               </div>
             </div>
 
-            <div class="col-md-4 text-center">
-              <div class="profile-pic-container border mx-auto d-flex align-items-center justify-content-center">
-                <img *ngIf="avatar()" [src]="avatar()" alt="Profile" class="img-fluid" />
-                <span *ngIf="!avatar()" class="text-muted small">No Image</span>
+            <div class="row g-3 mb-2">
+              <div class="col-md-6">
+                <label for="password" class="form-label">New Password</label>
+                <input
+                  id="password"
+                  type="password"
+                  class="form-control"
+                  [class.is-invalid]="showFieldError('password') || hasFormError('passwordRequired') || hasFormError('mismatch')"
+                  formControlName="password"
+                  placeholder="Leave empty to keep current password"
+                />
+                <div class="form-text">{{ getPasswordRulesHint() }}</div>
+                <div class="invalid-feedback" *ngIf="showFieldError('password')">
+                  Password does not meet complexity requirements.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  class="form-control"
+                  [class.is-invalid]="hasFormError('confirmPasswordRequired') || hasFormError('mismatch') || hasFormError('passwordRequired')"
+                  formControlName="confirmPassword"
+                  placeholder="Re-enter new password"
+                />
+                <div class="invalid-feedback d-block" *ngIf="hasFormError('confirmPasswordRequired')">
+                  Confirm your new password.
+                </div>
+                <div class="invalid-feedback d-block" *ngIf="hasFormError('passwordRequired')">
+                  Enter a new password first.
+                </div>
+                <div class="invalid-feedback d-block" *ngIf="hasFormError('mismatch')">
+                  Password and confirmation do not match.
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="password" class="form-label">Password</label>
+            <div class="mb-3">
+              <label for="address1" class="form-label">Address Line 1</label>
               <input
-                id="password"
-                type="password"
+                id="address1"
+                type="text"
                 class="form-control"
-                formControlName="password"
-                placeholder="*****************************"
+                [class.is-invalid]="showFieldError('addressLine1')"
+                formControlName="addressLine1"
               />
+              <div class="invalid-feedback" *ngIf="showFieldError('addressLine1')">Address is too long.</div>
             </div>
-            <div class="col-md-6">
-              <label for="confirmPassword" class="form-label">Confirm Password</label>
+
+            <div class="mb-3">
+              <label for="address2" class="form-label">Address Line 2</label>
               <input
-                id="confirmPassword"
-                type="password"
+                id="address2"
+                type="text"
                 class="form-control"
-                placeholder="*****************************"
-                formControlName="confirmPassword"
+                [class.is-invalid]="showFieldError('addressLine2')"
+                formControlName="addressLine2"
               />
+              <div class="invalid-feedback" *ngIf="showFieldError('addressLine2')">Address is too long.</div>
             </div>
-          </div>
 
-          <div class="mb-3">
-            <label for="address1" class="form-label">Address Line 1</label>
-            <input id="address1" type="text" class="form-control" formControlName="addressLine1" />
-          </div>
-
-          <div class="mb-3">
-            <label for="address2" class="form-label">Address Line 2</label>
-            <input id="address2" type="text" class="form-control" formControlName="addressLine2" />
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-md-4">
-              <label for="city" class="form-label">City</label>
-              <input id="city" type="text" class="form-control" formControlName="city" />
+            <div class="row g-3 mb-3">
+              <div class="col-md-4">
+                <label for="city" class="form-label">City</label>
+                <input
+                  id="city"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="showFieldError('city')"
+                  formControlName="city"
+                />
+                <div class="invalid-feedback" *ngIf="showFieldError('city')">Enter a valid city.</div>
+              </div>
+              <div class="col-md-4">
+                <label for="province" class="form-label">Province / State</label>
+                <input
+                  id="province"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="showFieldError('province')"
+                  formControlName="province"
+                />
+                <div class="invalid-feedback" *ngIf="showFieldError('province')">Enter a valid province or state.</div>
+              </div>
+              <div class="col-md-4">
+                <label for="postalCode" class="form-label">Postal Code</label>
+                <input
+                  id="postalCode"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="showFieldError('postalCode')"
+                  formControlName="postalCode"
+                />
+                <div class="invalid-feedback" *ngIf="showFieldError('postalCode')">Use a valid postal code format.</div>
+              </div>
             </div>
-            <div class="col-md-4">
-              <label for="province" class="form-label">Province</label>
-              <input id="province" type="text" class="form-control" formControlName="province" />
-            </div>
-            <div class="col-md-4">
-              <label for="postalCode" class="form-label">Postal Code</label>
-              <input id="postalCode" type="text" class="form-control" formControlName="postalCode" />
-            </div>
-          </div>
 
-          <button type="submit" class="btn btn-primary w-100" [disabled]="!this.profileForm.valid">
-            Update Profile
-          </button>
-        </form>
-      </ng-template>
+            <div class="alert alert-danger py-2 mb-3" *ngIf="submitError()">
+              {{ submitError() }}
+            </div>
+            <div class="alert alert-success py-2 mb-3" *ngIf="submitSuccess()">
+              {{ submitSuccess() }}
+            </div>
 
-      <div class="roles-wrap">
-        <h5>Roles</h5>
-        <div class="d-flex flex-wrap gap-2">
-          @for (role of userRoles(); track $index) {
-          <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill d-flex align-items-center">
-            {{ role.name }}
-            <i class="bi bi-x-circle-fill ms-2 text-danger" style="font-size: 0.9rem;"></i>
-          </button>
-          }
+            <button type="submit" class="btn btn-primary w-100" [disabled]="isSaveDisabled()">
+              Save Changes
+            </button>
+          </form>
         </div>
-      </div>
+      </ng-template>
     </section>
   </div>
 </main>

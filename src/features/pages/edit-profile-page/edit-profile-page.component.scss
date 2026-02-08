@@ -1,22 +1,90 @@
+.profile-layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 260px 1fr;
+}
+
+.profile-side-card,
+.profile-form {
+  border: 1px solid #dbe7ff;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  box-shadow: 0 12px 30px rgba(20, 40, 78, 0.06);
+}
+
+.profile-side-card {
+  padding: 1rem;
+  text-align: center;
+}
+
+.profile-form {
+  padding: 1rem;
+}
+
 .profile-pic-container {
-  width: 160px;
-  height: 160px;
+  width: 148px;
+  height: 148px;
+  margin-inline: auto;
   overflow: hidden;
-  background: #f8f9fa;
-  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #eef4ff 0%, #f8fbff 100%);
+  border-radius: 1rem;
+  border-color: #c8dcff !important;
+}
+
+.profile-pic-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.role-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  color: #184f9e;
+  border: 1px solid #bdd6ff;
+  background: #edf4ff;
 }
 
 .roles-wrap {
-  margin-top: 1rem;
+  text-align: left;
+}
+
+.roles-wrap h6 {
+  margin: 0;
+  color: #315784;
+  font-weight: 700;
 }
 
 .id-label {
-  color: #44608a;
+  color: #46668f;
   font-weight: 600;
+  font-size: 0.87rem;
 }
 
-button:hover .bi-x-circle-fill {
-  color: #c82333;
-  transform: scale(1.1);
-  transition: all 0.2s ease;
+.form-control.ng-touched.ng-invalid,
+.form-control.is-invalid {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.1);
+}
+
+.form-text {
+  font-size: 0.78rem;
+}
+
+@media (max-width: 992px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-side-card {
+    text-align: left;
+  }
+
+  .profile-pic-container {
+    margin-inline: 0;
+  }
 }

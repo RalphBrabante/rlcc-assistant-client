@@ -10,3 +10,12 @@ export interface ManagedRole {
   name: string;
   permissions: RolePermission[];
 }
+
+export interface RoleAssignmentUser {
+  id: number;
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  pcoId?: string | number | null;
+  roles: Array<Pick<ManagedRole, 'id' | 'name'>>;
+}
