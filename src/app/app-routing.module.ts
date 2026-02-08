@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { loginPageGuard } from '../common/guards/login-page.guard';
 import { appDashboardGuard } from '../common/guards/app-dashboard.guard';
 import { adminGuard } from '../common/guards/admin.guard';
+import { superuserGuard } from '../common/guards/superuser.guard';
 
 const routes: Routes = [
   {
@@ -70,6 +71,14 @@ const routes: Routes = [
       import('../features/pages/settings-page/settings-page.module').then(
         (m) => m.SettingsPageModule
       ),
+  },
+  {
+    path: 'roles-permissions',
+    canActivate: [appDashboardGuard, superuserGuard],
+    loadChildren: () =>
+      import(
+        '../features/pages/roles-permissions-page/roles-permissions-page.module'
+      ).then((m) => m.RolesPermissionsPageModule),
   },
   {
     path: 'profile',

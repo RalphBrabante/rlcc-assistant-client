@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, viewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Group } from '../../models/groups';
 import { GroupService } from '../../../../../common/services/group.service';
 import { BaseComponent } from '../../../../../common/directives/base-component';
@@ -8,6 +8,7 @@ import { AssignCirlceMembersModalComponent } from '../assign-cirlce-members-moda
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteConfirmationModalComponent } from '../../../../../common/components/delete-confirmation-modal/delete-confirmation-modal.component';
 import { AuthService } from '../../../../../common/services/auth.service';
+import { GroupUser } from '../../models/user';
 
 @Component({
   selector: 'app-circle-details-page',
@@ -24,17 +25,19 @@ export class CircleDetailsPageComponent
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
   hasChatAccess = signal<boolean>(false);
+  canRemoveMembers = signal<boolean>(false);
+  leaderAvatarFailed = signal<boolean>(false);
   currentUserId = 0;
 
   constructor(
     private route: ActivatedRoute,
     private grpSvc: GroupService,
-    private router: Router,
     private modalService: NgbModal,
     private authSvc: AuthService
   ) {
     super();
     this.currentUserId = this.safeGetUserId();
+    this.canRemoveMembers.set(this.authSvc.isAdmin() || this.authSvc.isSuperUser());
   }
 
   ngOnInit() {
@@ -59,19 +62,29 @@ export class CircleDetailsPageComponent
           const group = resp.data.group!;
           this.group.set(group);
           this.hasChatAccess.set(this.checkChatAccess(group));
+          this.leaderAvatarFailed.set(false);
           this.errorMessage.set('');
         },
         error: (err) => {
-          if (err?.error?.code === 403) {
-            this.router.navigate(['/forbidden']);
+          this.group.set(null);
+          this.hasChatAccess.set(false);
+          this.leaderAvatarFailed.set(false);
+          if (err?.status === 403) {
+            this.errorMessage.set(
+              err?.error?.message ||
+                'You do not have access to view members for this circle.'
+            );
             return;
           }
-          this.errorMessage.set(err?.error?.message || 'Unable to load circle details.');
+          this.errorMessage.set(
+            err?.error?.message || 'Unable to load circle details.'
+          );
         },
       });
   }
 
   open() {
+    if (!this.canRemoveMembers()) return;
     this.modal()?.openCreateCircleModal(this.group()!);
   }
 
@@ -92,6 +105,12 @@ export class CircleDetailsPageComponent
   }
 
   onRemoveMember(userId: number) {
+    if (!this.canRemoveMembers()) return;
+    if (userId === this.currentUserId) {
+      this.errorMessage.set('You cannot remove yourself from this circle.');
+      return;
+    }
+
     const selectedGroup = this.group();
     if (!selectedGroup?.id) return;
 
@@ -124,5 +143,43 @@ export class CircleDetailsPageComponent
       },
       () => {}
     );
+  }
+
+  leaderProfile(): GroupUser | null {
+    const group = this.group();
+    if (!group?.leaderId) return null;
+
+    const members = group.groupMembers || [];
+    return members.find((member) => member.id === group.leaderId) || null;
+  }
+
+  leaderName(): string {
+    const leader = this.leaderProfile();
+    if (leader) {
+      return `${leader.firstName} ${leader.lastName}`.trim();
+    }
+    return 'No leader assigned';
+  }
+
+  leaderAvatarUrl(): string {
+    const leader = this.leaderProfile();
+    return leader?.avatar?.trim() || '';
+  }
+
+  onLeaderAvatarError() {
+    this.leaderAvatarFailed.set(true);
+  }
+
+  leaderInitials(): string {
+    const leader = this.leaderProfile();
+    if (!leader) return 'NA';
+    const first = leader.firstName?.trim()?.charAt(0) || '';
+    const last = leader.lastName?.trim()?.charAt(0) || '';
+    const initials = `${first}${last}`.toUpperCase();
+    return initials || 'NA';
+  }
+
+  canRemoveSpecificMember(memberId: number): boolean {
+    return this.canRemoveMembers() && memberId !== this.currentUserId;
   }
 }

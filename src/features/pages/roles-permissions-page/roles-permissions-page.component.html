@@ -1,0 +1,106 @@
+<main class="roles-page">
+  <section class="hero-card">
+    <p class="eyebrow">Access Control</p>
+    <h1>Roles & Permissions</h1>
+    <p class="subtitle">Create roles and manage endpoint permissions for each role.</p>
+  </section>
+
+  <section class="content-grid">
+    <article class="panel role-panel">
+      <header class="panel-head">
+        <h3>Roles</h3>
+      </header>
+
+      <form class="create-role-form" [formGroup]="roleForm" (ngSubmit)="createRole()">
+        <label for="roleName" class="form-label">Create Role</label>
+        <div class="input-wrap">
+          <input id="roleName" type="text" class="form-control" formControlName="name" placeholder="e.g. AUDITOR" />
+          <button class="btn btn-primary" type="submit" [disabled]="creatingRole()">
+            @if (creatingRole()) { Creating... } @else { Add }
+          </button>
+        </div>
+        @if (roleName.invalid && roleName.touched) {
+          <small class="text-danger">Role name is required (min 2 characters).</small>
+        }
+      </form>
+
+      <div class="role-list">
+        @if (loading()) {
+          <p class="text-muted mb-0">Loading roles...</p>
+        } @else {
+          @for (role of roles(); track role.id) {
+            <button
+              type="button"
+              class="role-item"
+              [class.active]="selectedRoleId() === role.id"
+              (click)="selectRole(role.id)"
+            >
+              <span>{{ role.name }}</span>
+              <small>{{ role.permissions?.length || 0 }} permissions</small>
+            </button>
+          } @empty {
+            <p class="text-muted mb-0">No roles available.</p>
+          }
+        }
+      </div>
+    </article>
+
+    <article class="panel permissions-panel">
+      <header class="panel-head">
+        <h3>{{ selectedRoleName() }} Permissions</h3>
+        <div class="action-buttons">
+          <button
+            class="btn btn-outline-danger"
+            type="button"
+            [disabled]="!selectedRoleId() || deletingRole() || savingPermissions() || isSelectedRoleSuperUser()"
+            (click)="deleteSelectedRole()"
+          >
+            @if (deletingRole()) { Deleting... } @else { Delete Role }
+          </button>
+          <button class="btn btn-success" type="button" [disabled]="!selectedRoleId() || savingPermissions() || deletingRole()" (click)="savePermissions()">
+            @if (savingPermissions()) { Saving... } @else { Save Changes }
+          </button>
+        </div>
+      </header>
+
+      @if (errorMessage()) {
+        <div class="alert alert-danger py-2 px-3">{{ errorMessage() }}</div>
+      }
+
+      @if (successMessage()) {
+        <div class="alert alert-success py-2 px-3">{{ successMessage() }}</div>
+      }
+
+      @if (!selectedRoleId()) {
+        <div class="empty-state">Select a role to manage permissions.</div>
+      } @else {
+        <label class="select-all-row">
+          <input
+            type="checkbox"
+            [checked]="areAllPermissionsSelected()"
+            (change)="onToggleAllPermissions($any($event.target).checked)"
+          />
+          <span>Select All Permissions</span>
+        </label>
+
+        <div class="permissions-grid">
+          @for (permission of permissions(); track permission.id) {
+            <label class="permission-item">
+              <input
+                type="checkbox"
+                [checked]="isPermissionChecked(permission.id)"
+                (change)="onPermissionToggle(permission.id, $any($event.target).checked)"
+              />
+              <div>
+                <strong>{{ permission.name }}</strong>
+                <small>{{ permission.method }} · {{ permission.resource }}</small>
+              </div>
+            </label>
+          } @empty {
+            <div class="empty-state">No permissions found.</div>
+          }
+        </div>
+      }
+    </article>
+  </section>
+</main>

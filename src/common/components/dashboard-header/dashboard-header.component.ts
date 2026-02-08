@@ -70,6 +70,10 @@ export class DashboardHeaderComponent extends BaseComponent implements OnInit {
     return false;
   }
 
+  isSuperUser() {
+    return this.authSvc.getRoles().includes('SUPERUSER');
+  }
+
   toggleSubmenu() {
     this.showSubmenu.update((prevVal) => !prevVal);
   }

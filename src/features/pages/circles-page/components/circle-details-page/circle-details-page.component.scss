@@ -28,6 +28,7 @@
 .summary-card {
   padding: 1rem;
   align-self: start;
+  background: linear-gradient(165deg, #ffffff 0%, #f5f9ff 100%);
 }
 
 .summary-card .label {
@@ -43,6 +44,64 @@
   font-size: 1.2rem;
   margin: 0.3rem 0 1rem;
   color: #162743;
+}
+
+.leader-panel {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.9rem;
+  border: 1px solid #d8e6ff;
+  border-radius: 0.8rem;
+  background: linear-gradient(135deg, #f8fbff 0%, #eef5ff 100%);
+}
+
+.leader-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #c5dbff;
+  background: #dce9ff;
+  display: grid;
+  place-items: center;
+}
+
+.leader-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.leader-avatar span {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f4f8d;
+}
+
+.leader-meta {
+  min-width: 0;
+}
+
+.leader-meta small {
+  display: block;
+  color: #56709a;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.68rem;
+}
+
+.leader-meta strong {
+  display: block;
+  margin-top: 0.15rem;
+  color: #142b4a;
+  font-size: 0.97rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .stat-row {
@@ -83,6 +142,20 @@
 
 .members-table tbody tr:hover {
   background: #f8fbff;
+}
+
+.leader-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #0f4e2f;
+  background: #d8f6e4;
+  border: 1px solid #b9ebd0;
+  text-transform: uppercase;
 }
 
 .empty-row {

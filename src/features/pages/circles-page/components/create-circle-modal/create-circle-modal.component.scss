@@ -1,0 +1,52 @@
+.lookup-dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 220px;
+  overflow-y: auto;
+  margin-top: 0.25rem;
+  border: 1px solid #dce4f5;
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+.lookup-item {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #eef2fb;
+  background: #fff;
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lookup-item:last-child {
+  border-bottom: 0;
+}
+
+.lookup-item:hover {
+  background: #f7faff;
+}
+
+.lookup-item small {
+  color: #576984;
+}
+
+.lookup-empty {
+  padding: 0.6rem 0.75rem;
+  color: #6a788f;
+}
+
+.selected-leader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.5rem;
+  background: #f5f8ff;
+  border: 1px solid #dbe6ff;
+}

@@ -54,4 +54,14 @@ export class GroupService {
   removeUserFromGroup(groupId: number, userId: number): Observable<GroupsAPIResp> {
     return this.http.delete<GroupsAPIResp>(baseUrl + `/groups/${groupId}/user/${userId}`);
   }
+
+  assignGroupAdministrator(
+    groupId: number,
+    userId: number
+  ): Observable<GroupsAPIResp> {
+    return this.http.patch<GroupsAPIResp>(
+      baseUrl + `/groups/${groupId}/administrator/${userId}`,
+      {}
+    );
+  }
 }

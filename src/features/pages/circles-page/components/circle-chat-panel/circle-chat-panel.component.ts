@@ -32,6 +32,7 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
   sending = signal<boolean>(false);
   errorMessage = signal<string>('');
   socketConnected = signal<boolean>(false);
+  failedAvatarSenderIds = signal<Set<number>>(new Set());
   currentUserId = 0;
 
   messageControl = new FormControl('', {
@@ -69,6 +70,7 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
   private initializeChat() {
     this.errorMessage.set('');
     this.messages.set([]);
+    this.failedAvatarSenderIds.set(new Set());
 
     if (!this.groupId || !this.canAccess) {
       this.leaveCurrentRoom();
@@ -195,6 +197,30 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
     }
 
     return `User #${message.senderId}`;
+  }
+
+  senderAvatarUrl(message: GroupChatMessage) {
+    return message.sender?.avatar?.trim() || '';
+  }
+
+  onSenderAvatarError(senderId: number) {
+    const failed = new Set(this.failedAvatarSenderIds());
+    failed.add(senderId);
+    this.failedAvatarSenderIds.set(failed);
+  }
+
+  shouldShowSenderAvatar(message: GroupChatMessage) {
+    const avatarUrl = this.senderAvatarUrl(message);
+    if (!avatarUrl) return false;
+    return !this.failedAvatarSenderIds().has(message.senderId);
+  }
+
+  senderInitials(message: GroupChatMessage) {
+    const first = message.sender?.firstName?.trim()?.charAt(0) || '';
+    const last = message.sender?.lastName?.trim()?.charAt(0) || '';
+    const initials = `${first}${last}`.toUpperCase();
+    if (initials) return initials;
+    return 'U';
   }
 
   private upsertMessage(message: GroupChatMessage) {

@@ -4,6 +4,7 @@ export interface GroupUser {
   id: number;
   firstName: string;
   lastName: string;
+  avatar?: string | null;
   emailAddress: string;
   addressLine1?: string;
   addressLine2: string;

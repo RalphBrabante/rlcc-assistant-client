@@ -27,18 +27,31 @@
       } @else {
         @for (message of messages(); track message.id) {
           <article class="message-item" [class.message-self]="message.senderId === currentUserId">
-            <div class="message-meta">
-              <strong>{{ displaySenderName(message) }}</strong>
-              <small>{{ message.createdAt | date:'MMM d, y h:mm a' }}</small>
+            <div class="message-avatar" [attr.aria-label]="displaySenderName(message)">
+              @if (shouldShowSenderAvatar(message)) {
+                <img
+                  [src]="senderAvatarUrl(message)"
+                  [alt]="displaySenderName(message)"
+                  (error)="onSenderAvatarError(message.senderId)"
+                />
+              } @else {
+                <span>{{ senderInitials(message) }}</span>
+              }
             </div>
-            <p>{{ message.content }}</p>
-            @if (canDelete(message)) {
-              <div class="message-actions">
-                <button type="button" class="btn btn-sm btn-link text-danger p-0" (click)="deleteMessage(message.id)">
-                  Delete
-                </button>
+            <div class="message-bubble">
+              <div class="message-meta">
+                <strong>{{ displaySenderName(message) }}</strong>
+                <small>{{ message.createdAt | date:'MMM d, y h:mm a' }}</small>
               </div>
-            }
+              <p>{{ message.content }}</p>
+              @if (canDelete(message)) {
+                <div class="message-actions">
+                  <button type="button" class="btn btn-sm btn-link text-danger p-0" (click)="deleteMessage(message.id)">
+                    Delete
+                  </button>
+                </div>
+              }
+            </div>
           </article>
         } @empty {
           <div class="chat-state">No messages yet. Start the conversation.</div>

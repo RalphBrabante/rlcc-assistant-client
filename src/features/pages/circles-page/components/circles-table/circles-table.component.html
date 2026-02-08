@@ -15,9 +15,11 @@
       <h5 class="mb-0">Circles Directory</h5>
       <small class="text-muted">{{ groupsData().length }} total</small>
     </div>
+    @if (canManageCircles()) {
     <button class="btn btn-primary btn-sm" (click)="open()">
       <i class="bi bi-plus-circle me-1"></i> Add Circle
     </button>
+    }
   </div>
 
   @if(errorMessage()){

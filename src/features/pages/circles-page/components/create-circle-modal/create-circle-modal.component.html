@@ -23,11 +23,67 @@
         <small style="color: Red">Name is required.</small>
         }
       </div>
+
+      <div class="mb-3">
+        <label class="form-label">Circle Administrator (Optional)</label>
+        <div class="position-relative">
+          <input
+            type="text"
+            class="form-control pe-5"
+            placeholder="Search active users"
+            formControlName="leaderLookup"
+            (blur)="hideLookupDropdown()"
+          />
+
+          @if (isSearchingUsers()) {
+          <div class="position-absolute top-50 end-0 translate-middle-y me-2">
+            <div class="spinner-border spinner-border-sm text-secondary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          }
+
+          @if (showLookupDropdown()) {
+          <div class="lookup-dropdown shadow-sm">
+            @for (user of lookupUsers(); track user.id) {
+            <button type="button" class="lookup-item" (click)="selectLeader(user)">
+              <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+              <small>#{{ user.id }}</small>
+            </button>
+            } @empty {
+            <div class="lookup-empty">No active users found.</div>
+            }
+          </div>
+          }
+        </div>
+
+        @if (selectedLeader()) {
+        <div class="selected-leader mt-2">
+          <span>
+            Selected: <strong>{{ selectedLeader()?.firstName }} {{ selectedLeader()?.lastName }}</strong>
+            (ID: {{ selectedLeader()?.id }})
+          </span>
+          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="clearSelectedLeader()">
+            Clear
+          </button>
+        </div>
+        }
+      </div>
+
+      @if (errorMessage()) {
+      <div class="alert alert-danger py-2 px-3 mb-0">{{ errorMessage() }}</div>
+      }
     </form>
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
-    <button class="btn btn-primary" (click)="saveGroup(modal)">Save</button>
+    <button class="btn btn-light" [disabled]="isSaving()" (click)="modal.dismiss()">Cancel</button>
+    <button class="btn btn-primary" [disabled]="isSaving()" (click)="saveGroup(modal)">
+      @if (isSaving()) {
+        Saving...
+      } @else {
+        Save
+      }
+    </button>
   </div>
 </ng-template>

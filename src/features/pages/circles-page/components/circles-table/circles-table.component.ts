@@ -6,6 +6,7 @@ import { Group } from '../../models/groups';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateCircleModalComponent } from '../create-circle-modal/create-circle-modal.component';
 import { DeleteConfirmationModalComponent } from '../../../../../common/components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { AuthService } from '../../../../../common/services/auth.service';
 
 @Component({
   selector: 'app-circles-table',
@@ -17,10 +18,16 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
   groupsData = signal<Group[]>([]);
   errorMessage = signal<string>('');
   isLoading = signal<boolean>(false);
+  canManageCircles = signal<boolean>(false);
   private errorTimer: ReturnType<typeof setTimeout> | null = null;
 
-  constructor(private grpSvc: GroupService, private modalService: NgbModal) {
+  constructor(
+    private grpSvc: GroupService,
+    private modalService: NgbModal,
+    private authSvc: AuthService
+  ) {
     super();
+    this.canManageCircles.set(this.authSvc.isAdmin() || this.authSvc.isSuperUser());
   }
 
   ngOnInit(): void {
@@ -50,6 +57,7 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
   }
 
   open() {
+    if (!this.canManageCircles()) return;
     this.modal()?.openCreateCircleModal();
   }
 
