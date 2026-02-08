@@ -4,6 +4,7 @@ import { baseUrl } from '../../appConfig';
 import { Observable } from 'rxjs';
 import { TitheTypeApiResponse } from './tithe-type-api-response';
 import { TitheType } from '../../features/pages/tithe-type-page/models/tithe-type';
+import { ApiResponse } from './api-response';
 
 @Injectable({
   providedIn: 'root',
@@ -35,8 +36,8 @@ export class TitheTypeService {
     });
   }
 
-  deleteTitheType(id: number): Observable<{ status: number; id: number }> {
-    return this.http.delete<{ status: number; id: number }>(
+  deleteTitheType(id: number): Observable<ApiResponse<{ id: number }>> {
+    return this.http.delete<ApiResponse<{ id: number }>>(
       baseUrl + `/titheTypes/${id}`
     );
   }

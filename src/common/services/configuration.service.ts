@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { baseUrl } from '../../appConfig';
 import { ServerConfiguration } from './server-configuration';
 import { Observable } from 'rxjs';
+import { ApiResponse } from './api-response';
 
 @Injectable({
   providedIn: 'root',
@@ -10,13 +11,9 @@ import { Observable } from 'rxjs';
 export class ConfigurationService {
   constructor(private http: HttpClient) {}
 
-  getServerConfigurations(): Observable<{
-    status: number;
-    serverConfigurations: ServerConfiguration[];
-  }> {
-    return this.http.get<{
-      status: number;
-      serverConfigurations: ServerConfiguration[];
-    }>(baseUrl + '/configurations');
+  getServerConfigurations(): Observable<ApiResponse<{ serverConfigurations: ServerConfiguration[] }>> {
+    return this.http.get<ApiResponse<{ serverConfigurations: ServerConfiguration[] }>>(
+      baseUrl + '/configurations'
+    );
   }
 }

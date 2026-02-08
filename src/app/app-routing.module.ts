@@ -7,11 +7,21 @@ import { adminGuard } from '../common/guards/admin.guard';
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
+    redirectTo: 'login',
+  },
+  {
+    path: 'login',
     canActivate: [loginPageGuard],
     loadChildren: () =>
       import('../features/pages/login-page/login-page.module').then(
         (m) => m.LoginPageModule
       ),
+  },
+  {
+    path: 'home',
+    pathMatch: 'full',
+    redirectTo: 'login',
   },
   {
     path: 'dashboard',

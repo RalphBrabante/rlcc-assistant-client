@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-  <div class="card shadow p-4 rounded-4" style="max-width: 400px; width: 100%">
+  <div class="card shadow p-4 rounded-4 position-relative" style="max-width: 400px; width: 100%">
     <div class="card-body text-center">
       <div class="logo-container">
         <img src="rlcc-logo.png" alt="" class="img-fluid" />
@@ -9,16 +9,20 @@
       <!-- Loader Overlay -->
       @if(isLoggingIn()){
         <div class="loader-overlay" id="loader">
-        <div
-          class="spinner-border text-primary"
-          role="status"
-          style="width: 3rem; height: 3rem"
-        >
-          <span class="visually-hidden">Loading...</span>
+          <div class="loader-panel">
+            <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="loader-text">Signing you in...</div>
+          </div>
         </div>
-      </div>
       }
-      <app-login-form #formData (submitEventEmitter)="onLogin($event)" [errorMessage]="errorMessage()"/>
+      <app-login-form
+        #formData
+        (submitEventEmitter)="onLogin($event)"
+        [errorMessage]="errorMessage()"
+        [isSubmitting]="isLoggingIn()"
+      />
     </div>
   </div>
 </div>

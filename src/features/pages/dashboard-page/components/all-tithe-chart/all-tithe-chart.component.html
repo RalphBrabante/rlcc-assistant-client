@@ -6,24 +6,13 @@
     <i class="bi bi-graph-down"></i>
   </div>
   <div class="card-body">
-    <div class="p-4">
+    <div class="p-4 position-relative">
       @if(isFetching()){
       <!-- Loader Overlay -->
-      <div
-        class="loader-overlay d-flex flex-column justify-content-center align-items-center"
-      >
-        <!-- Spinner -->
-        <div class="spinner-border text-primary mb-3" role="status"></div>
-        <div class="w-75">
-          <div class="placeholder-glow mb-2">
-            <span class="placeholder col-12"></span>
-          </div>
-          <div class="placeholder-glow mb-2">
-            <span class="placeholder col-10"></span>
-          </div>
-          <div class="placeholder-glow">
-            <span class="placeholder col-8"></span>
-          </div>
+      <div class="loader-overlay">
+        <div class="loader-panel">
+          <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem"></div>
+          <div class="loader-text">Fetching chart data...</div>
         </div>
       </div>
       }@else{

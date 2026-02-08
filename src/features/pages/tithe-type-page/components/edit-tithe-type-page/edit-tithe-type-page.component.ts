@@ -67,7 +67,7 @@ export class EditTitheTypePageComponent
       )
       .subscribe({
         next: (resp) => {
-          this.name.setValue(resp.titheType?.name);
+          this.name.setValue(resp.data.titheType?.name);
         },
       });
   }

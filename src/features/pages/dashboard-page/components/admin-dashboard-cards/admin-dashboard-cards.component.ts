@@ -35,7 +35,7 @@ export class AdminDashboardCardsComponent
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: (resp) => {
-          this.activeUsersCount.set(resp.count);
+          this.activeUsersCount.set(resp.data.count);
         },
       });
 

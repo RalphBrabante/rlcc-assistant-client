@@ -1,3 +1,5 @@
 export interface ApiResponseWithoutData {
-  status: number;
+  code: number;
+  message?: string;
+  data?: unknown;
 }

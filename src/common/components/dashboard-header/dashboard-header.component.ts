@@ -37,15 +37,24 @@ export class DashboardHeaderComponent extends BaseComponent implements OnInit {
   }
 
   onLogout() {
+    const token = localStorage.getItem('RLCCAT');
+
+    if (!token) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.authSvc
-      .logout(localStorage.getItem('RLCCAT')!)
+      .logout(token)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
-        next: (resp) => {
+        next: () => {
           localStorage.removeItem('RLCCAT');
-          this.router.navigate(['/']).then(() => {
-            window.location.reload(); // optional: ensures complete app reinit
-          });
+          this.router.navigate(['/login']);
+        },
+        error: () => {
+          localStorage.removeItem('RLCCAT');
+          this.router.navigate(['/login']);
         },
       });
   }

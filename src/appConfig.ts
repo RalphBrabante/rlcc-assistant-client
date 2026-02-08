@@ -1,1 +1,3 @@
-export const baseUrl = 'http://localhost:3000/api/v1';
+export const baseUrl = '/api/v1';
+
+// export const baseUrl = 'https://api.bulkqrcodegenerator.online/api/v1';

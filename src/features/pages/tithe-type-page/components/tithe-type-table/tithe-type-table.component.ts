@@ -41,7 +41,7 @@ export class TitheTypeTableComponent extends BaseComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: (resp) => {
-          this.titheTypes.set(resp.titheTypes.rows);
+          this.titheTypes.set(resp.data.titheTypes.rows);
         },
       });
   }
@@ -80,7 +80,7 @@ export class TitheTypeTableComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe))
             .subscribe({
               next: (resp) => {
-                if (resp.id) {
+                if (resp.data.id) {
                   console.log(close);
                   modalRef.close();
                   this.fetchData();

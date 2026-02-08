@@ -8,6 +8,7 @@ import {
 } from '../../features/pages/tithes-page/models/tithe';
 import { Observable } from 'rxjs';
 import { TitheReportApiResponse } from './tithe-type-api-response';
+import { ApiResponse } from './api-response';
 
 @Injectable({
   providedIn: 'root',
@@ -58,8 +59,8 @@ export class TithesService {
     return this.http.get<TitheAPIResp>(baseUrl + `/tithes/${id}`);
   }
 
-  deleteTithe(titheId: number): Observable<{ status: number; id: number }> {
-    return this.http.patch<{ status: number; id: number }>(
+  deleteTithe(titheId: number): Observable<ApiResponse<{ id: number }>> {
+    return this.http.patch<ApiResponse<{ id: number }>>(
       baseUrl + `/tithes/${titheId}`,
       null
     );

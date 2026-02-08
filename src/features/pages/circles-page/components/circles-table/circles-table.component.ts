@@ -38,7 +38,7 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
       )
       .subscribe({
         next: (resp) => {
-          this.groupsData.set(resp.groups.rows);
+          this.groupsData.set(resp.data.groups.rows);
         },
       });
   }
@@ -75,7 +75,7 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe))
             .subscribe({
               next: (resp) => {
-                if (resp.id) {
+                if (resp.data.id) {
                   console.log(close);
                   modalRef.close();
                   this.fetchData();
@@ -114,7 +114,7 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe))
             .subscribe({
               next: (resp) => {
-                if (resp.id) {
+                if (resp.data.id) {
                   console.log(close);
                   modalRef.close();
                   this.fetchData();

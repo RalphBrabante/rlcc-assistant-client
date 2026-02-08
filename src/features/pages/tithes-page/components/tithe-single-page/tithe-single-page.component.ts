@@ -39,10 +39,10 @@ export class TitheSinglePageComponent extends BaseComponent implements OnInit {
       )
       .subscribe({
         next: (resp) => {
-          this.tithe.set(resp.tithe);
+          this.tithe.set(resp.data.tithe);
         },
         error: (err) => {
-          if (err.error.status === 403) {
+          if (err.error.code === 403) {
             this.router.navigate(['/forbidden'])
           }
         },

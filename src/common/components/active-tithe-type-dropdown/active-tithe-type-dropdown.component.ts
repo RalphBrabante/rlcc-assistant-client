@@ -37,7 +37,7 @@ export class ActiveTitheTypeDropdownComponent
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: (resp) => {
-          this.titheTypes.set(resp.titheTypes.rows);
+          this.titheTypes.set(resp.data.titheTypes.rows);
         },
       });
   }

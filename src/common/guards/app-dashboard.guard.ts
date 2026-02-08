@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { map, take } from 'rxjs';
+import { catchError, map, of, take } from 'rxjs';
 
 export const appDashboardGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
@@ -11,21 +11,16 @@ export const appDashboardGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  authSvc
-    .verifyToken()
-    .pipe(
-      take(1),
-      map((resp) => resp.data.token.token)
-    )
-    .subscribe({
-      next: (token) => {
-        localStorage.setItem('RLCCAT', token);
-      },
-      error: (err) => {
-        localStorage.removeItem('RLCCAT');
-        router.navigate(['/']);
-      },
-    });
-
-  return true;
+  return authSvc.verifyToken().pipe(
+    take(1),
+    map((resp) => {
+      const token = resp.data.token.token;
+      localStorage.setItem('RLCCAT', token);
+      return true;
+    }),
+    catchError(() => {
+      localStorage.removeItem('RLCCAT');
+      return of(router.createUrlTree(['/login']));
+    })
+  );
 };

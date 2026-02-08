@@ -67,21 +67,23 @@ export class EditTithePageComponent extends BaseComponent implements OnInit {
       )
       .subscribe({
         next: (resp) => {
-          this.amount.setValue(resp.tithe?.amount);
-          this.memberId.setValue(resp.tithe?.giver?.id);
+          this.amount.setValue(resp.data.tithe?.amount);
+          this.memberId.setValue(resp.data.tithe?.giver?.id);
           this.dateReceived.setValue(
-            new Date(resp.tithe?.dateReceived as string)
+            new Date(resp.data.tithe?.dateReceived as string)
               .toISOString()
               .split('T')[0]
           );
           this.memberName.setValue(
-            resp.tithe?.giver?.firstName + ' ' + resp.tithe?.giver?.lastName
+            resp.data.tithe?.giver?.firstName +
+              ' ' +
+              resp.data.tithe?.giver?.lastName
           );
-          this.titheTypeId.setValue(resp.tithe?.titheTypeId);
+          this.titheTypeId.setValue(resp.data.tithe?.titheTypeId);
 
           setTimeout(() => {
             this.titheTypeDropdown.selectedTitheTypeId.set(
-              String(resp.tithe?.titheType?.id)
+              String(resp.data.tithe?.titheType?.id)
             );
           }, 100);
 

@@ -49,10 +49,10 @@ this.isLoading = true;
       )
       .subscribe({
         next: (resp) => {
-          this.group.set(resp.group!);
+          this.group.set(resp.data.group!);
         },
         error: (err) => {
-          if (err.error.status === 403) {
+          if (err.error.code === 403) {
             this.router.navigate(['/forbidden']);
           }
         },

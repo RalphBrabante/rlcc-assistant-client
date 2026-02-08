@@ -16,6 +16,7 @@ export class LoginFormComponent extends BaseComponent {
   form!: FormGroup;
   submitEventEmitter = output<boolean>()
   errorMessage = input<string>('');
+  isSubmitting = input<boolean>(false);
 
   constructor(private fb: FormBuilder) {
     super();
@@ -35,6 +36,10 @@ export class LoginFormComponent extends BaseComponent {
   }
 
   onSubmit(){
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.submitEventEmitter.emit(true);
   }
 

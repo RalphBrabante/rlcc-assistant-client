@@ -1,4 +1,5 @@
 import { GroupUser } from './user';
+import { ApiResponse } from '../../../../common/services/api-response';
 
 export interface Group {
   id?: number;
@@ -7,8 +8,7 @@ export interface Group {
   isActive: boolean;
 }
 
-export interface GroupsAPIResp {
-  status: number;
+export interface GroupsPayload {
   groups: {
     count: number;
     rows: Group[];
@@ -17,16 +17,14 @@ export interface GroupsAPIResp {
   id?: number;
 }
 
-export interface GroupUnassignedUsersAPIResp {
-  status: number;
-  data: {
-    count: number;
-    rows: GroupUser[];
-  };
-}
+export type GroupsAPIResp = ApiResponse<GroupsPayload>;
+export type GroupUnassignedUsersAPIResp = ApiResponse<{
+  count: number;
+  rows: GroupUser[];
+}>;
 
 export interface AssignUsersToGroupAPI {
-  status: number;
+  code: number;
   data: any[];
 }
 

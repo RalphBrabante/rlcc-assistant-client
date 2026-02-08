@@ -1,11 +1,12 @@
-
-export interface ApiResponse {
-  status: number;
-  data: any[];
+export interface ApiResponse<T> {
+  code: number;
+  data: T;
+  message?: string;
+  meta?: unknown;
 }
 
-
-export interface UserProfile{
-    status: number;
-  data: any[];
+export interface ApiErrorResponse {
+  code: number;
+  message: string;
+  details?: unknown;
 }

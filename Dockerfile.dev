@@ -1,0 +1,10 @@
+FROM node:20
+
+WORKDIR /rlcc-assistant-client
+
+# Install deps in the image so first container start is fast.
+# --legacy-peer-deps avoids existing peer conflicts in this project.
+COPY package*.json ./
+RUN npm install --legacy-peer-deps --no-audit --no-fund
+
+EXPOSE 4200

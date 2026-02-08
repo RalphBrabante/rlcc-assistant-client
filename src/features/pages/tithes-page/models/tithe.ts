@@ -1,3 +1,5 @@
+import { ApiResponse } from '../../../../common/services/api-response';
+
 export interface Tithe {
   id?: number;
   amount: string;
@@ -25,14 +27,16 @@ export interface Tithe {
   updatedAt?: string;
 }
 
-export interface TitheAPIResp {
-  status: number;
+export interface TitheApiPayload {
   tithes: {
     count: number;
     rows: Tithe[];
   };
   tithe?: Tithe;
+  id?: number;
 }
+
+export type TitheAPIResp = ApiResponse<TitheApiPayload>;
 
 export interface BulkTithePayload {
   index: number;

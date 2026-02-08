@@ -1,12 +1,13 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 export const loginPageGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const AUTH_KEY = localStorage.getItem('RLCCAT');
+  const authSvc = inject(AuthService);
 
-  if (AUTH_KEY) {
-    router.navigate(['/dashboard']);
+  if (authSvc.isLoggedIn()) {
+    return router.createUrlTree(['/dashboard']);
   }
 
   return true;

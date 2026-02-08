@@ -26,32 +26,34 @@ export class LoginPageComponent extends BaseComponent {
   }
 
   onLogin($event: boolean) {
-    console.log('log');
+    const form = this.formData()?.form;
+    if (!form || form.invalid) {
+      form?.markAllAsTouched();
+      return;
+    }
+
+    this.errorMessage.set('');
     this.isLoggingIn.set(true);
-    this.formData()?.form.disable;
+    form.disable();
 
     this.authSvc
-      .loginUser(
-        this.formData()?.emailAddress.value,
-        this.formData()?.password.value
-      )
+      .loginUser(this.formData()?.emailAddress.value, this.formData()?.password.value)
       .pipe(
         finalize(() => {
           this.isLoggingIn.set(false);
-          this.formData()?.form.enable;
+          form.enable();
         }),
         takeUntil(this.unsubscribe)
       )
       .subscribe({
         next: (resp) => {
           localStorage.setItem('RLCCAT', resp.data.token);
-
-          this.router.navigate(['/dashboard']).then(() => {
-            window.location.reload(); // optional: ensures complete app reinit
-          });
+          this.router.navigate(['/dashboard']);
         },
         error: (error) => {
-          this.errorMessage.set(error.error.message);
+          this.errorMessage.set(
+            error?.error?.message || 'Unable to login. Please try again.'
+          );
         },
       });
   }

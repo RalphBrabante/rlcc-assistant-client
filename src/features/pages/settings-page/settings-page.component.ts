@@ -39,11 +39,11 @@ export class SettingsPageComponent extends BaseComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: (resp) => {
-          this.serverConfigurations.set(resp.serverConfigurations);
+          this.serverConfigurations.set(resp.data.serverConfigurations);
 
           this.maintenanceMode.setValue(
             Boolean(
-              resp.serverConfigurations.filter(
+              resp.data.serverConfigurations.filter(
                 (c) => c.name === 'maintenance_mode'
               )[0].value === 'true'
             )

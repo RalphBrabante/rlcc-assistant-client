@@ -2,3 +2,31 @@
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+.loader-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(2px);
+  border-radius: inherit;
+}
+
+.loader-panel {
+  min-width: 180px;
+  text-align: center;
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+}
+
+.loader-text {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #475569;
+}

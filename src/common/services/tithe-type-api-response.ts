@@ -1,7 +1,7 @@
 import { TitheType } from '../../features/pages/tithe-type-page/models/tithe-type';
+import { ApiResponse } from './api-response';
 
-export interface TitheTypeApiResponse {
-  status: number;
+export interface TitheTypePayload {
   titheTypes: {
     count: number;
     rows: TitheType[];
@@ -15,7 +15,5 @@ export interface TitheTypeApiResponse {
   };
 }
 
-export interface TitheReportApiResponse {
-  status: number;
-  data: number[];
-}
+export type TitheTypeApiResponse = ApiResponse<TitheTypePayload>;
+export type TitheReportApiResponse = ApiResponse<number[]>;

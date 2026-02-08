@@ -16,12 +16,12 @@ interface UserAndToken {
 }
 
 export interface AuthApiResponse {
-  status: number;
+  code: number;
   data: UserAndToken;
 }
 
 export interface VerifyTokenResponse {
-  status: number;
+  code: number;
   data: {
     token: Token;
   };

@@ -57,47 +57,28 @@ export class AuthService {
 
   getRoles(): string[] {
     const token = this.getToken();
+    if (!token) {
+      return [];
+    }
 
-    const decoded = jwtDecode<JwtPayload>(token!);
-
-    return decoded.roles;
+    try {
+      const decoded = jwtDecode<JwtPayload>(token);
+      return decoded.roles || [];
+    } catch (e) {
+      return [];
+    }
   }
 
   isSuperUser() {
-    const token = this.getToken();
-
-    const decoded = jwtDecode<JwtPayload>(token!);
-
-    if (decoded.roles.includes('SUPERUSER')) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.getRoles().includes('SUPERUSER');
   }
 
   isAdmin(): boolean {
-    const token = this.getToken();
-
-    const decoded = jwtDecode<JwtPayload>(token!);
-
-    if (decoded.roles.includes('ADMINISTRATOR')) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.getRoles().includes('ADMINISTRATOR');
   }
 
   isAccountant(): boolean {
-    const token = this.getToken();
-
-    const decoded = jwtDecode<JwtPayload>(token!);
-
-    console.log(decoded.roles);
-    if (decoded.roles.includes('ACCOUNTANT')) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.getRoles().includes('ACCOUNTANT');
   }
 
   getFullName(): string {

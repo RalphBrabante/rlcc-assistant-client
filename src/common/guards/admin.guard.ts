@@ -6,16 +6,19 @@ export const adminGuard: CanActivateFn = (route, state) => {
   const authSvc = inject(AuthService);
   const router = inject(Router);
 
-  const userRoles = authSvc.getRoles();
-
-  if (
-    !userRoles.includes('SUPERUSER') ||
-    userRoles.includes('ADMINISTRATOR') ||
-    userRoles.includes('ACCOUNTANT')
-  ) {
-    router.navigate(['forbidden']);
-    return false;
-  } else {
-    return true;
+  if (!authSvc.isLoggedIn()) {
+    return router.createUrlTree(['/login']);
   }
+
+  const userRoles = authSvc.getRoles();
+  const hasAccess =
+    userRoles.includes('SUPERUSER') ||
+    userRoles.includes('ADMINISTRATOR') ||
+    userRoles.includes('ACCOUNTANT');
+
+  if (!hasAccess) {
+    return router.createUrlTree(['/forbidden']);
+  }
+
+  return true;
 };

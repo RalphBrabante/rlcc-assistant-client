@@ -42,8 +42,8 @@ export class UserTithesTableComponent extends BaseComponent implements OnInit {
       )
       .subscribe({
         next: (resp) => {
-          this.tithes.set(resp.tithes.rows);
-          this.dataCount.set(resp.tithes.count);
+          this.tithes.set(resp.data.tithes.rows);
+          this.dataCount.set(resp.data.tithes.count);
         },
       });
   }
@@ -76,7 +76,7 @@ export class UserTithesTableComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe))
             .subscribe({
               next: (resp) => {
-                if (resp.id) {
+                if (resp.data.id) {
                   console.log(close);
                   modalRef.close();
                   this.fetchData();
