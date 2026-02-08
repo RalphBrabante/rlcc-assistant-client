@@ -84,5 +84,9 @@
         </div>
       </article>
     </section>
+
+    <section class="chat-section">
+      <app-circle-chat-panel [groupId]="group()?.id || null" [canAccess]="hasChatAccess()" />
+    </section>
   }
 </main>

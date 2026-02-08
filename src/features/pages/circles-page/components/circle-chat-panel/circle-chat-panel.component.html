@@ -1,0 +1,66 @@
+<section class="chat-card">
+  <header class="chat-head">
+    <div>
+      <h4>Circle Chat</h4>
+      <small class="text-muted">
+        @if (socketConnected()) {
+          Live connection active
+        } @else {
+          Connecting...
+        }
+      </small>
+    </div>
+  </header>
+
+  @if (!canAccess) {
+    <div class="chat-state chat-state-error">
+      You are not assigned to this circle, so chat access is restricted.
+    </div>
+  } @else {
+    @if (errorMessage()) {
+      <div class="chat-state chat-state-error">{{ errorMessage() }}</div>
+    }
+
+    <div #messageList class="messages-wrap">
+      @if (loading()) {
+        <div class="chat-state">Loading messages...</div>
+      } @else {
+        @for (message of messages(); track message.id) {
+          <article class="message-item" [class.message-self]="message.senderId === currentUserId">
+            <div class="message-meta">
+              <strong>{{ displaySenderName(message) }}</strong>
+              <small>{{ message.createdAt | date:'MMM d, y h:mm a' }}</small>
+            </div>
+            <p>{{ message.content }}</p>
+            @if (canDelete(message)) {
+              <div class="message-actions">
+                <button type="button" class="btn btn-sm btn-link text-danger p-0" (click)="deleteMessage(message.id)">
+                  Delete
+                </button>
+              </div>
+            }
+          </article>
+        } @empty {
+          <div class="chat-state">No messages yet. Start the conversation.</div>
+        }
+      }
+    </div>
+
+    <form class="composer" (ngSubmit)="sendMessage()">
+      <textarea
+        class="form-control"
+        rows="2"
+        [formControl]="messageControl"
+        placeholder="Type your message..."
+        [disabled]="sending()"
+      ></textarea>
+      <button type="submit" class="btn btn-primary" [disabled]="sending() || messageControl.invalid">
+        @if (sending()) {
+          Sending...
+        } @else {
+          Send
+        }
+      </button>
+    </form>
+  }
+</section>

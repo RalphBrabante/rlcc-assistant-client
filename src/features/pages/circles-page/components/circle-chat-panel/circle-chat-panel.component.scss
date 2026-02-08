@@ -1,0 +1,96 @@
+.chat-card {
+  border: 1px solid #dbe8ff;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(20, 47, 93, 0.06);
+  overflow: hidden;
+}
+
+.chat-head {
+  border-bottom: 1px solid #e5eeff;
+  background: linear-gradient(135deg, #f4f8ff 0%, #fbfdff 100%);
+  padding: 0.85rem 1rem;
+}
+
+.chat-head h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #172844;
+}
+
+.messages-wrap {
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.65rem;
+  background: #f8fbff;
+}
+
+.message-item {
+  background: #fff;
+  border: 1px solid #e4edff;
+  border-radius: 0.8rem;
+  padding: 0.6rem 0.7rem;
+}
+
+.message-self {
+  border-color: #b9d2ff;
+  background: #edf4ff;
+}
+
+.message-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.message-meta strong {
+  font-size: 0.85rem;
+  color: #1a2c4a;
+}
+
+.message-meta small {
+  color: #6a7b97;
+  font-size: 0.75rem;
+}
+
+.message-item p {
+  margin: 0;
+  color: #2b3c57;
+  white-space: pre-wrap;
+}
+
+.message-actions {
+  margin-top: 0.35rem;
+  text-align: right;
+}
+
+.composer {
+  border-top: 1px solid #e5eeff;
+  padding: 0.8rem;
+  display: grid;
+  gap: 0.55rem;
+  background: #fff;
+}
+
+.composer textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+
+.chat-state {
+  margin: 0.8rem;
+  border-radius: 0.7rem;
+  padding: 0.55rem 0.7rem;
+  background: #f2f6ff;
+  color: #405575;
+}
+
+.chat-state-error {
+  background: #ffefef;
+  color: #8a2d2d;
+}

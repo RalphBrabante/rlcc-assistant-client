@@ -8,10 +8,12 @@ import { AssignCirlceMembersModalComponent } from '../assign-cirlce-members-moda
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CircleMemberSearchFieldComponent } from '../circle-member-search-field/circle-member-search-field.component';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { CircleChatPanelComponent } from '../circle-chat-panel/circle-chat-panel.component';
 
 @NgModule({
   declarations: [
     CircleMemberSearchFieldComponent,
+    CircleChatPanelComponent,
     AssignCirlceMembersModalComponent,
     CircleDetailsPageComponent,
   ],

@@ -7,6 +7,7 @@ import { finalize, takeUntil } from 'rxjs';
 import { AssignCirlceMembersModalComponent } from '../assign-cirlce-members-modal/assign-cirlce-members-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteConfirmationModalComponent } from '../../../../../common/components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { AuthService } from '../../../../../common/services/auth.service';
 
 @Component({
   selector: 'app-circle-details-page',
@@ -22,14 +23,18 @@ export class CircleDetailsPageComponent
   id = signal<string | null>(null);
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
+  hasChatAccess = signal<boolean>(false);
+  currentUserId = 0;
 
   constructor(
     private route: ActivatedRoute,
     private grpSvc: GroupService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authSvc: AuthService
   ) {
     super();
+    this.currentUserId = this.safeGetUserId();
   }
 
   ngOnInit() {
@@ -51,7 +56,9 @@ export class CircleDetailsPageComponent
       )
       .subscribe({
         next: (resp) => {
-          this.group.set(resp.data.group!);
+          const group = resp.data.group!;
+          this.group.set(group);
+          this.hasChatAccess.set(this.checkChatAccess(group));
           this.errorMessage.set('');
         },
         error: (err) => {
@@ -66,6 +73,22 @@ export class CircleDetailsPageComponent
 
   open() {
     this.modal()?.openCreateCircleModal(this.group()!);
+  }
+
+  private checkChatAccess(group: Group) {
+    const members = group.groupMembers || [];
+    if (group.userId === this.currentUserId || group.leaderId === this.currentUserId) {
+      return true;
+    }
+    return members.some((member) => member.id === this.currentUserId);
+  }
+
+  private safeGetUserId() {
+    try {
+      return this.authSvc.getId();
+    } catch (error) {
+      return 0;
+    }
   }
 
   onRemoveMember(userId: number) {
