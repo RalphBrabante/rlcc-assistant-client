@@ -9,6 +9,7 @@ import {
 } from '../../features/pages/login-page/models/auth-api-response';
 import { jwtDecode } from 'jwt-decode';
 import { ApiResponseWithoutData } from './api-response-without-data';
+import { ApiResponse } from './api-response';
 
 interface JwtPayload {
   id: number;
@@ -45,6 +46,20 @@ export class AuthService {
       baseUrl + `/auth/verifyToken?token=${token}`,
       null
     );
+  }
+
+  forgotPassword(emailAddress: string): Observable<ApiResponse<null>> {
+    return this.http.post<ApiResponse<null>>(baseUrl + '/auth/forgot-password', {
+      emailAddress,
+    });
+  }
+
+  resetPassword(payload: {
+    token: string;
+    password: string;
+    confirmPassword: string;
+  }): Observable<ApiResponse<null>> {
+    return this.http.post<ApiResponse<null>>(baseUrl + '/auth/reset-password', payload);
   }
 
   clearVerification() {
