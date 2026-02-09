@@ -101,6 +101,11 @@
                 </li>
                 @if (isSuperOrAdministrator()) {
                   <li>
+                    <a class="dropdown-item" routerLink="/documentation" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                      Documentation
+                    </a>
+                  </li>
+                  <li>
                     <a class="dropdown-item" routerLink="/reported-bugs" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                       Reported Bugs
                     </a>

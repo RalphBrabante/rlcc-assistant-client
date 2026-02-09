@@ -1,0 +1,136 @@
+<main class="app-page documentation-page">
+  <div class="app-shell">
+    <section class="app-shell-head hero">
+      <div>
+        <p class="doc-kicker mb-1">RLCC Assistant Guide</p>
+        <h2>Documentation</h2>
+        <p class="app-shell-subtitle mb-0">
+          Complete guide for administrators and superusers to operate RLCC Assistant.
+        </p>
+      </div>
+      <div class="hero-badge">
+        <i class="bi bi-journal-richtext"></i>
+        <span>Admin Docs</span>
+      </div>
+    </section>
+
+    <section class="app-shell-body">
+      <div class="quick-grid">
+        <article class="doc-card">
+          <h5><i class="bi bi-play-circle"></i> Quick Start</h5>
+          <ol>
+            <li>Open <strong>Dashboard</strong> to review system counts and bug metrics.</li>
+            <li>Use <strong>Members</strong> to manage user roles.</li>
+            <li>Configure <strong>Circle Types</strong> before creating circles.</li>
+            <li>Moderate discussions from <strong>Circle Topics</strong>.</li>
+          </ol>
+        </article>
+
+        <article class="doc-card">
+          <h5><i class="bi bi-shield-check"></i> Access Model</h5>
+          <ul>
+            <li><strong>SUPERUSER:</strong> Full system controls and integrations.</li>
+            <li><strong>ADMINISTRATOR:</strong> Member, content, and operations management.</li>
+            <li><strong>ACCOUNTANT:</strong> Giving and tithe visibility focused tasks.</li>
+            <li><strong>ENDUSER:</strong> Personal profile, circles, and submissions only.</li>
+          </ul>
+        </article>
+      </div>
+
+      <article class="doc-section" id="navigation">
+        <h4><i class="bi bi-compass"></i> Main Navigation</h4>
+        <div class="table-responsive">
+          <table class="table align-middle mb-0 doc-table">
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Purpose</th>
+                <th>Who Uses It</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dashboard</td>
+                <td>System overview and operational metrics.</td>
+                <td>All authenticated users</td>
+              </tr>
+              <tr>
+                <td>Giving</td>
+                <td>Create, review, and maintain tithe records and types.</td>
+                <td>Admin, Superuser, Accountant</td>
+              </tr>
+              <tr>
+                <td>Circles</td>
+                <td>Manage circles, members, chats, and topic discussions.</td>
+                <td>All users (scope by role)</td>
+              </tr>
+              <tr>
+                <td>Members</td>
+                <td>Search members and assign roles per user.</td>
+                <td>Admin and Superuser</td>
+              </tr>
+              <tr>
+                <td>Administrator Tools</td>
+                <td>System settings, bug monitoring, integrations.</td>
+                <td>Admin and Superuser</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <div class="quick-grid">
+        <article class="doc-section">
+          <h4><i class="bi bi-people"></i> Member Management Workflow</h4>
+          <ol>
+            <li>Open <strong>Members</strong> from the header.</li>
+            <li>Search by name, email, ID, or PCOID.</li>
+            <li>Select a member row and assign/remove roles.</li>
+            <li>Save roles and confirm updated badges in the table.</li>
+          </ol>
+          <p class="section-note mb-0">
+            Role updates can refresh permissions immediately after token refresh.
+          </p>
+        </article>
+
+        <article class="doc-section">
+          <h4><i class="bi bi-chat-left-text"></i> Circle Topics & Comments</h4>
+          <ul>
+            <li>Only circle members, administrators, and superusers can comment.</li>
+            <li>Comments are sorted newest first with relative timestamps.</li>
+            <li>Replies are hidden by default and expandable in batches.</li>
+            <li>Delete is allowed only when ownership/rules are satisfied.</li>
+          </ul>
+        </article>
+      </div>
+
+      <article class="doc-section">
+        <h4><i class="bi bi-wrench-adjustable"></i> Operations & Maintenance</h4>
+        <div class="ops-grid">
+          <div>
+            <h6>System Settings</h6>
+            <p>Use <strong>Settings</strong> to toggle maintenance mode and dev mode.</p>
+          </div>
+          <div>
+            <h6>Reported Bugs</h6>
+            <p>Track incoming bug reports and monitor resolution progress.</p>
+          </div>
+          <div>
+            <h6>Queues & Migration</h6>
+            <p>Superusers can monitor AMQP queues and run PCO user migration.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="doc-section">
+        <h4><i class="bi bi-question-circle"></i> Troubleshooting</h4>
+        <ul>
+          <li><strong>Empty tables:</strong> verify role permissions and active filters.</li>
+          <li><strong>Access denied:</strong> confirm user has required role and relogin after role changes.</li>
+          <li><strong>Real-time chat issues:</strong> verify socket token validity and circle membership.</li>
+          <li><strong>Slow data refresh:</strong> retry after cache TTL or re-open the page.</li>
+        </ul>
+      </article>
+    </section>
+  </div>
+</main>

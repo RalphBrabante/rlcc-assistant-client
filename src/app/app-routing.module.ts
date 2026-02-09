@@ -111,6 +111,14 @@ const routes: Routes = [
       ).then((m) => m.AmqpQueueViewerPageModule),
   },
   {
+    path: 'documentation',
+    canActivate: [appDashboardGuard, superadminAdminGuard],
+    loadChildren: () =>
+      import('../features/pages/documentation-page/documentation-page.module').then(
+        (m) => m.DocumentationPageModule
+      ),
+  },
+  {
     path: 'reported-bugs',
     canActivate: [appDashboardGuard, superadminAdminGuard],
     loadChildren: () =>
