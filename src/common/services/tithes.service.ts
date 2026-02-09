@@ -25,16 +25,54 @@ export class TithesService {
     return this.http.post<TitheAPIResp>(baseUrl + `/tithes/bulk-create`, { tithes });
   }
 
-  getAllTithes(limit: string, page: string): Observable<TitheAPIResp> {
-    return this.http.get<TitheAPIResp>(
-      baseUrl + `/tithes?page=${page}&limit=${limit}`
-    );
+  getAllTithes(params: {
+    limit: number;
+    page: number;
+    name?: string;
+    status?: 'all' | 'active' | 'inactive';
+    encodedBy?: string;
+    createdFrom?: string;
+    createdTo?: string;
+    dateReceivedFrom?: string;
+    dateReceivedTo?: string;
+  }): Observable<TitheAPIResp> {
+    const query = new URLSearchParams();
+    query.set('page', String(params.page));
+    query.set('limit', String(params.limit));
+    if (params.name) query.set('name', params.name);
+    if (params.status) query.set('status', params.status);
+    if (params.encodedBy) query.set('encodedBy', params.encodedBy);
+    if (params.createdFrom) query.set('createdFrom', params.createdFrom);
+    if (params.createdTo) query.set('createdTo', params.createdTo);
+    if (params.dateReceivedFrom) query.set('dateReceivedFrom', params.dateReceivedFrom);
+    if (params.dateReceivedTo) query.set('dateReceivedTo', params.dateReceivedTo);
+
+    return this.http.get<TitheAPIResp>(baseUrl + `/tithes?${query.toString()}`);
   }
 
-  getUserTithes(limit: string, page: string): Observable<TitheAPIResp> {
-    return this.http.get<TitheAPIResp>(
-      baseUrl + `/tithes/user?page=${page}&limit=${limit}`
-    );
+  getUserTithes(params: {
+    limit: number;
+    page: number;
+    name?: string;
+    status?: 'all' | 'active' | 'inactive';
+    encodedBy?: string;
+    createdFrom?: string;
+    createdTo?: string;
+    dateReceivedFrom?: string;
+    dateReceivedTo?: string;
+  }): Observable<TitheAPIResp> {
+    const query = new URLSearchParams();
+    query.set('page', String(params.page));
+    query.set('limit', String(params.limit));
+    if (params.name) query.set('name', params.name);
+    if (params.status) query.set('status', params.status);
+    if (params.encodedBy) query.set('encodedBy', params.encodedBy);
+    if (params.createdFrom) query.set('createdFrom', params.createdFrom);
+    if (params.createdTo) query.set('createdTo', params.createdTo);
+    if (params.dateReceivedFrom) query.set('dateReceivedFrom', params.dateReceivedFrom);
+    if (params.dateReceivedTo) query.set('dateReceivedTo', params.dateReceivedTo);
+
+    return this.http.get<TitheAPIResp>(baseUrl + `/tithes/user?${query.toString()}`);
   }
 
   getAllTitheReportByYear(year: string): Observable<TitheReportApiResponse> {

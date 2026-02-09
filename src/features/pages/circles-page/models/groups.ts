@@ -8,6 +8,14 @@ export interface Group {
   leaderId?: number | null;
   groupMembers?: GroupUser[];
   isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  creator?: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    emailAddress: string;
+  } | null;
 }
 
 export interface GroupsPayload {

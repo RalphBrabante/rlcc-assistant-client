@@ -7,7 +7,7 @@
     </section>
     <section class="app-shell-body">
       @if(this.roles().includes('SUPERUSER') ||
-      this.roles().includes('ADMIN')){
+      this.roles().includes('ADMINISTRATOR')){
       <app-tithes-table />
       } @else {
       <app-user-tithes-table />

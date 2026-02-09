@@ -13,12 +13,49 @@
   <div class="card-header d-flex justify-content-between align-items-center">
     <div>
       <h5 class="mb-0">Circles Directory</h5>
-      <small class="text-muted">{{ groupsData().length }} total</small>
+      <small class="text-muted">{{ dataCount() }} total</small>
     </div>
     @if (canManageCircles()) {
     <button class="btn btn-primary btn-sm" (click)="open()">
       <i class="bi bi-plus-circle me-1"></i> Add Circle
     </button>
+    }
+  </div>
+
+  <div class="filters-wrap px-3 pt-3">
+    <form [formGroup]="filtersForm" (ngSubmit)="applyFilters()">
+      <div class="row g-2">
+        <div class="col-md-3">
+          <input class="form-control form-control-sm" formControlName="name" placeholder="Circle name / ID" />
+        </div>
+        <div class="col-md-2">
+          <select class="form-select form-select-sm" formControlName="status">
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <input class="form-control form-control-sm" formControlName="encodedBy" placeholder="Encoded By" />
+        </div>
+        <div class="col-md-2">
+          <input class="form-control form-control-sm" type="date" formControlName="createdFrom" />
+        </div>
+        <div class="col-md-2">
+          <input class="form-control form-control-sm" type="date" formControlName="createdTo" />
+        </div>
+        <div class="col-md-1 d-flex gap-1">
+          <button class="btn btn-sm btn-dark w-100" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-secondary w-100" type="button" (click)="resetFilters()">
+            <i class="bi bi-arrow-counterclockwise"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+    @if (filterError()) {
+      <div class="text-danger small mt-2">{{ filterError() }}</div>
     }
   </div>
 
@@ -32,7 +69,9 @@
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Circle Name</th>
-          <th scope="col">Status Name</th>
+          <th scope="col">Encoded By</th>
+          <th scope="col">Created At</th>
+          <th scope="col">Status</th>
           <th scope="col" class="text-center">Actions</th>
         </tr>
       </thead>
@@ -51,6 +90,8 @@
           <tr>
             <td>{{ group.id }}</td>
             <td>{{ group.name }}</td>
+            <td>{{ group.creator?.firstName }} {{ group.creator?.lastName }}</td>
+            <td>{{ group.createdAt | date: 'short' }}</td>
             <td>
               <span class="badge" [ngClass]="group.isActive ? 'bg-success-subtle text-success-emphasis' : 'bg-secondary-subtle text-secondary-emphasis'">
                 {{ group.isActive ? "Active" : "Inactive" }}
@@ -68,7 +109,7 @@
           </tr>
           } @empty {
           <tr>
-            <td colspan="4" class="empty-state">
+            <td colspan="6" class="empty-state">
               <i class="bi bi-people"></i>
               <p>No circles available yet.</p>
             </td>
@@ -78,4 +119,11 @@
       </tbody>
     </table>
   </div>
+
+  <app-pagination
+    [data]="groupsData()"
+    #pagination
+    [dataCount]="dataCount()"
+    (changeEmitter)="fetchData()"
+  />
 </div>

@@ -7,6 +7,7 @@ import { PaginationComponent } from '../../../../../common/components/pagination
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteConfirmationModalComponent } from '../../../../../common/components/delete-confirmation-modal/delete-confirmation-modal.component';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-user-tithes-table',
@@ -18,9 +19,25 @@ export class UserTithesTableComponent extends BaseComponent implements OnInit {
   isFetching = signal<boolean>(false);
   pagination = viewChild<PaginationComponent>('pagination');
   dataCount = signal<number>(0);
+  filterError = signal<string>('');
+  filtersForm: FormGroup;
 
-  constructor(private titheSvc: TithesService, private modalService: NgbModal, private router:Router) {
+  constructor(
+    private titheSvc: TithesService,
+    private modalService: NgbModal,
+    private router: Router,
+    private fb: FormBuilder
+  ) {
     super();
+    this.filtersForm = this.fb.group({
+      name: [''],
+      status: ['active'],
+      encodedBy: [''],
+      createdFrom: [''],
+      createdTo: [''],
+      dateReceivedFrom: [''],
+      dateReceivedTo: [''],
+    });
   }
 
   ngOnInit(): void {
@@ -28,12 +45,37 @@ export class UserTithesTableComponent extends BaseComponent implements OnInit {
   }
 
   fetchData() {
+    const createdFrom = String(this.filtersForm.value.createdFrom || '').trim();
+    const createdTo = String(this.filtersForm.value.createdTo || '').trim();
+    const dateReceivedFrom = String(this.filtersForm.value.dateReceivedFrom || '').trim();
+    const dateReceivedTo = String(this.filtersForm.value.dateReceivedTo || '').trim();
+    if (createdFrom && createdTo && new Date(createdFrom) > new Date(createdTo)) {
+      this.filterError.set('Created From must be on or before Created To.');
+      return;
+    }
+    if (
+      dateReceivedFrom &&
+      dateReceivedTo &&
+      new Date(dateReceivedFrom) > new Date(dateReceivedTo)
+    ) {
+      this.filterError.set('Date Received From must be on or before Date Received To.');
+      return;
+    }
+
+    this.filterError.set('');
     this.isFetching.set(true);
     this.titheSvc
-      .getUserTithes(
-        this.pagination()!.pageSize.toString(),
-        this.pagination()!.currentPage().toString()
-      )
+      .getUserTithes({
+        limit: this.pagination()?.pageSize || 10,
+        page: this.pagination()?.currentPage() || 1,
+        name: String(this.filtersForm.value.name || '').trim() || undefined,
+        status: this.filtersForm.value.status || 'active',
+        encodedBy: String(this.filtersForm.value.encodedBy || '').trim() || undefined,
+        createdFrom: createdFrom || undefined,
+        createdTo: createdTo || undefined,
+        dateReceivedFrom: dateReceivedFrom || undefined,
+        dateReceivedTo: dateReceivedTo || undefined,
+      })
       .pipe(
         finalize(() => {
           this.isFetching.set(false);
@@ -46,6 +88,26 @@ export class UserTithesTableComponent extends BaseComponent implements OnInit {
           this.dataCount.set(resp.data.tithes.count);
         },
       });
+  }
+
+  applyFilters() {
+    this.pagination()?.currentPage.set(1);
+    this.fetchData();
+  }
+
+  resetFilters() {
+    this.filtersForm.reset({
+      name: '',
+      status: 'active',
+      encodedBy: '',
+      createdFrom: '',
+      createdTo: '',
+      dateReceivedFrom: '',
+      dateReceivedTo: '',
+    });
+    this.pagination()?.currentPage.set(1);
+    this.filterError.set('');
+    this.fetchData();
   }
 
   openPopup(id: number) {

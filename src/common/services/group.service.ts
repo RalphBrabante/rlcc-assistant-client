@@ -25,8 +25,25 @@ export class GroupService {
     );
   }
 
-  getAllGroupsAndCount(page: number, limit: number): Observable<GroupsAPIResp> {
-    return this.http.get<GroupsAPIResp>(baseUrl + '/groups?limit=10&page=1');
+  getAllGroupsAndCount(params: {
+    page: number;
+    limit: number;
+    name?: string;
+    status?: 'all' | 'active' | 'inactive';
+    encodedBy?: string;
+    createdFrom?: string;
+    createdTo?: string;
+  }): Observable<GroupsAPIResp> {
+    const query = new URLSearchParams();
+    query.set('page', String(params.page));
+    query.set('limit', String(params.limit));
+    if (params.name) query.set('name', params.name);
+    if (params.status) query.set('status', params.status);
+    if (params.encodedBy) query.set('encodedBy', params.encodedBy);
+    if (params.createdFrom) query.set('createdFrom', params.createdFrom);
+    if (params.createdTo) query.set('createdTo', params.createdTo);
+
+    return this.http.get<GroupsAPIResp>(baseUrl + `/groups?${query.toString()}`);
   }
 
   createGroup(group: Group): Observable<GroupsAPIResp> {

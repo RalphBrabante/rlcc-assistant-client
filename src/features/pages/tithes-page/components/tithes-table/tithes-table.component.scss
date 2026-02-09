@@ -23,6 +23,54 @@
   padding-inline: 0.85rem;
 }
 
+.filters-wrap {
+  border-bottom: 1px solid #edf2ed;
+}
+
+.filters-form {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.filters-main {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 150px auto;
+  gap: 0.6rem;
+  align-items: end;
+}
+
+.filters-grid {
+  margin-top: 0.55rem;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  gap: 0.6rem;
+}
+
+.form-label-xs {
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #5d6778;
+}
+
+.field-wide {
+  min-width: 0;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.filters-advanced {
+  summary {
+    cursor: pointer;
+    font-size: 0.84rem;
+    color: #4b5563;
+    user-select: none;
+  }
+}
+
 @media (max-width: 767.98px) {
   .tithe-toolbar {
     flex-direction: column;
@@ -36,5 +84,21 @@
 
   .toolbar-btn {
     flex: 1 1 calc(50% - 0.25rem);
+  }
+
+  .filters-main {
+    grid-template-columns: 1fr;
+  }
+
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-actions {
+    width: 100%;
+
+    .btn {
+      flex: 1;
+    }
   }
 }

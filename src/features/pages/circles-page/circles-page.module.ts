@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateCircleModalComponent } from './components/create-circle-modal/create-circle-modal.component';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { RouterLink } from '@angular/router';
+import { PaginationModule } from '../../../common/components/pagination/pagination.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { RouterLink } from '@angular/router';
     NgbTooltip,
     RouterLink,
     ReactiveFormsModule,
+    PaginationModule,
     CommonModule,
     CirclesPageRoutingModule,
     DashboardHeaderModule,

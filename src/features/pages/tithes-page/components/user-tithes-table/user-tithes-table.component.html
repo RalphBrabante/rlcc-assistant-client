@@ -22,6 +22,62 @@
       <h5 class="mb-0 fw-semibold">Tithes</h5>
     </div>
 
+    <div class="filters-wrap px-3 py-3">
+      <form [formGroup]="filtersForm" (ngSubmit)="applyFilters()" class="filters-form">
+        <div class="filters-main">
+          <div class="field field-wide">
+            <label class="form-label form-label-xs mb-1">Search</label>
+            <input class="form-control form-control-sm" formControlName="name" placeholder="Name / ID / Type" />
+          </div>
+          <div class="field">
+            <label class="form-label form-label-xs mb-1">Status</label>
+            <select class="form-select form-select-sm" formControlName="status">
+              <option value="all">All</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-sm btn-dark" type="submit">
+              <i class="bi bi-search me-1"></i>Apply
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" type="button" (click)="resetFilters()">
+              <i class="bi bi-arrow-counterclockwise"></i>
+            </button>
+          </div>
+        </div>
+
+        <details class="filters-advanced">
+          <summary>More filters</summary>
+          <div class="filters-grid">
+            <div class="field">
+              <label class="form-label form-label-xs mb-1">Encoded By</label>
+              <input class="form-control form-control-sm" formControlName="encodedBy" placeholder="Encoder name" />
+            </div>
+            <div class="field">
+              <label class="form-label form-label-xs mb-1">Created From</label>
+              <input class="form-control form-control-sm" type="date" formControlName="createdFrom" />
+            </div>
+            <div class="field">
+              <label class="form-label form-label-xs mb-1">Created To</label>
+              <input class="form-control form-control-sm" type="date" formControlName="createdTo" />
+            </div>
+            <div class="field">
+              <label class="form-label form-label-xs mb-1">Date Received From</label>
+              <input class="form-control form-control-sm" type="date" formControlName="dateReceivedFrom" />
+            </div>
+            <div class="field">
+              <label class="form-label form-label-xs mb-1">Date Received To</label>
+              <input class="form-control form-control-sm" type="date" formControlName="dateReceivedTo" />
+            </div>
+          </div>
+        </details>
+      </form>
+      @if (filterError()) {
+      <div class="text-danger small mt-2">{{ filterError() }}</div>
+      }
+    </div>
+
     <!-- Card Body -->
     <div class="card-body p-0">
       <div class="table-responsive">
@@ -34,6 +90,8 @@
               <th scope="col">Type</th>
               <th scope="col">Amount</th>
               <th scope="col">Encoded By</th>
+              <th scope="col">Created At</th>
+              <th scope="col">Status</th>
               <th scope="col" class="text-center">Actions</th>
             </tr>
           </thead>
@@ -49,6 +107,12 @@
               </td>
               <td>
                 {{ tithe.encoder?.firstName }} {{ tithe.encoder?.lastName }}
+              </td>
+              <td>{{ tithe.createdAt | date : "short" }}</td>
+              <td>
+                <span class="badge" [ngClass]="tithe.isActive ? 'bg-success-subtle text-success-emphasis' : 'bg-secondary-subtle text-secondary-emphasis'">
+                  {{ tithe.isActive ? 'Active' : 'Inactive' }}
+                </span>
               </td>
               <td class="text-center action-btns">
                 <button
