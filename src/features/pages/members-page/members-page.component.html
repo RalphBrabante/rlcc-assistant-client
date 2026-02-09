@@ -1,0 +1,122 @@
+<main class="app-page members-page">
+  <div class="app-shell">
+    <section class="app-shell-head">
+      <h2>Members</h2>
+      <p class="app-shell-subtitle">View all members and manage roles per user.</p>
+    </section>
+
+    <section class="app-shell-body">
+      <form class="row g-2 align-items-end mb-3" [formGroup]="form" (ngSubmit)="onSearch()">
+        <div class="col-md-8">
+          <label class="form-label">Search Member</label>
+          <input class="form-control" formControlName="query" placeholder="Name, email, ID, or PCOID" />
+        </div>
+        <div class="col-md-2 d-grid">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+        <div class="col-md-2 d-grid">
+          <button class="btn btn-outline-secondary" type="button" (click)="onReset()">Reset</button>
+        </div>
+      </form>
+
+      @if (errorMessage()) {
+        <div class="alert alert-danger py-2">{{ errorMessage() }}</div>
+      }
+
+      <div class="row g-3">
+        <div class="col-12 col-lg-8">
+          <div class="table-responsive members-table-wrap">
+            <table class="table table-hover align-middle mb-0 members-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Roles</th>
+                  <th class="text-end">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (loading()) {
+                  <tr>
+                    <td colspan="5" class="text-center text-muted py-4">Loading members...</td>
+                  </tr>
+                } @else {
+                  @for (user of users(); track user.id) {
+                    <tr>
+                      <td>{{ user.id }}</td>
+                      <td>{{ fullName(user) }}</td>
+                      <td>{{ user.emailAddress || 'N/A' }}</td>
+                      <td>
+                        @for (role of user.roles; track role.id) {
+                          <span class="badge text-bg-light border me-1">{{ role.name }}</span>
+                        } @empty {
+                          <span class="text-muted">None</span>
+                        }
+                      </td>
+                      <td class="text-end">
+                        <button class="btn btn-sm btn-outline-primary" type="button" (click)="selectUser(user)">
+                          Manage Roles
+                        </button>
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="5" class="text-center text-muted py-4">No members found.</td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <app-pagination
+            #pagination
+            class="d-block mt-3"
+            [data]="users()"
+            [dataCount]="dataCount()"
+            (changeEmitter)="fetchData()"
+          />
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <div class="role-card">
+            @if (selectedUser(); as user) {
+              <h6 class="mb-2">Manage Roles</h6>
+              <div class="text-muted small mb-3">{{ fullName(user) }} (ID: {{ user.id }})</div>
+
+              <div class="role-grid">
+                @for (role of roleOptions(); track role.id) {
+                  <label class="role-option">
+                    <input
+                      type="checkbox"
+                      [checked]="isRoleSelected(role.id)"
+                      (change)="toggleRole(role.id, $any($event.target).checked)"
+                    />
+                    <span>{{ role.name }}</span>
+                  </label>
+                }
+              </div>
+
+              @if (roleMessage()) {
+                <div class="alert alert-success py-2 mt-3 mb-0">{{ roleMessage() }}</div>
+              }
+
+              @if (roleError()) {
+                <div class="alert alert-danger py-2 mt-3 mb-0">{{ roleError() }}</div>
+              }
+
+              <div class="text-end mt-3">
+                <button class="btn btn-primary" type="button" (click)="saveUserRoles()" [disabled]="roleSaving()">
+                  {{ roleSaving() ? 'Saving...' : 'Save Roles' }}
+                </button>
+              </div>
+            } @else {
+              <div class="text-muted">Select a member from the table to manage roles.</div>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>

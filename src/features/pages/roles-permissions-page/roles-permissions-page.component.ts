@@ -169,8 +169,8 @@ export class RolesPermissionsPageComponent extends BaseComponent implements OnIn
   deleteSelectedRole() {
     const roleId = this.selectedRoleId();
     if (!roleId || this.deletingRole()) return;
-    if (this.isSelectedRoleSuperUser()) {
-      this.errorMessage.set('The SUPERUSER role cannot be deleted.');
+    if (this.isSelectedRoleProtected()) {
+      this.errorMessage.set(`The ${this.selectedRoleName()} role cannot be deleted.`);
       return;
     }
 
@@ -215,8 +215,9 @@ export class RolesPermissionsPageComponent extends BaseComponent implements OnIn
     return role?.name || 'Role';
   }
 
-  isSelectedRoleSuperUser() {
-    return this.selectedRoleName() === 'SUPERUSER';
+  isSelectedRoleProtected() {
+    const roleName = this.selectedRoleName();
+    return roleName === 'SUPERUSER' || roleName === 'ENDUSER';
   }
 
   areAllPermissionsSelected() {

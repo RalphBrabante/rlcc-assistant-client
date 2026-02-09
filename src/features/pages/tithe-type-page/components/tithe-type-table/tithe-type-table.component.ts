@@ -15,6 +15,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class TitheTypeTableComponent extends BaseComponent implements OnInit {
   titheTypes = signal<TitheType[]>([]);
   errorMessage = signal<string>('');
+  isLoading = signal<boolean>(false);
+  private errorTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private titheTypeSvc: TitheTypeService,
@@ -36,12 +38,19 @@ export class TitheTypeTableComponent extends BaseComponent implements OnInit {
   }
 
   fetchData() {
+    this.isLoading.set(true);
     this.titheTypeSvc
       .getAllTitheType()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: (resp) => {
           this.titheTypes.set(resp.data.titheTypes.rows);
+          this.isLoading.set(false);
+        },
+        error: (err) => {
+          this.titheTypes.set([]);
+          this.setErrorMessage(err?.error?.message || 'Unable to load tithe types.', 2500);
+          this.isLoading.set(false);
         },
       });
   }
@@ -53,10 +62,11 @@ export class TitheTypeTableComponent extends BaseComponent implements OnInit {
    */
   setErrorMessage(message: string, ms: number) {
     this.errorMessage.set(message);
-
-    // setTimeout(() => {
-    //   this.errorMessage.set('');
-    // }, ms);
+    if (this.errorTimer) clearTimeout(this.errorTimer);
+    this.errorTimer = setTimeout(() => {
+      this.errorMessage.set('');
+      this.errorTimer = null;
+    }, ms);
   }
 
   onDeleteTithes(titheId: number) {
@@ -72,29 +82,23 @@ export class TitheTypeTableComponent extends BaseComponent implements OnInit {
     modalRef.result.then(
       (result) => {
         if (result) {
-          console.log('Deleting tithe with id:', titheId);
-          // 🔥 call your delete service here
-
           this.titheTypeSvc
             .deleteTitheType(titheId)
             .pipe(takeUntil(this.unsubscribe))
             .subscribe({
               next: (resp) => {
                 if (resp.data.id) {
-                  console.log(close);
                   modalRef.close();
                   this.fetchData();
                 }
               },
               error: (err) => {
-                this.setErrorMessage(err.error.message, 2500)
+                this.setErrorMessage(err?.error?.message || 'Unable to delete tithe type.', 2500);
               },
             });
         }
       },
-      () => {
-        console.log('Delete canceled');
-      }
+      () => {}
     );
   }
 }

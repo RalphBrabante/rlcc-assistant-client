@@ -28,6 +28,14 @@ export class UserService {
     return this.http.get<UserApiResponse>(baseUrl + '/users?name=' + query);
   }
 
+  getMembers(params: { page: number; limit: number; query?: string }): Observable<UserApiResponse> {
+    const search = new URLSearchParams();
+    search.set('page', String(params.page));
+    search.set('limit', String(params.limit));
+    if (params.query) search.set('q', params.query);
+    return this.http.get<UserApiResponse>(`${baseUrl}/users?${search.toString()}`);
+  }
+
   countAllActiveUsers(): Observable<UserCountApiResponse> {
     return this.http.get<UserCountApiResponse>(
       baseUrl + '/users/count'

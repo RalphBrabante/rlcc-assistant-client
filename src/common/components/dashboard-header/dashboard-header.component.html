@@ -66,6 +66,27 @@
             }
           </li>
 
+          @if (isSuperOrAdministrator()) {
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" role="button">
+                <i class="bi bi-person-badge"></i>
+                Members
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" routerLink="/members" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    Manage Users
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" routerLink="/roles-permissions" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    Roles & Permissions
+                  </a>
+                </li>
+              </ul>
+            </li>
+          }
+
           @if (isAdmin()) {
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" role="button">
@@ -86,11 +107,6 @@
                   </li>
                 }
                 @if (isSuperUser()) {
-                  <li>
-                    <a class="dropdown-item" routerLink="/roles-permissions" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                      Roles & Permissions
-                    </a>
-                  </li>
                   <li>
                     <a class="dropdown-item" routerLink="/pco-users-migration" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                       PCO Users

@@ -1,0 +1,18 @@
+.app-page {
+  position: relative;
+}
+
+.app-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(14, 165, 233, 0.15), transparent 36%),
+    radial-gradient(circle at 88% 14%, rgba(16, 185, 129, 0.12), transparent 32%);
+}
+
+.app-shell {
+  position: relative;
+  z-index: 1;
+}

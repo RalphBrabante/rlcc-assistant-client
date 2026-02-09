@@ -1,85 +1,81 @@
 <!-- Modal -->
 <app-create-tithe-type-modal (saveTithe)="fetchData()" />
 
-
-<div class="container mt-4">
-
-
-
-
-  <ngb-alert
-    type="danger"
-    *ngIf="errorMessage()"
-    (closed)="errorMessage.set('')"
-    >{{ errorMessage() }}</ngb-alert
-  >
-  <div class="card shadow-sm rounded-3">
-    <div
-      class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
-    >
-      <h5 class="mb-0">Tithe Types</h5>
+<div class="tithe-types-card">
+  <div class="card-toolbar">
+    <div>
+      <h5 class="mb-1">Tithe Categories</h5>
+      <p class="mb-0 text-muted">Configure giving categories used in tithe entries.</p>
+    </div>
+    <div class="toolbar-actions">
+      <span class="type-count">{{ titheTypes().length }} total</span>
       <button
-        class="btn btn-light btn-sm"
+        class="btn btn-primary btn-sm"
         data-bs-toggle="modal"
         data-bs-target="#titheCreateModal"
-        a
       >
-        Add Tithes Type
+        <i class="bi bi-plus-circle me-1"></i>
+        Add Tithe Type
       </button>
     </div>
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-hover mb-0 align-middle">
-          <thead class="table-light">
-            <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Active</th>
-              <th scope="col" class="text-end">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let titheType of titheTypes()">
-              <td>{{ titheType.name }}</td>
-              <td>
-                <span
-                  class="badge"
-                  [ngClass]="titheType.isActive ? 'bg-success' : 'bg-secondary'"
-                >
-                  {{ titheType.isActive ? "Active" : "Inactive" }}
-                </span>
-              </td>
-              <td class="text-end">
-                <button
-                  class="btn btn-light btn-sm me-2"
-                  ngbTooltip="Edit"
-                  placement="top"
-                  container="body"
-                  [routerLink]="['edit/', titheType.id]"
-                  *ngIf="isAdmin() || isSuperUser()"
-                >
-                  <i class="bi bi-pencil"></i>
-                </button>
-
-                <button
-                  class="btn btn-danger btn-sm me-1"
-                  ngbTooltip="Delete"
-                  placement="top"
-                  container="body"
-                  *ngIf="isAdmin() || isSuperUser()"
-                  (click)="onDeleteTithes(titheType.id)"
-                >
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-            <tr *ngIf="titheTypes().length === 0">
-              <td colspan="4" class="text-center text-muted py-4">
-                No users found
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
   </div>
-</div>
+
+  <ngb-alert type="danger" *ngIf="errorMessage()" (closed)="errorMessage.set('')">
+    {{ errorMessage() }}
+  </ngb-alert>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0 tithe-types-table">
+      <thead>
+        <tr>
+          <th scope="col">Type Name</th>
+          <th scope="col">Status</th>
+          <th scope="col">Last Updated</th>
+          <th scope="col" class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="isLoading()">
+          <td colspan="4" class="text-center text-muted py-4">Loading tithe types...</td>
+        </tr>
+
+        <tr *ngFor="let titheType of titheTypes()">
+          <td class="fw-semibold">{{ titheType.name }}</td>
+          <td>
+            <span class="status-pill" [class.inactive]="!titheType.isActive">
+              {{ titheType.isActive ? "Active" : "Inactive" }}
+            </span>
+          </td>
+          <td>{{ titheType.updatedAt | date:'MMM d, y, h:mm a' }}</td>
+          <td class="text-end">
+            <button
+              class="btn btn-outline-secondary btn-sm me-2"
+              ngbTooltip="Edit"
+              placement="top"
+              container="body"
+              [routerLink]="['edit/', titheType.id]"
+              *ngIf="isAdmin() || isSuperUser()"
+            >
+              <i class="bi bi-pencil"></i>
+            </button>
+
+            <button
+              class="btn btn-outline-danger btn-sm"
+              ngbTooltip="Delete"
+              placement="top"
+              container="body"
+              *ngIf="isAdmin() || isSuperUser()"
+              (click)="onDeleteTithes(titheType.id)"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="!isLoading() && titheTypes().length === 0">
+          <td colspan="4" class="text-center text-muted py-4">No tithe types found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+    </div>

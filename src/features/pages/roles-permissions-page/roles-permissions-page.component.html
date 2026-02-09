@@ -52,7 +52,7 @@
           <button
             class="btn btn-outline-danger"
             type="button"
-            [disabled]="!selectedRoleId() || deletingRole() || savingPermissions() || isSelectedRoleSuperUser()"
+            [disabled]="!selectedRoleId() || deletingRole() || savingPermissions() || isSelectedRoleProtected()"
             (click)="deleteSelectedRole()"
           >
             @if (deletingRole()) { Deleting... } @else { Delete Role }

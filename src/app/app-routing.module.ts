@@ -79,8 +79,16 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'members',
+    canActivate: [appDashboardGuard, superadminAdminGuard],
+    loadChildren: () =>
+      import('../features/pages/members-page/members-page.module').then(
+        (m) => m.MembersPageModule
+      ),
+  },
+  {
     path: 'roles-permissions',
-    canActivate: [appDashboardGuard, superuserGuard],
+    canActivate: [appDashboardGuard, superadminAdminGuard],
     loadChildren: () =>
       import(
         '../features/pages/roles-permissions-page/roles-permissions-page.module'
