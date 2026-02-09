@@ -1,6 +1,6 @@
 <ng-template #createCircleModal let-modal>
   <div class="modal-header bg-primary text-white">
-    <h5 class="modal-title">Create a Circle</h5>
+    <h5 class="modal-title">Create a Group</h5>
     <button
       type="button"
       class="btn-close"
@@ -25,7 +25,7 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Circle Type</label>
+        <label class="form-label">Group Type</label>
         <select class="form-select" formControlName="groupTypeId">
           <option [ngValue]="null">Select circle type</option>
           @for (type of groupTypes(); track type.id) {
@@ -34,12 +34,12 @@
         </select>
 
         @if(groupTypeId.invalid && groupTypeId.touched){
-        <small style="color: Red">Circle type is required.</small>
+        <small style="color: Red">Group type is required.</small>
         }
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Circle Administrator (Optional)</label>
+        <label class="form-label">Group Administrator (Optional)</label>
         <div class="position-relative">
           <input
             type="text"

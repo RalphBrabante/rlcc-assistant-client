@@ -84,7 +84,7 @@ export class EditCirclePageComponent extends BaseComponent implements OnInit {
         next: (resp) => {
           const group = resp.data?.group;
           if (!group) {
-            this.errorMessage.set('Circle not found.');
+            this.errorMessage.set('Group not found.');
             return;
           }
 
@@ -125,7 +125,7 @@ export class EditCirclePageComponent extends BaseComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.successMessage.set('Circle updated successfully.');
+          this.successMessage.set('Group updated successfully.');
         },
         error: (err) => {
           this.errorMessage.set(err?.error?.message || 'Unable to update circle.');

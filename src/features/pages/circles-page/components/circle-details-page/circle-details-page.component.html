@@ -7,7 +7,7 @@
           <a routerLink="/" class="text-decoration-none">Dashboard</a>
         </li>
         <li class="breadcrumb-item">
-          <a routerLink="/circles" class="text-decoration-none">Circles</a>
+          <a routerLink="/circles" class="text-decoration-none">Groups</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
           {{ group()?.name || "Details" }}
@@ -27,7 +27,7 @@
   } @else {
     <section class="content-grid">
       <aside class="summary-card">
-        <p class="label">Circle</p>
+        <p class="label">Group</p>
         <h2>{{ group()?.name }}</h2>
         <div class="leader-panel">
           <div class="leader-avatar" [attr.aria-label]="leaderName()">
@@ -42,7 +42,7 @@
             }
           </div>
           <div class="leader-meta">
-            <small>Circle Leader</small>
+            <small>Group Leader</small>
             <strong>{{ leaderName() }}</strong>
           </div>
         </div>
@@ -54,7 +54,7 @@
 
       <article class="members-card">
         <div class="members-head">
-          <h3>Circle Members</h3>
+          <h3>Group Members</h3>
           @if (canRemoveMembers()) {
           <button class="btn btn-primary btn-sm" (click)="open()">
             <i class="bi bi-person-plus me-1"></i>
@@ -129,7 +129,7 @@
     <section class="chat-section">
       <article class="topics-card mb-3">
         <div class="members-head">
-          <h3>Circle Topics</h3>
+          <h3>Group Topics</h3>
         </div>
 
         @if (canCreateTopics()) {

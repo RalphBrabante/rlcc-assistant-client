@@ -2,7 +2,7 @@
   <div class="app-shell">
     <section class="app-shell-head d-flex justify-content-between align-items-start gap-2 flex-wrap">
       <div>
-        <h2>Edit Circle</h2>
+        <h2>Edit Group</h2>
         <p class="app-shell-subtitle mb-0">Update circle details and classification.</p>
       </div>
       <button class="btn btn-sm btn-outline-secondary" type="button" (click)="goBack()">Back</button>
@@ -14,15 +14,15 @@
       } @else {
       <form [formGroup]="form" (ngSubmit)="save()" class="edit-form">
         <div class="mb-3">
-          <label class="form-label">Circle Name</label>
+          <label class="form-label">Group Name</label>
           <input type="text" class="form-control" formControlName="name" />
           @if (name.invalid && name.touched) {
-          <small class="text-danger">Circle name is required and must be 120 chars or fewer.</small>
+          <small class="text-danger">Group name is required and must be 120 chars or fewer.</small>
           }
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Circle Type</label>
+          <label class="form-label">Group Type</label>
           <select class="form-select" formControlName="groupTypeId">
             <option [ngValue]="null">Select circle type</option>
             @for (type of groupTypes(); track type.id) {
@@ -30,7 +30,7 @@
             }
           </select>
           @if (groupTypeId.invalid && groupTypeId.touched) {
-          <small class="text-danger">Circle type is required.</small>
+          <small class="text-danger">Group type is required.</small>
           }
         </div>
 

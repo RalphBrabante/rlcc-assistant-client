@@ -46,19 +46,19 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" routerLink="/circles" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
               <i class="bi bi-universal-access-circle"></i>
-              Circles
+              Groups
             </a>
             @if (isAdmin()) {
               <ul class="dropdown-menu">
                 <li>
                   <a class="dropdown-item" routerLink="/circle-types" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                    Circle Types
+                    Group Types
                   </a>
                 </li>
                 @if (isSuperOrAdministrator()) {
                 <li>
                   <a class="dropdown-item" routerLink="/circles/topics" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                    Circle Topics
+                    Group Topics
                   </a>
                 </li>
                 }

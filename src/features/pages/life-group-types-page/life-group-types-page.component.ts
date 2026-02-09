@@ -60,7 +60,7 @@ export class LifeGroupTypesPageComponent extends BaseComponent implements OnInit
 
     const name = String(this.name.value || '').trim();
     if (!name) {
-      this.errorMessage.set('Circle type name is required.');
+      this.errorMessage.set('Group type name is required.');
       return;
     }
 

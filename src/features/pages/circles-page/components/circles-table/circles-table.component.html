@@ -12,12 +12,12 @@
   }
   <div class="card-header d-flex justify-content-between align-items-center">
     <div>
-      <h5 class="mb-0">Circles Directory</h5>
+      <h5 class="mb-0">Groups Directory</h5>
       <small class="text-muted">{{ dataCount() }} total</small>
     </div>
     @if (canManageCircles()) {
     <button class="btn btn-primary btn-sm" (click)="open()">
-      <i class="bi bi-plus-circle me-1"></i> Add Circle
+      <i class="bi bi-plus-circle me-1"></i> Add Group
     </button>
     }
   </div>
@@ -26,7 +26,7 @@
     <form [formGroup]="filtersForm" (ngSubmit)="applyFilters()">
       <div class="row g-2">
         <div class="col-md-3">
-          <input class="form-control form-control-sm" formControlName="name" placeholder="Circle name / ID" />
+          <input class="form-control form-control-sm" formControlName="name" placeholder="Group name / ID" />
         </div>
         <div class="col-md-2">
           <select class="form-select form-select-sm" formControlName="status">
@@ -68,7 +68,7 @@
       <thead>
         <tr>
           <th scope="col">ID</th>
-          <th scope="col">Circle Name</th>
+          <th scope="col">Group Name</th>
           <th scope="col">Type</th>
           <th scope="col">Encoded By</th>
           <th scope="col">Created At</th>
