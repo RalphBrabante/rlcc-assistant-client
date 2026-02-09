@@ -11,6 +11,9 @@ import { GroupTopic } from '../../models/group-topic';
 })
 export class CircleTopicsPageComponent extends BaseComponent implements OnInit {
   topics = signal<GroupTopic[]>([]);
+  viewMode = signal<'card' | 'table'>('card');
+  searchTerm = signal<string>('');
+  selectedGroupId = signal<string>('all');
   loading = signal<boolean>(false);
   errorMessage = signal<string>('');
 
@@ -42,5 +45,53 @@ export class CircleTopicsPageComponent extends BaseComponent implements OnInit {
           );
         },
       });
+  }
+
+  setViewMode(mode: 'card' | 'table') {
+    this.viewMode.set(mode);
+  }
+
+  filteredTopics(): GroupTopic[] {
+    const search = this.searchTerm().trim().toLowerCase();
+    const selectedGroup = this.selectedGroupId();
+
+    return this.topics().filter((topic) => {
+      const groupMatches =
+        selectedGroup === 'all' || String(topic.group?.id || '') === selectedGroup;
+
+      if (!groupMatches) return false;
+
+      if (!search) return true;
+
+      const haystack = [
+        topic.title,
+        topic.description || '',
+        topic.group?.name || '',
+        `${topic.creator?.firstName || ''} ${topic.creator?.lastName || ''}`,
+      ]
+        .join(' ')
+        .toLowerCase();
+
+      return haystack.includes(search);
+    });
+  }
+
+  availableGroups() {
+    const map = new Map<number, string>();
+    for (const topic of this.topics()) {
+      const id = topic.group?.id;
+      const name = topic.group?.name;
+      if (id && name && !map.has(id)) {
+        map.set(id, name);
+      }
+    }
+    return [...map.entries()]
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  clearFilters() {
+    this.searchTerm.set('');
+    this.selectedGroupId.set('all');
   }
 }

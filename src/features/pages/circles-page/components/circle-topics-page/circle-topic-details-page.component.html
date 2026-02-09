@@ -1,0 +1,165 @@
+<main class="app-page circle-topic-details-page">
+  <div class="app-shell">
+    <section class="app-shell-head d-flex justify-content-between align-items-start gap-2 flex-wrap">
+      <div>
+        <h2>Topic Activities</h2>
+        <p class="app-shell-subtitle mb-0">Track comments and replies for this circle topic.</p>
+      </div>
+      <a class="btn btn-sm btn-outline-secondary" routerLink="/circles/topics">Back to Topics</a>
+    </section>
+
+    <section class="app-shell-body">
+      @if (loading()) {
+      <p class="text-muted mb-0">Loading topic details...</p>
+      } @else if (errorMessage()) {
+      <div class="alert alert-danger py-2 mb-0">{{ errorMessage() }}</div>
+      } @else if (topic()) {
+      <article class="topic-header mb-3">
+        <div class="topic-header-top">
+          <div class="user-avatar lg" [attr.aria-label]="(topic()!.creator?.firstName || '') + ' ' + (topic()!.creator?.lastName || '')">
+            @if (avatarUrl('topic-' + topic()!.id, topic()!.creator?.avatar)) {
+            <img
+              [src]="avatarUrl('topic-' + topic()!.id, topic()!.creator?.avatar)"
+              [alt]="(topic()!.creator?.firstName || '') + ' ' + (topic()!.creator?.lastName || '')"
+              (error)="onAvatarError('topic-' + topic()!.id)"
+            />
+            } @else {
+            <span>{{ initials(topic()!.creator?.firstName, topic()!.creator?.lastName) }}</span>
+            }
+          </div>
+          <div class="topic-meta">
+            <h4 class="mb-1">{{ topic()!.title }}</h4>
+            <small class="text-muted d-block">
+              Circle: {{ topic()!.group?.name }}
+            </small>
+            <small class="text-muted d-block">
+              {{ topic()!.creator?.firstName }} {{ topic()!.creator?.lastName }} ·
+              {{ topic()!.createdAt | date:'medium' }}
+            </small>
+          </div>
+        </div>
+        <p class="mb-0 mt-2 text-muted">{{ topic()!.description || 'No description.' }}</p>
+      </article>
+
+      @if (canComment) {
+      <div class="comment-composer mb-3">
+        <textarea
+          class="form-control"
+          rows="2"
+          maxlength="1000"
+          placeholder="Add a comment..."
+          [ngModel]="commentDraft()"
+          (ngModelChange)="commentDraft.set($event)"
+          [ngModelOptions]="{ standalone: true }"
+        ></textarea>
+        <div class="d-flex justify-content-end mt-2">
+          <button type="button" class="btn btn-sm btn-primary" [disabled]="savingComment()" (click)="postComment()">
+            {{ savingComment() ? 'Posting...' : 'Post Comment' }}
+          </button>
+        </div>
+      </div>
+      }
+
+      <div class="comments-list">
+        @for (comment of visibleComments(); track comment.id) {
+        <article class="comment-row">
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <div class="d-flex align-items-start gap-2">
+              <div class="user-avatar" [attr.aria-label]="(comment.creator?.firstName || '') + ' ' + (comment.creator?.lastName || '')">
+                @if (avatarUrl('comment-' + comment.id, comment.creator?.avatar)) {
+                <img
+                  [src]="avatarUrl('comment-' + comment.id, comment.creator?.avatar)"
+                  [alt]="(comment.creator?.firstName || '') + ' ' + (comment.creator?.lastName || '')"
+                  (error)="onAvatarError('comment-' + comment.id)"
+                />
+                } @else {
+                <span>{{ initials(comment.creator?.firstName, comment.creator?.lastName) }}</span>
+                }
+              </div>
+              <div>
+                <strong>{{ comment.creator?.firstName }} {{ comment.creator?.lastName }}</strong>
+                <small class="text-muted d-block">{{ formatRelativeTime(comment.createdAt) }}</small>
+              </div>
+            </div>
+            @if ((comment.replies || []).length > 0) {
+            <button
+              type="button"
+              class="btn btn-link btn-sm p-0 text-decoration-none"
+              (click)="toggleReplies(comment.id)"
+            >
+              {{ isRepliesVisible(comment.id) ? 'Hide replies' : 'Show replies' }}
+            </button>
+            }
+          </div>
+          <p class="mb-2 mt-1">{{ comment.comment }}</p>
+
+          @if (canComment) {
+          <div class="reply-composer mb-2">
+            <textarea
+              class="form-control"
+              rows="2"
+              maxlength="1000"
+              placeholder="Reply..."
+              [ngModel]="replyDrafts()[comment.id] || ''"
+              (ngModelChange)="onReplyInput(comment.id, $event)"
+              [ngModelOptions]="{ standalone: true }"
+            ></textarea>
+            <div class="d-flex justify-content-end mt-1">
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-primary"
+                [disabled]="savingReplies()[comment.id]"
+                (click)="postReply(comment.id)"
+              >
+                {{ savingReplies()[comment.id] ? 'Posting...' : 'Reply' }}
+              </button>
+            </div>
+          </div>
+          }
+
+          @if (isRepliesVisible(comment.id)) {
+          <div class="reply-list">
+            @for (reply of visibleCommentReplies(comment); track reply.id) {
+            <div class="reply-row">
+              <div class="d-flex align-items-start gap-2">
+                <div class="user-avatar sm" [attr.aria-label]="(reply.creator?.firstName || '') + ' ' + (reply.creator?.lastName || '')">
+                  @if (avatarUrl('reply-' + reply.id, reply.creator?.avatar)) {
+                  <img
+                    [src]="avatarUrl('reply-' + reply.id, reply.creator?.avatar)"
+                    [alt]="(reply.creator?.firstName || '') + ' ' + (reply.creator?.lastName || '')"
+                    (error)="onAvatarError('reply-' + reply.id)"
+                  />
+                  } @else {
+                  <span>{{ initials(reply.creator?.firstName, reply.creator?.lastName) }}</span>
+                  }
+                </div>
+                <div>
+                  <strong>{{ reply.creator?.firstName }} {{ reply.creator?.lastName }}</strong>
+                  <small class="text-muted d-block">{{ formatRelativeTime(reply.createdAt) }}</small>
+                </div>
+              </div>
+              <p class="mb-0 mt-1">{{ reply.comment }}</p>
+            </div>
+            }
+            @if (canShowMoreReplies(comment)) {
+            <button type="button" class="btn btn-sm btn-link p-0 text-decoration-none" (click)="showMoreReplies(comment.id)">
+              Show more replies
+            </button>
+            }
+          </div>
+          }
+        </article>
+        } @empty {
+        <p class="text-muted mb-0">No activities yet for this topic.</p>
+        }
+
+        @if (canShowMoreComments()) {
+        <button type="button" class="btn btn-sm btn-link p-0 text-decoration-none" (click)="showMoreComments()">
+          Show more comments
+        </button>
+        }
+      </div>
+      }
+    </section>
+  </div>
+</main>

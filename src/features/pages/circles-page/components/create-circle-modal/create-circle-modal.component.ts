@@ -38,6 +38,7 @@ export class CreateCircleModalComponent
   lookupUsers = signal<GroupUser[]>([]);
   selectedLeader = signal<GroupUser | null>(null);
   showLookupDropdown = signal<boolean>(false);
+  groupTypes = signal<Array<{ id: number; name: string }>>([]);
 
   fetchData = output<boolean>();
 
@@ -50,11 +51,13 @@ export class CreateCircleModalComponent
     super();
     this.circleForm = this.fb.group({
       name: ['', Validators.required],
+      groupTypeId: [null, Validators.required],
       leaderLookup: [''],
     });
   }
 
   ngOnInit(): void {
+    this.loadGroupTypes();
     this.leaderLookup.valueChanges
       .pipe(
         debounceTime(350),
@@ -112,12 +115,18 @@ export class CreateCircleModalComponent
     return this.circleForm.get('leaderLookup') as FormControl;
   }
 
+  get groupTypeId() {
+    return this.circleForm.get('groupTypeId') as FormControl;
+  }
+
   openCreateCircleModal() {
+    this.loadGroupTypes();
     this.errorMessage.set('');
     this.selectedLeader.set(null);
     this.lookupUsers.set([]);
     this.showLookupDropdown.set(false);
     this.circleForm.reset();
+    this.circleForm.patchValue({ groupTypeId: null });
     this.modalService.open(this.createCircleModal, {
       centered: true,
       size: 'lg',
@@ -152,6 +161,7 @@ export class CreateCircleModalComponent
 
     const groupPayload: Group = {
       name: (this.name.value || '').trim(),
+      groupTypeId: Number(this.groupTypeId.value),
       isActive: true,
     };
 
@@ -196,6 +206,20 @@ export class CreateCircleModalComponent
           this.errorMessage.set(
             err?.error?.message || 'Unable to create circle right now.'
           );
+        },
+      });
+  }
+
+  private loadGroupTypes() {
+    this.groupSvc
+      .getAllGroupTypes()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: (resp) => {
+          this.groupTypes.set(resp.data?.groupTypes || []);
+        },
+        error: (err) => {
+          this.groupTypes.set([]);
         },
       });
   }

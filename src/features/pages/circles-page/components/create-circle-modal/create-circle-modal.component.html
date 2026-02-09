@@ -25,6 +25,20 @@
       </div>
 
       <div class="mb-3">
+        <label class="form-label">Circle Type</label>
+        <select class="form-select" formControlName="groupTypeId">
+          <option [ngValue]="null">Select circle type</option>
+          @for (type of groupTypes(); track type.id) {
+          <option [ngValue]="type.id">{{ type.name }}</option>
+          }
+        </select>
+
+        @if(groupTypeId.invalid && groupTypeId.touched){
+        <small style="color: Red">Circle type is required.</small>
+        }
+      </div>
+
+      <div class="mb-3">
         <label class="form-label">Circle Administrator (Optional)</label>
         <div class="position-relative">
           <input

@@ -1,23 +1,13 @@
-.empty-card {
-  border: 1px dashed #cfdfff;
-  border-radius: 1rem;
-  padding: 1.5rem 1rem;
-  text-align: center;
-  background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+.type-form {
+  border: 1px solid #dce8ff;
+  border-radius: 0.9rem;
+  background: #f9fcff;
+  padding: 0.8rem;
 }
 
-.empty-card i {
-  font-size: 2rem;
-  color: #1f6feb;
-}
-
-.empty-card h4 {
-  margin: 0.7rem 0 0.25rem;
-  font-size: 1.1rem;
-  color: #132443;
-}
-
-.empty-card p {
-  margin: 0;
-  color: #667793;
+table thead th {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #51617d;
 }

@@ -16,6 +16,14 @@ const routes: Routes = [
       ).then((m) => m.CircleDetailsPageModule),
   },
   {
+    path: 'edit',
+    canActivate: [superadminAdminGuard],
+    loadChildren: () =>
+      import(
+        './components/edit-circle-page/edit-circle-page.module'
+      ).then((m) => m.EditCirclePageModule),
+  },
+  {
     path: 'topics',
     canActivate: [superadminAdminGuard],
     loadChildren: () =>

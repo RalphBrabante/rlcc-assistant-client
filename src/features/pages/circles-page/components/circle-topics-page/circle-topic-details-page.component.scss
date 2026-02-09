@@ -1,0 +1,80 @@
+.topic-header {
+  border: 1px solid #dbe8ff;
+  border-radius: 1rem;
+  background: linear-gradient(165deg, #ffffff 0%, #f3f9ff 100%);
+  padding: 1rem;
+  box-shadow: 0 8px 24px rgba(17, 49, 90, 0.06);
+}
+
+.topic-header-top {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.topic-meta {
+  min-width: 0;
+}
+
+.comment-composer,
+.comment-row {
+  border: 1px solid #e3ecff;
+  border-radius: 0.9rem;
+  background: #fff;
+  padding: 0.8rem;
+  box-shadow: 0 6px 16px rgba(17, 49, 90, 0.04);
+}
+
+.comments-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.reply-list {
+  margin-left: 2rem;
+  display: grid;
+  gap: 0.45rem;
+  border-left: 2px solid #e2edff;
+  padding-left: 0.8rem;
+}
+
+.reply-row {
+  border: 1px solid #e7efff;
+  border-radius: 0.65rem;
+  background: #f8fbff;
+  padding: 0.55rem;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #cde0ff;
+  background: #e6f0ff;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.user-avatar.lg {
+  width: 42px;
+  height: 42px;
+}
+
+.user-avatar.sm {
+  width: 28px;
+  height: 28px;
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-avatar span {
+  color: #244a80;
+  font-weight: 700;
+  font-size: 0.72rem;
+}

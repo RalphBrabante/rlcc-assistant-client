@@ -69,6 +69,7 @@
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Circle Name</th>
+          <th scope="col">Type</th>
           <th scope="col">Encoded By</th>
           <th scope="col">Created At</th>
           <th scope="col">Status</th>
@@ -90,6 +91,7 @@
           <tr>
             <td>{{ group.id }}</td>
             <td>{{ group.name }}</td>
+            <td>{{ group.groupType?.name || 'N/A' }}</td>
             <td>{{ group.creator?.firstName }} {{ group.creator?.lastName }}</td>
             <td>{{ group.createdAt | date: 'short' }}</td>
             <td>
@@ -102,14 +104,20 @@
                 <i class="bi bi-eye"></i>
               </button>
 
+              @if (canManageCircles()) {
+              <button class="btn btn-sm btn-outline-secondary me-1" ngbTooltip="Edit" [routerLink]="['./edit', group.id]">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+
               <button class="btn btn-sm btn-outline-danger" ngbTooltip="Delete" (click)="onDeleteGroup(group.id!)">
                 <i class="bi bi-trash"></i>
               </button>
+              }
             </td>
           </tr>
           } @empty {
           <tr>
-            <td colspan="6" class="empty-state">
+            <td colspan="7" class="empty-state">
               <i class="bi bi-people"></i>
               <p>No circles available yet.</p>
             </td>

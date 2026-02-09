@@ -50,12 +50,17 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'life-group-types',
+    path: 'circle-types',
     canActivate: [appDashboardGuard, adminGuard],
     loadChildren: () =>
       import(
         '../features/pages/life-group-types-page/life-group-types-page.module'
       ).then((m) => m.LifeGroupTypesPageModule),
+  },
+  {
+    path: 'life-group-types',
+    pathMatch: 'full',
+    redirectTo: 'circle-types',
   },
   {
     path: 'circles',

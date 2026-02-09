@@ -1,78 +1,65 @@
 <div class="row g-4 mt-2">
-
-
-  <!-- Column 1 -->
   <div class="col-12 col-md-6 col-lg-3">
-    <div class="card h-100 shadow-sm border-0 rounded-4">
-      <div
-        class="card-header bg-transparent fw-semibold d-flex justify-content-between align-items-center"
-      >
-        <span>Members</span>
+    <div class="card h-100 shadow-sm border-0 rounded-4 metric-card metric-members">
+      <div class="card-header bg-transparent fw-semibold d-flex justify-content-between align-items-center">
+        <span>Total Members</span>
         <i class="bi bi-people"></i>
       </div>
       <div class="card-body">
-        <h2 class="fw-bold">{{activeUsersCount()}}</h2>
-        <p class="text-muted">This week</p>
-        <div
-          class="progress"
-          role="progressbar"
-          aria-valuenow="54"
-          aria-valuemin="0"
-          aria-valuemax="100"
-        >
-          <div class="progress-bar bg-info" style="width: 54%"></div>
-        </div>
+        <h2 class="fw-bold mb-1">{{ activeUsersCount() }}</h2>
+        <p class="metric-sub mb-0">Active users connected to the system.</p>
       </div>
     </div>
   </div>
 
-  <!-- Column 3 -->
   <div class="col-12 col-md-6 col-lg-3">
-    <div class="card h-100 shadow-sm border-0 rounded-4">
-      <div
-        class="card-header bg-transparent fw-semibold d-flex justify-content-between align-items-center"
-      >
-        <span>Circles</span>
+    <div class="card h-100 shadow-sm border-0 rounded-4 metric-card metric-circles">
+      <div class="card-header bg-transparent fw-semibold d-flex justify-content-between align-items-center">
+        <span>Active Circles</span>
         <i class="bi bi-person-arms-up"></i>
       </div>
       <div class="card-body">
-        <h2 class="fw-bold">{{activeGroupsCount()}}</h2>
-        <p class="text-muted">Active</p>
-        <div
-          class="progress"
-          role="progressbar"
-          aria-valuenow="80"
-          aria-valuemin="0"
-          aria-valuemax="100"
-        >
-          <div class="progress-bar bg-warning" style="width: 80%"></div>
-        </div>
+        <h2 class="fw-bold mb-1">{{ activeGroupsCount() }}</h2>
+        <p class="metric-sub mb-0">Current active circle groups.</p>
       </div>
     </div>
   </div>
 
-  <!-- Column 4 -->
+  @if (bugsEnabled()) {
   <div class="col-12 col-md-6 col-lg-3">
-    <div class="card h-100 shadow-sm border-0 rounded-4">
-      <div
-        class="card-header bg-transparent fw-semibold d-flex justify-content-between align-items-center"
-      >
-        <span>Feature Requests</span>
-        <i class="bi bi-life-preserver"></i>
+    <div class="card h-100 shadow-sm border-0 rounded-4 metric-card metric-bugs">
+      <div class="card-header bg-transparent fw-semibold d-flex justify-content-between align-items-center">
+        <span>Reported Bugs</span>
+        <i class="bi bi-bug"></i>
       </div>
       <div class="card-body">
-        <h2 class="fw-bold">34</h2>
-        <p class="text-muted">Open</p>
-        <div
-          class="progress"
-          role="progressbar"
-          aria-valuenow="25"
-          aria-valuemin="0"
-          aria-valuemax="100"
-        >
-          <div class="progress-bar bg-danger" style="width: 25%"></div>
+        <h2 class="fw-bold mb-1">{{ bugTotalCount() }}</h2>
+        <p class="metric-sub mb-0">Total submitted bug reports.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card h-100 shadow-sm border-0 rounded-4 metric-card metric-status">
+      <div class="card-header bg-transparent fw-semibold d-flex justify-content-between align-items-center">
+        <span>Bug Status</span>
+        <i class="bi bi-activity"></i>
+      </div>
+      <div class="card-body">
+        <div class="status-row">
+          <span>Open</span>
+          <strong class="text-danger">{{ bugOpenCount() }}</strong>
+        </div>
+        <div class="status-row">
+          <span>In Progress</span>
+          <strong class="text-warning">{{ bugInProgressCount() }}</strong>
+        </div>
+        <div class="status-row">
+          <span>Resolved</span>
+          <strong class="text-success">{{ bugResolvedCount() }}</strong>
         </div>
       </div>
     </div>
   </div>
+  }
 </div>

@@ -3,6 +3,50 @@
     <section class="app-shell-head">
       <h2>All Circle Topics</h2>
       <p class="app-shell-subtitle">Central view of discussion topics across all circles.</p>
+      <div class="filters-row">
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          placeholder="Search topic, description, life group, or creator..."
+          [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)"
+          [ngModelOptions]="{ standalone: true }"
+        />
+        <select
+          class="form-select form-select-sm"
+          [ngModel]="selectedGroupId()"
+          (ngModelChange)="selectedGroupId.set($event)"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option value="all">All Life Groups</option>
+          @for (group of availableGroups(); track group.id) {
+          <option [value]="group.id">{{ group.name }}</option>
+          }
+        </select>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
+          Clear
+        </button>
+      </div>
+      <div class="view-toggle">
+        <button
+          type="button"
+          class="btn btn-sm"
+          [ngClass]="viewMode() === 'card' ? 'btn-primary' : 'btn-outline-primary'"
+          (click)="setViewMode('card')"
+          ngbTooltip="Card view"
+        >
+          <i class="bi bi-grid-3x3-gap-fill"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm"
+          [ngClass]="viewMode() === 'table' ? 'btn-primary' : 'btn-outline-primary'"
+          (click)="setViewMode('table')"
+          ngbTooltip="Table view"
+        >
+          <i class="bi bi-table"></i>
+        </button>
+      </div>
     </section>
     <section class="app-shell-body">
       @if (loading()) {
@@ -10,8 +54,9 @@
       } @else if (errorMessage()) {
       <div class="alert alert-danger py-2 mb-0">{{ errorMessage() }}</div>
       } @else {
+      @if (viewMode() === 'card') {
       <div class="topic-grid">
-        @for (topic of topics(); track topic.id) {
+        @for (topic of filteredTopics(); track topic.id) {
         <article class="topic-card">
           <div class="topic-card-head">
             <h5 class="mb-0">{{ topic.title }}</h5>
@@ -24,11 +69,52 @@
             {{ topic.creator?.firstName }} {{ topic.creator?.lastName }} ·
             {{ topic.createdAt | date: 'medium' }}
           </small>
+          <div class="mt-2">
+            <a class="btn btn-sm btn-outline-primary" [routerLink]="['/circles/topics', topic.id]">
+              Details
+            </a>
+          </div>
         </article>
         } @empty {
-        <p class="text-muted mb-0">No circle topics available.</p>
+        <p class="text-muted mb-0">No topics match your filters.</p>
         }
       </div>
+      } @else {
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-0 topic-table">
+          <thead>
+            <tr>
+              <th>Topic</th>
+              <th>Circle</th>
+              <th>Created By</th>
+              <th>Created</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (topic of filteredTopics(); track topic.id) {
+            <tr>
+              <td>
+                <strong>{{ topic.title }}</strong>
+              </td>
+              <td>{{ topic.group?.name }}</td>
+              <td>{{ topic.creator?.firstName }} {{ topic.creator?.lastName }}</td>
+              <td>{{ topic.createdAt | date: 'short' }}</td>
+              <td class="text-end">
+                <a class="btn btn-sm btn-outline-primary" [routerLink]="['/circles/topics', topic.id]">
+                  Details
+                </a>
+              </td>
+            </tr>
+            } @empty {
+            <tr>
+              <td colspan="5" class="text-muted">No topics match your filters.</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
       }
     </section>
   </div>

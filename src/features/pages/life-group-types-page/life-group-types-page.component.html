@@ -1,15 +1,62 @@
 <main class="app-page">
   <div class="app-shell">
     <section class="app-shell-head">
-      <h2>Life Group Types</h2>
-      <p class="app-shell-subtitle">Define and organize circle classifications.</p>
+      <h2>Circle Types</h2>
+      <p class="app-shell-subtitle">Create and manage circle classifications used during circle creation.</p>
     </section>
     <section class="app-shell-body">
-      <div class="empty-card">
-        <i class="bi bi-diagram-3"></i>
-        <h4>Life group type management is ready for setup</h4>
-        <p>Create your type list here when backend endpoints are connected.</p>
+      <form class="type-form mb-3" [formGroup]="form" (ngSubmit)="createType()">
+        <div class="row g-2 align-items-start">
+          <div class="col-md-8">
+            <input class="form-control" formControlName="name" placeholder="Enter circle type name" />
+            @if (name.invalid && name.touched) {
+            <small class="text-danger">Type name is required and must be 120 chars or fewer.</small>
+            }
+          </div>
+          <div class="col-md-4 d-grid">
+            <button class="btn btn-primary" type="submit" [disabled]="saving()">
+              {{ saving() ? 'Saving...' : 'Add Circle Type' }}
+            </button>
+          </div>
+        </div>
+      </form>
+
+      @if (errorMessage()) {
+      <div class="alert alert-danger py-2">{{ errorMessage() }}</div>
+      }
+
+      @if (loading()) {
+      <p class="text-muted mb-0">Loading circle types...</p>
+      } @else {
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (type of groupTypes(); track type.id) {
+            <tr>
+              <td>{{ type.id }}</td>
+              <td>{{ type.name }}</td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-outline-danger" type="button" (click)="deleteType(type.id)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+            } @empty {
+            <tr>
+              <td colspan="3" class="text-muted">No circle types yet.</td>
+            </tr>
+            }
+          </tbody>
+        </table>
       </div>
+      }
     </section>
   </div>
 </main>

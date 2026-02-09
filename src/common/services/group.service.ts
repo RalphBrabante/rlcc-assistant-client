@@ -20,9 +20,28 @@ import { Observable } from 'rxjs';
 export class GroupService {
   constructor(private http: HttpClient) {}
 
-  countAllActiveGroups(): Observable<{ status: number; count: number }> {
-    return this.http.get<{ status: number; count: number }>(
+  countAllActiveGroups(): Observable<{ code: number; data: { count: number } }> {
+    return this.http.get<{ code: number; data: { count: number } }>(
       baseUrl + '/groups/count'
+    );
+  }
+
+  getAllGroupTypes(): Observable<{ code: number; data: { groupTypes: Array<{ id: number; name: string }> } }> {
+    return this.http.get<{ code: number; data: { groupTypes: Array<{ id: number; name: string }> } }>(
+      baseUrl + '/groupTypes'
+    );
+  }
+
+  createGroupType(name: string): Observable<{ code: number; data: { groupType: { id: number; name: string } } }> {
+    return this.http.post<{ code: number; data: { groupType: { id: number; name: string } } }>(
+      baseUrl + '/groupTypes',
+      { groupType: { name } }
+    );
+  }
+
+  deleteGroupType(id: number): Observable<{ code: number; data: { id: number; deleted: boolean } }> {
+    return this.http.delete<{ code: number; data: { id: number; deleted: boolean } }>(
+      baseUrl + `/groupTypes/${id}`
     );
   }
 
@@ -53,6 +72,13 @@ export class GroupService {
 
   deleteGroup(id: number): Observable<GroupsAPIResp> {
     return this.http.delete<GroupsAPIResp>(baseUrl + `/groups/${id}`);
+  }
+
+  updateGroup(
+    id: number,
+    group: { name: string; groupTypeId: number; isActive: boolean }
+  ): Observable<GroupsAPIResp> {
+    return this.http.patch<GroupsAPIResp>(baseUrl + `/groups/${id}`, { group });
   }
 
   getGroupById(id: string): Observable<GroupsAPIResp> {

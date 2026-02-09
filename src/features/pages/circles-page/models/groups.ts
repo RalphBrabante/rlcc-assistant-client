@@ -4,6 +4,11 @@ import { ApiResponse } from '../../../../common/services/api-response';
 export interface Group {
   id?: number;
   name: string;
+  groupTypeId?: number | null;
+  groupType?: {
+    id: number;
+    name: string;
+  } | null;
   userId?: number | null;
   leaderId?: number | null;
   groupMembers?: GroupUser[];

@@ -4,6 +4,20 @@
   gap: 0.9rem;
 }
 
+.filters-row {
+  margin-top: 0.55rem;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(180px, 260px) auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.view-toggle {
+  display: inline-flex;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+}
+
 .topic-card {
   border: 1px solid #dbe8ff;
   border-radius: 0.85rem;
@@ -28,4 +42,17 @@
   padding: 0.15rem 0.55rem;
   font-size: 0.74rem;
   font-weight: 600;
+}
+
+.topic-table th {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  color: #4f607c;
+  letter-spacing: 0.03em;
+}
+
+@media (max-width: 768px) {
+  .filters-row {
+    grid-template-columns: 1fr;
+  }
 }

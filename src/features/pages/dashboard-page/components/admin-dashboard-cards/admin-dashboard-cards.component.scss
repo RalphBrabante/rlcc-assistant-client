@@ -1,0 +1,45 @@
+.metric-card {
+  border: 1px solid #dce8ff !important;
+  overflow: hidden;
+}
+
+.metric-card .card-header {
+  border-bottom: 1px solid #e7efff;
+}
+
+.metric-card .card-header i {
+  color: #2b5da3;
+}
+
+.metric-members {
+  background: linear-gradient(160deg, #ffffff 0%, #f4f9ff 100%);
+}
+
+.metric-circles {
+  background: linear-gradient(160deg, #ffffff 0%, #fff8f0 100%);
+}
+
+.metric-bugs {
+  background: linear-gradient(160deg, #ffffff 0%, #fff4f4 100%);
+}
+
+.metric-status {
+  background: linear-gradient(160deg, #ffffff 0%, #f8faff 100%);
+}
+
+.metric-sub {
+  color: #5e6f8b;
+  font-size: 0.86rem;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.24rem 0;
+  border-bottom: 1px dashed #e6eeff;
+}
+
+.status-row:last-child {
+  border-bottom: 0;
+}
