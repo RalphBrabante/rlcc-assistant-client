@@ -7,6 +7,7 @@ import {
   GroupUsers,
 } from '../../features/pages/circles-page/models/groups';
 import {
+  GroupTopicCommentApiResponse,
   GroupTopicApiResponse,
   GroupTopicsApiResponse,
 } from '../../features/pages/circles-page/models/group-topic';
@@ -97,6 +98,39 @@ export class GroupService {
     return this.http.post<GroupTopicApiResponse>(baseUrl + `/groups/${groupId}/topics`, {
       topic,
     });
+  }
+
+  createGroupTopicComment(
+    groupId: number | string,
+    topicId: number,
+    topicComment: { comment: string }
+  ): Observable<GroupTopicCommentApiResponse> {
+    return this.http.post<GroupTopicCommentApiResponse>(
+      baseUrl + `/groups/${groupId}/topics/${topicId}/comments`,
+      { topicComment }
+    );
+  }
+
+  createGroupTopicCommentReply(
+    groupId: number | string,
+    topicId: number,
+    commentId: number,
+    topicComment: { comment: string }
+  ): Observable<GroupTopicCommentApiResponse> {
+    return this.http.post<GroupTopicCommentApiResponse>(
+      baseUrl + `/groups/${groupId}/topics/${topicId}/comments/${commentId}/replies`,
+      { topicComment }
+    );
+  }
+
+  deleteGroupTopicComment(
+    groupId: number | string,
+    topicId: number,
+    commentId: number
+  ): Observable<{ code: number; data: { id: number; deleted: boolean } }> {
+    return this.http.delete<{ code: number; data: { id: number; deleted: boolean } }>(
+      baseUrl + `/groups/${groupId}/topics/${topicId}/comments/${commentId}`
+    );
   }
 
   deleteGroupTopic(groupId: number | string, topicId: number): Observable<{ code: number; data: { id: number; deleted: boolean } }> {

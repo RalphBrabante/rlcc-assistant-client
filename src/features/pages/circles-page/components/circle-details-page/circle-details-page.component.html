@@ -179,26 +179,220 @@
         <div class="topic-list">
           @for (topic of topics(); track topic.id) {
           <div class="topic-item">
-            <div class="d-flex justify-content-between align-items-start gap-2">
+            <div class="topic-summary">
               <div class="topic-title">{{ topic.title }}</div>
-              @if (canDeleteTopics()) {
+              <p class="topic-description mb-1">{{ topicDescriptionExcerpt(topic) }}</p>
+              <small class="text-muted">
+                {{ topic.creator?.firstName }} {{ topic.creator?.lastName }} ·
+                {{ topic.createdAt | date: 'medium' }}
+              </small>
+            </div>
+
+            <div class="topic-actions">
               <button
                 type="button"
-                class="btn btn-sm btn-outline-danger"
-                (click)="onDeleteTopic(topic.id)"
-                ngbTooltip="Delete topic"
+                class="btn btn-sm btn-outline-primary topic-toggle-btn"
+                (click)="toggleTopicExpanded(topic.id)"
+                [ngbTooltip]="isTopicExpanded(topic.id) ? 'Minimize topic' : 'Show more details'"
               >
-                <i class="bi bi-trash"></i>
+                <i class="bi" [ngClass]="isTopicExpanded(topic.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
               </button>
-              }
             </div>
-            @if (topic.description) {
-            <p class="topic-description mb-1">{{ topic.description }}</p>
+
+            @if (isTopicExpanded(topic.id)) {
+            <div class="topic-expanded mt-2">
+              @if (topic.description) {
+              <p class="topic-description mb-2">{{ topic.description }}</p>
+              }
+
+              <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+                <small class="text-muted">
+                  Created by {{ topic.creator?.firstName }} {{ topic.creator?.lastName }} ·
+                  {{ topic.createdAt | date: 'medium' }}
+                </small>
+                @if (canDeleteTopics()) {
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="onDeleteTopic(topic.id)"
+                  ngbTooltip="Delete topic"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+                }
+              </div>
+
+              @if (canCommentOnTopics()) {
+              <div class="topic-comment-form mt-2">
+                <textarea
+                  class="form-control"
+                  rows="2"
+                  [ngModel]="getTopicCommentDraft(topic.id)"
+                  (ngModelChange)="onTopicCommentInput(topic.id, $event)"
+                  [ngModelOptions]="{ standalone: true }"
+                  maxlength="1000"
+                  placeholder="Write a comment..."
+                ></textarea>
+                <div class="d-flex justify-content-end mt-2">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-primary"
+                    [disabled]="creatingTopicComments()[topic.id]"
+                    (click)="onCreateTopicComment(topic.id)"
+                  >
+                    {{ creatingTopicComments()[topic.id] ? 'Posting...' : 'Post Comment' }}
+                  </button>
+                </div>
+              </div>
+              }
+
+              <div class="topic-comments mt-2">
+                @for (comment of visibleComments(topic); track comment.id) {
+                <div class="topic-comment-item">
+                  <div class="topic-comment-head justify-content-between">
+                    <div class="comment-avatar" [attr.aria-label]="(comment.creator?.firstName || '') + ' ' + (comment.creator?.lastName || '')">
+                      @if (commentAvatarUrl(topic, comment.id)) {
+                      <img
+                        [src]="commentAvatarUrl(topic, comment.id)"
+                        [alt]="(comment.creator?.firstName || '') + ' ' + (comment.creator?.lastName || '')"
+                        (error)="onCommentAvatarError(comment.id)"
+                      />
+                      } @else {
+                      <span>{{ commentInitials(comment.creator?.firstName, comment.creator?.lastName) }}</span>
+                      }
+                    </div>
+                    <div>
+                      <small class="text-muted d-block">
+                        {{ comment.creator?.firstName }} {{ comment.creator?.lastName }} ·
+                        {{ formatRelativeTime(comment.createdAt) }}
+                      </small>
+                    </div>
+                  </div>
+                  <div class="comment-actions mt-1">
+                    @if (canCommentOnTopics()) {
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-link p-0 text-decoration-none comment-action-btn"
+                      (click)="toggleReplyForm(comment.id)"
+                    >
+                      {{ isReplyFormExpanded(comment.id) ? 'Cancel' : 'Reply' }}
+                    </button>
+                    }
+                    @if ((comment.replies || []).length) {
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-link p-0 text-decoration-none comment-action-btn"
+                      (click)="toggleRepliesVisible(comment.id)"
+                    >
+                      {{
+                        isRepliesVisible(comment.id)
+                          ? 'Hide responses'
+                          : 'Show responses (' + (comment.replies || []).length + ')'
+                      }}
+                    </button>
+                    }
+                    @if (canDeleteTopLevelComment(comment)) {
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-link p-0 text-danger text-decoration-none comment-action-btn"
+                      (click)="onDeleteTopicComment(topic.id, comment.id)"
+                    >
+                      Delete
+                    </button>
+                    }
+                  </div>
+                  <p class="mb-1 mt-1">{{ comment.comment }}</p>
+
+                  @if (isReplyFormExpanded(comment.id) && canCommentOnTopics()) {
+                  <div class="reply-form mt-2">
+                    <textarea
+                      class="form-control"
+                      rows="2"
+                      [ngModel]="getReplyDraft(comment.id)"
+                      (ngModelChange)="onReplyInput(comment.id, $event)"
+                      [ngModelOptions]="{ standalone: true }"
+                      maxlength="1000"
+                      placeholder="Write a reply..."
+                    ></textarea>
+                    <div class="d-flex justify-content-end mt-2">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-primary"
+                        [disabled]="creatingCommentReplies()[comment.id]"
+                        (click)="onCreateCommentReply(topic.id, comment.id)"
+                      >
+                        {{ creatingCommentReplies()[comment.id] ? 'Posting...' : 'Post Reply' }}
+                      </button>
+                    </div>
+                  </div>
+                  }
+
+                  @if ((comment.replies || []).length && isRepliesVisible(comment.id)) {
+                  <div class="comment-replies mt-2">
+                    @for (reply of visibleCommentReplies(comment); track reply.id) {
+                    <div class="topic-comment-item reply-item">
+                      <div class="topic-comment-head justify-content-between">
+                        <div class="comment-avatar" [attr.aria-label]="(reply.creator?.firstName || '') + ' ' + (reply.creator?.lastName || '')">
+                          @if (commentAvatarUrl(topic, reply.id)) {
+                          <img
+                            [src]="commentAvatarUrl(topic, reply.id)"
+                            [alt]="(reply.creator?.firstName || '') + ' ' + (reply.creator?.lastName || '')"
+                            (error)="onCommentAvatarError(reply.id)"
+                          />
+                          } @else {
+                          <span>{{ commentInitials(reply.creator?.firstName, reply.creator?.lastName) }}</span>
+                          }
+                        </div>
+                        <div>
+                          <small class="text-muted d-block">
+                            {{ reply.creator?.firstName }} {{ reply.creator?.lastName }} ·
+                            {{ formatRelativeTime(reply.createdAt) }}
+                          </small>
+                        </div>
+                      </div>
+                      @if (canDeleteOwnComment(reply)) {
+                      <div class="comment-actions mt-1">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-link p-0 text-danger text-decoration-none comment-action-btn"
+                          (click)="onDeleteTopicComment(topic.id, reply.id)"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      }
+                      <p class="mb-1 mt-1">{{ reply.comment }}</p>
+                    </div>
+                    }
+                    @if (canShowMoreReplies(comment)) {
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-link p-0 text-decoration-none comment-action-btn"
+                      (click)="showMoreReplies(comment.id)"
+                    >
+                      Show more
+                    </button>
+                    }
+                  </div>
+                  }
+                </div>
+                } @empty {
+                <small class="text-muted d-block">No comments yet.</small>
+                }
+                @if (canShowMoreComments(topic)) {
+                <div class="mt-1">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    (click)="showMoreComments(topic.id)"
+                  >
+                    Show more
+                  </button>
+                </div>
+                }
+              </div>
+            </div>
             }
-            <small class="text-muted">
-              {{ topic.creator?.firstName }} {{ topic.creator?.lastName }} ·
-              {{ topic.createdAt | date: 'medium' }}
-            </small>
           </div>
           } @empty {
           <p class="text-muted mb-0">No topics yet for this circle.</p>
@@ -206,8 +400,28 @@
         </div>
         }
       </article>
-
-      <app-circle-chat-panel [groupId]="group()?.id || null" [canAccess]="hasChatAccess()" />
     </section>
+
+    <button
+      type="button"
+      class="chat-fab btn btn-primary"
+      (click)="toggleChatPanel()"
+      [attr.aria-expanded]="isChatOpen()"
+      [attr.aria-label]="isChatOpen() ? 'Hide circle chat' : 'Show circle chat'"
+    >
+      <i class="bi" [ngClass]="isChatOpen() ? 'bi-x-lg' : 'bi-chat-dots-fill'"></i>
+      @if (!isChatOpen() && unreadChatCount() > 0) {
+      <span class="chat-fab-badge">{{ unreadChatCount() > 9 ? '9+' : unreadChatCount() }}</span>
+      }
+    </button>
+
+    <aside class="floating-chat-panel" [class.chat-hidden]="!isChatOpen()">
+      <app-circle-chat-panel
+        [groupId]="group()?.id || null"
+        [canAccess]="hasChatAccess()"
+        [isOpen]="isChatOpen()"
+        (unreadCountChange)="onChatUnreadCountChange($event)"
+      />
+    </aside>
   }
 </main>

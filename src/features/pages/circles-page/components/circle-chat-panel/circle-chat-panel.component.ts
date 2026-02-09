@@ -1,9 +1,11 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
+  Output,
   SimpleChanges,
   ViewChild,
   signal,
@@ -24,6 +26,8 @@ import { GroupChatMessage } from '../../models/group-chat';
 export class CircleChatPanelComponent extends BaseComponent implements OnChanges, OnDestroy {
   @Input() groupId: number | null = null;
   @Input() canAccess = false;
+  @Input() isOpen = false;
+  @Output() unreadCountChange = new EventEmitter<number>();
 
   @ViewChild('messageList') messageList?: ElementRef<HTMLDivElement>;
 
@@ -34,6 +38,7 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
   socketConnected = signal<boolean>(false);
   failedAvatarSenderIds = signal<Set<number>>(new Set());
   currentUserId = 0;
+  unreadCount = signal<number>(0);
 
   messageControl = new FormControl('', {
     nonNullable: true,
@@ -57,6 +62,10 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
     if (changes['groupId'] || changes['canAccess']) {
       this.initializeChat();
     }
+    if (changes['isOpen'] && this.isOpen) {
+      this.resetUnreadCount();
+      this.scrollToBottom();
+    }
   }
 
   override ngOnDestroy(): void {
@@ -73,6 +82,7 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
     this.failedAvatarSenderIds.set(new Set());
 
     if (!this.groupId || !this.canAccess) {
+      this.resetUnreadCount();
       this.leaveCurrentRoom();
       return;
     }
@@ -82,6 +92,7 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
     }
 
     this.activeGroupId = this.groupId;
+    this.resetUnreadCount();
     this.loadMessages(this.groupId);
     this.setupSocket(this.groupId);
   }
@@ -275,6 +286,10 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
         const isNewMessage = this.upsertMessage(payload.message);
         if (isNewMessage) {
           this.playNewMessageSound();
+          if (!this.isOpen && payload.message.senderId !== this.currentUserId) {
+            this.unreadCount.set(this.unreadCount() + 1);
+            this.unreadCountChange.emit(this.unreadCount());
+          }
         }
         this.scrollToBottom();
       });
@@ -330,5 +345,10 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
     } catch (error) {
       // Ignore notification sound errors to avoid impacting chat interactions.
     }
+  }
+
+  private resetUnreadCount() {
+    this.unreadCount.set(0);
+    this.unreadCountChange.emit(0);
   }
 }
