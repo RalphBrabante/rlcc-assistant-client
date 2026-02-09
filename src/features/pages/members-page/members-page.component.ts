@@ -6,6 +6,9 @@ import { PaginationComponent } from '../../../common/components/pagination/pagin
 import { RoleAssignmentUser } from '../../../common/services/role-management';
 import { RoleManagementService } from '../../../common/services/role-management.service';
 import { UserService } from '../../../common/services/user.service';
+import { AuthService } from '../../../common/services/auth.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CreateMemberModalComponent } from './components/create-member-modal/create-member-modal.component';
 
 @Component({
   selector: 'app-members-page',
@@ -27,13 +30,17 @@ export class MembersPageComponent extends BaseComponent implements OnInit {
   roleSaving = signal<boolean>(false);
   roleMessage = signal<string>('');
   roleError = signal<string>('');
+  canCreateUsers = signal<boolean>(false);
 
   constructor(
     private fb: FormBuilder,
     private userSvc: UserService,
-    private roleMgmtSvc: RoleManagementService
+    private roleMgmtSvc: RoleManagementService,
+    private authSvc: AuthService,
+    private modalService: NgbModal
   ) {
     super();
+    this.canCreateUsers.set(this.authSvc.isAdmin() || this.authSvc.isSuperUser());
     this.form = this.fb.group({
       query: [''],
     });
@@ -151,5 +158,20 @@ export class MembersPageComponent extends BaseComponent implements OnInit {
 
   fullName(user: RoleAssignmentUser) {
     return `${user.firstName || ''} ${user.lastName || ''}`.trim();
+  }
+
+  openCreateUserModal() {
+    if (!this.canCreateUsers()) return;
+
+    const modalRef = this.modalService.open(CreateMemberModalComponent, {
+      centered: true,
+      backdrop: 'static',
+      size: 'lg',
+    });
+
+    modalRef.componentInstance.userCreated.subscribe(() => {
+      this.pagination()?.currentPage.set(1);
+      this.fetchData();
+    });
   }
 }

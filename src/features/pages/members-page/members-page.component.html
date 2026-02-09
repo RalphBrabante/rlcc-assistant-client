@@ -14,9 +14,24 @@
         <div class="col-md-2 d-grid">
           <button class="btn btn-primary" type="submit">Search</button>
         </div>
-        <div class="col-md-2 d-grid">
+        <div class="col-md-1 d-grid">
           <button class="btn btn-outline-secondary" type="button" (click)="onReset()">Reset</button>
         </div>
+        @if (canCreateUsers()) {
+          <div class="col-md-1 d-grid">
+            <button
+              class="btn btn-outline-primary create-user-btn"
+              type="button"
+              (click)="openCreateUserModal()"
+              ngbTooltip="Create User"
+              placement="top"
+              container="body"
+              aria-label="Create user"
+            >
+              <i class="bi bi-plus-lg"></i>
+            </button>
+          </div>
+        }
       </form>
 
       @if (errorMessage()) {

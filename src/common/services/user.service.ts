@@ -18,6 +18,15 @@ export interface UpdateUserPayload {
   confirmPassword?: string;
 }
 
+export interface CreateUserPayload {
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  password: string;
+  pcoId?: number | null;
+  isActive?: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -53,5 +62,9 @@ export class UserService {
       baseUrl + `/users/${id}`,
       { user }
     );
+  }
+
+  createUser(user: CreateUserPayload): Observable<ApiResponse<User>> {
+    return this.http.post<ApiResponse<User>>(baseUrl + '/users', { user });
   }
 }
