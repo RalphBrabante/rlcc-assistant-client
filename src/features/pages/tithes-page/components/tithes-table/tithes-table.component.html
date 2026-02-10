@@ -93,7 +93,7 @@
 
     <!-- Card Body -->
     <div class="card-body p-0">
-      <div class="table-responsive">
+      <div class="table-responsive desktop-table-view">
         <table class="table table-hover align-middle mb-0">
           <thead>
             <tr>
@@ -128,40 +128,76 @@
                 </span>
               </td>
               <td class="text-center action-btns">
-                <button
-                  class="btn btn-primary btn-sm me-1"
-                  (click)="openPopup(tithe?.id!)"
-                  ngbTooltip="View Details"
-                  placement="top"
-                  container="body"
-                >
-                  <i class="bi bi-eye"></i>
-                </button>
-
-                <button
-                  class="btn btn-light btn-sm me-1"
-                  ngbTooltip="Edit"
-                  placement="top"
-                  container="body"
-                  [routerLink]="['edit', tithe.id]" target="_blank"
-                >
-                  <i class="bi bi-pencil"></i>
-                </button>
-
-                <button
-                  class="btn btn-danger btn-sm"
-                  (click)="onDeleteTithes(tithe.id!)"
-                  ngbTooltip="Delete"
-                  placement="top"
-                  container="body"
-                >
-                  <i class="bi bi-trash"></i>
-                </button>
+                <div ngbDropdown container="body" class="d-inline-block">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-primary action-toggle"
+                    ngbDropdownToggle
+                  >
+                    <i class="bi bi-list-ul me-1"></i>
+                    Actions
+                  </button>
+                  <div ngbDropdownMenu class="action-menu">
+                    <button ngbDropdownItem (click)="openPopup(tithe?.id!)">
+                      <i class="bi bi-eye me-2 text-primary"></i>
+                      View Details
+                    </button>
+                    <button ngbDropdownItem [routerLink]="['edit', tithe.id]" target="_blank">
+                      <i class="bi bi-pencil-square me-2 text-secondary"></i>
+                      Edit
+                    </button>
+                    <button ngbDropdownItem (click)="onDeleteTithes(tithe.id!)">
+                      <i class="bi bi-trash me-2 text-danger"></i>
+                      Delete
+                    </button>
+                  </div>
+                </div>
               </td>
             </tr>
             }
           </tbody>
         </table>
+      </div>
+
+      <div class="mobile-card-view p-3">
+        @for (tithe of tithes(); track tithe.id) {
+        <article class="mobile-data-card">
+          <div class="mobile-data-head">
+            <h6 class="mb-0">Tithe #{{ tithe.id }}</h6>
+            <span class="badge" [ngClass]="tithe.isActive ? 'bg-success-subtle text-success-emphasis' : 'bg-secondary-subtle text-secondary-emphasis'">
+              {{ tithe.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+          <div class="mobile-data-grid">
+            <div><strong>Date Received:</strong> {{ tithe.dateReceived | date : "medium" }}</div>
+            <div><strong>Giver:</strong> {{ tithe.giver?.firstName }} {{ tithe.giver?.lastName }}</div>
+            <div><strong>Type:</strong> {{ tithe.titheType?.name }}</div>
+            <div><strong>Amount:</strong> {{ tithe.amount | currency : "PHP" : "symbol" : "1.2-2" }}</div>
+            <div><strong>Encoded By:</strong> {{ tithe.encoder?.firstName }} {{ tithe.encoder?.lastName }}</div>
+            <div><strong>Created:</strong> {{ tithe.createdAt | date : "short" }}</div>
+          </div>
+          <div class="mobile-data-actions">
+            <div ngbDropdown container="body" class="d-inline-block">
+              <button type="button" class="btn btn-sm btn-outline-primary action-toggle" ngbDropdownToggle>
+                <i class="bi bi-list-ul me-1"></i>Actions
+              </button>
+              <div ngbDropdownMenu class="action-menu">
+                <button ngbDropdownItem (click)="openPopup(tithe?.id!)">
+                  <i class="bi bi-eye me-2 text-primary"></i>View Details
+                </button>
+                <button ngbDropdownItem [routerLink]="['edit', tithe.id]" target="_blank">
+                  <i class="bi bi-pencil-square me-2 text-secondary"></i>Edit
+                </button>
+                <button ngbDropdownItem (click)="onDeleteTithes(tithe.id!)">
+                  <i class="bi bi-trash me-2 text-danger"></i>Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+        } @empty {
+        <div class="card card-body text-muted">No tithes found.</div>
+        }
       </div>
     </div>
 

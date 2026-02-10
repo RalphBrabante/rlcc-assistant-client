@@ -36,4 +36,45 @@
     border: 1px solid #e5e7eb;
     border-radius: 0.45rem;
   }
+
+  .mobile-card-view {
+    display: none;
+  }
+
+  .mobile-data-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.8rem;
+    background: #fff;
+    padding: 0.7rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .mobile-data-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .mobile-data-grid {
+    display: grid;
+    gap: 0.25rem;
+    font-size: 0.86rem;
+    color: #445973;
+  }
+
+  .mobile-data-actions {
+    margin-top: 0.6rem;
+  }
+
+  @media (max-width: 991.98px) {
+    .desktop-table-view {
+      display: none;
+    }
+
+    .mobile-card-view {
+      display: block;
+    }
+  }
 }

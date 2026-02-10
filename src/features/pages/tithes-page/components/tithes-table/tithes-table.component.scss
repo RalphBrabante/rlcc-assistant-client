@@ -71,6 +71,37 @@
   }
 }
 
+.mobile-card-view {
+  display: none;
+}
+
+.mobile-data-card {
+  border: 1px solid #e5ecf8;
+  border-radius: 0.8rem;
+  background: #fff;
+  padding: 0.7rem;
+  margin-bottom: 0.65rem;
+}
+
+.mobile-data-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.mobile-data-grid {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.86rem;
+  color: #42556f;
+}
+
+.mobile-data-actions {
+  margin-top: 0.6rem;
+}
+
 @media (max-width: 767.98px) {
   .tithe-toolbar {
     flex-direction: column;
@@ -100,5 +131,44 @@
     .btn {
       flex: 1;
     }
+  }
+}
+
+.action-toggle {
+  min-width: 102px;
+  font-weight: 600;
+}
+
+::ng-deep .action-menu.dropdown-menu {
+  border: 1px solid #dce8ff;
+  border-radius: 0.8rem;
+  box-shadow: 0 12px 28px rgba(20, 46, 90, 0.14);
+  padding: 0.35rem;
+  min-width: 198px;
+}
+
+::ng-deep .action-menu .dropdown-item {
+  border-radius: 0.55rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #203759;
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.48rem 0.62rem;
+}
+
+::ng-deep .action-menu .dropdown-item:hover,
+::ng-deep .action-menu .dropdown-item:focus {
+  background: #f2f7ff;
+}
+
+@media (max-width: 991.98px) {
+  .desktop-table-view {
+    display: none;
+  }
+
+  .mobile-card-view {
+    display: block;
   }
 }

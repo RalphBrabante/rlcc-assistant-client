@@ -40,7 +40,7 @@
 
       <div class="row g-3">
         <div class="col-12 col-lg-8">
-          <div class="table-responsive members-table-wrap">
+          <div class="table-responsive members-table-wrap desktop-table-view">
             <table class="table table-hover align-middle mb-0 members-table">
               <thead>
                 <tr>
@@ -83,6 +83,39 @@
                 }
               </tbody>
             </table>
+          </div>
+
+          <div class="mobile-card-view mt-2">
+            @if (loading()) {
+              <div class="card card-body text-muted">Loading members...</div>
+            } @else {
+              @for (user of users(); track user.id) {
+              <article class="mobile-data-card">
+                <div class="mobile-data-head">
+                  <h6 class="mb-0">{{ fullName(user) }}</h6>
+                  <span class="badge text-bg-light border">ID {{ user.id }}</span>
+                </div>
+                <div class="mobile-data-grid">
+                  <div><strong>Email:</strong> {{ user.emailAddress || 'N/A' }}</div>
+                  <div>
+                    <strong>Roles:</strong>
+                    @for (role of user.roles; track role.id) {
+                      <span class="badge text-bg-light border me-1">{{ role.name }}</span>
+                    } @empty {
+                      <span class="text-muted">None</span>
+                    }
+                  </div>
+                </div>
+                <div class="mobile-data-actions">
+                  <button class="btn btn-sm btn-outline-primary" type="button" (click)="selectUser(user)">
+                    Manage Roles
+                  </button>
+                </div>
+              </article>
+              } @empty {
+                <div class="card card-body text-muted">No members found.</div>
+              }
+            }
           </div>
 
           <app-pagination

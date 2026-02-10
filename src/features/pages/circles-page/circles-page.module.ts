@@ -7,7 +7,7 @@ import { DashboardHeaderModule } from '../../../common/components/dashboard-head
 import { CirclesTableComponent } from './components/circles-table/circles-table.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateCircleModalComponent } from './components/create-circle-modal/create-circle-modal.component';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { RouterLink } from '@angular/router';
 import { PaginationModule } from '../../../common/components/pagination/pagination.module';
 
@@ -21,6 +21,7 @@ import { PaginationModule } from '../../../common/components/pagination/paginati
     NgbTooltip,
     RouterLink,
     ReactiveFormsModule,
+    NgbDropdownModule,
     PaginationModule,
     CommonModule,
     CirclesPageRoutingModule,

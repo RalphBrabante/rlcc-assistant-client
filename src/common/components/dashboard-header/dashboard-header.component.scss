@@ -45,6 +45,7 @@ $app-text: #1e2b21;
 
 .nav-links {
   gap: 0.35rem;
+  position: static;
 }
 
 .nav-link {
@@ -76,10 +77,21 @@ $app-text: #1e2b21;
   position: relative;
 
   .dropdown-menu {
+    display: none;
     border: 1px solid $app-border;
     border-radius: 12px;
     padding: 0.4rem;
     box-shadow: 0 16px 24px -18px rgba(24, 43, 27, 0.75);
+  }
+
+  /* Keep hover state while moving pointer into submenu */
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 10px;
   }
 
   .dropdown-item {
@@ -94,10 +106,30 @@ $app-text: #1e2b21;
     }
   }
 
-  &:hover .dropdown-menu {
+  &:hover .dropdown-menu,
+  &:focus-within .dropdown-menu {
     display: block;
     margin-top: 0;
   }
+}
+
+.mega-menu {
+  min-width: 260px;
+}
+
+.mega-section {
+  list-style: none;
+  padding: 0.3rem;
+}
+
+.mega-title {
+  margin: 0 0 0.35rem;
+  padding: 0 0.35rem;
+  font-size: 0.69rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5f6f67;
 }
 
 .profile-menu {
@@ -213,10 +245,12 @@ $app-text: #1e2b21;
       float: none;
       margin-top: 0.35rem;
       box-shadow: none;
-      display: block;
+      display: none;
+      min-width: 100%;
     }
 
-    &:hover .dropdown-menu {
+    &:hover .dropdown-menu,
+    &:focus-within .dropdown-menu {
       display: block;
     }
   }
@@ -235,5 +269,34 @@ $app-text: #1e2b21;
     margin-top: 0.5rem;
     width: 100%;
     box-shadow: none;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar-collapse {
+    position: relative;
+  }
+
+  .nav-item.dropdown {
+    position: static;
+  }
+
+  .mega-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    margin-top: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.55rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.4rem;
+    border-radius: 14px;
+  }
+
+  .mega-menu .mega-section:only-child {
+    grid-column: 1 / -1;
   }
 }

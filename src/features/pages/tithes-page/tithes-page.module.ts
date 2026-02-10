@@ -12,7 +12,7 @@ import { AddNewTitheModalComponent } from './components/add-new-tithe-modal/add-
 import { ActiveMembersLookupDropdownModule } from '../../../common/components/active-members-lookup-dropdown/active-members-lookup-dropdown.module';
 import { ActiveTitheTypeDropdownModule } from "../../../common/components/active-tithe-type-dropdown/active-tithe-type-dropdown.module";
 import { DeleteConfirmationModalModule } from '../../../common/components/delete-confirmation-modal/delete-confirmation-modal.module';
-import { NgbAlert, NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlert, NgbDropdownModule, NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { EditTithePageComponent } from './components/edit-tithe-page/edit-tithe-page.component';
 import { AddBulkTithesPageComponent } from './components/add-bulk-tithes-page/add-bulk-tithes-page.component';
 import { VerseContainerModule } from "../../../common/components/verse-container/verse-container.module";
@@ -29,6 +29,7 @@ import { VerseContainerModule } from "../../../common/components/verse-container
   imports: [
     NgbAlert,
     NgbTooltip,
+    NgbDropdownModule,
     DeleteConfirmationModalModule,
     ActiveMembersLookupDropdownModule,
     ActiveTitheTypeDropdownModule,

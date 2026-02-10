@@ -105,4 +105,23 @@ export class DashboardHeaderComponent extends BaseComponent implements OnInit {
   toggleSubmenu() {
     this.showSubmenu.update((prevVal) => !prevVal);
   }
+
+  closeMobileNavigation() {
+    if (typeof window === 'undefined' || window.innerWidth > 991) {
+      return;
+    }
+
+    const nav = document.getElementById('dashboardNav');
+    if (nav) {
+      nav.classList.remove('show');
+    }
+
+    const toggler = document.querySelector(
+      '.navbar-toggler'
+    ) as HTMLButtonElement | null;
+    if (toggler) {
+      toggler.classList.add('collapsed');
+      toggler.setAttribute('aria-expanded', 'false');
+    }
+  }
 }

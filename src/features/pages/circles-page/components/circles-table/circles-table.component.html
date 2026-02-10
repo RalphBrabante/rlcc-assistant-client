@@ -63,7 +63,7 @@
     <div class="alert alert-danger mx-3 mb-0 mt-3 py-2 px-3">{{ errorMessage() }}</div>
   }
 
-  <div class="table-responsive">
+  <div class="table-responsive desktop-table-view">
     <table class="table table-hover align-middle mb-0 circles-table">
       <thead>
         <tr>
@@ -117,34 +117,47 @@
             </td>
             }
             <td class="text-end">
-              @if (canRequestJoin()) {
-                @if (canJoinGroup(group)) {
+              <div ngbDropdown container="body" class="d-inline-block">
                 <button
-                  class="btn btn-sm btn-outline-success me-1"
-                  ngbTooltip="Request to Join"
-                  [disabled]="joiningGroupState()[group.id!]"
-                  (click)="onRequestJoin(group)"
+                  type="button"
+                  class="btn btn-sm btn-outline-primary action-toggle"
+                  ngbDropdownToggle
                 >
-                  <i class="bi bi-person-plus"></i>
+                  <i class="bi bi-list-ul me-1"></i>
+                  Actions
                 </button>
-                }
-              }
 
-              @if (!canRequestJoin() || group.isMember) {
-              <button class="btn btn-sm btn-outline-primary me-1" ngbTooltip="Enter Circle" [routerLink]="['./view', group.id]">
-                <i class="bi bi-door-open-fill"></i>
-              </button>
-              }
+                <div ngbDropdownMenu class="action-menu">
+                  @if (!canRequestJoin() || group.isMember) {
+                  <button ngbDropdownItem [routerLink]="['./view', group.id]">
+                    <i class="bi bi-door-open-fill me-2 text-primary"></i>
+                    Enter Circle
+                  </button>
+                  }
 
-              @if (canManageCircles()) {
-              <button class="btn btn-sm btn-outline-secondary me-1" ngbTooltip="Edit" [routerLink]="['./edit', group.id]">
-                <i class="bi bi-pencil-square"></i>
-              </button>
+                  @if (canRequestJoin() && canJoinGroup(group)) {
+                  <button
+                    ngbDropdownItem
+                    [disabled]="joiningGroupState()[group.id!]"
+                    (click)="onRequestJoin(group)"
+                  >
+                    <i class="bi bi-person-plus me-2 text-success"></i>
+                    Request to Join
+                  </button>
+                  }
 
-              <button class="btn btn-sm btn-outline-danger" ngbTooltip="Delete" (click)="onDeleteGroup(group.id!)">
-                <i class="bi bi-trash"></i>
-              </button>
-              }
+                  @if (canManageCircles()) {
+                  <button ngbDropdownItem [routerLink]="['./edit', group.id]">
+                    <i class="bi bi-pencil-square me-2 text-secondary"></i>
+                    Edit Circle
+                  </button>
+                  <button ngbDropdownItem (click)="onDeleteGroup(group.id!)">
+                    <i class="bi bi-trash me-2 text-danger"></i>
+                    Delete Circle
+                  </button>
+                  }
+                </div>
+              </div>
             </td>
           </tr>
           } @empty {
@@ -158,6 +171,66 @@
         </ng-template>
       </tbody>
     </table>
+  </div>
+
+  <div class="mobile-card-view px-3 pb-3">
+    @if (isLoading()) {
+    <div class="card card-body text-muted">Loading circles...</div>
+    } @else {
+      @for (group of groupsData(); track group.id) {
+      <article class="mobile-data-card">
+        <div class="mobile-data-head">
+          <h6 class="mb-0">{{ group.name }}</h6>
+          <span class="badge" [ngClass]="group.isActive ? 'bg-success-subtle text-success-emphasis' : 'bg-secondary-subtle text-secondary-emphasis'">
+            {{ group.isActive ? "Active" : "Inactive" }}
+          </span>
+        </div>
+        <div class="mobile-data-grid">
+          <div><strong>ID:</strong> {{ group.id }}</div>
+          <div><strong>Type:</strong> {{ group.groupType?.name || 'N/A' }}</div>
+          <div><strong>Encoded By:</strong> {{ group.creator?.firstName }} {{ group.creator?.lastName }}</div>
+          <div><strong>Created:</strong> {{ group.createdAt | date: 'short' }}</div>
+          @if (canRequestJoin()) {
+          <div>
+            <strong>Membership:</strong>
+            <span class="badge ms-1" [ngClass]="membershipBadgeClass(group)">
+              {{ membershipLabel(group) }}
+            </span>
+          </div>
+          }
+        </div>
+        <div class="mobile-data-actions">
+          <div ngbDropdown container="body" class="d-inline-block">
+            <button type="button" class="btn btn-sm btn-outline-primary action-toggle" ngbDropdownToggle>
+              <i class="bi bi-list-ul me-1"></i>Actions
+            </button>
+            <div ngbDropdownMenu class="action-menu">
+              @if (!canRequestJoin() || group.isMember) {
+              <button ngbDropdownItem [routerLink]="['./view', group.id]">
+                <i class="bi bi-door-open-fill me-2 text-primary"></i>Enter Circle
+              </button>
+              }
+              @if (canRequestJoin() && canJoinGroup(group)) {
+              <button ngbDropdownItem [disabled]="joiningGroupState()[group.id!]" (click)="onRequestJoin(group)">
+                <i class="bi bi-person-plus me-2 text-success"></i>Request to Join
+              </button>
+              }
+              @if (canManageCircles()) {
+              <button ngbDropdownItem [routerLink]="['./edit', group.id]">
+                <i class="bi bi-pencil-square me-2 text-secondary"></i>Edit Circle
+              </button>
+              <button ngbDropdownItem (click)="onDeleteGroup(group.id!)">
+                <i class="bi bi-trash me-2 text-danger"></i>Delete Circle
+              </button>
+              }
+            </div>
+          </div>
+        </div>
+      </article>
+      } @empty {
+      <div class="card card-body text-muted">No circles available yet.</div>
+      }
+    }
   </div>
 
   <app-pagination
