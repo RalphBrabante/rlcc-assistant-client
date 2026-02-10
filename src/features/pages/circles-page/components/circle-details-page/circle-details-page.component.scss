@@ -158,6 +158,116 @@
   text-transform: uppercase;
 }
 
+.member-name-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.member-avatar-chip {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #cfdfff;
+  background: #e8f0ff;
+  display: inline-grid;
+  place-items: center;
+  color: #1f4f8d;
+  font-size: 0.62rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.member-avatar-chip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+::ng-deep .member-avatar-tooltip .tooltip-inner {
+  background: #ffffff;
+  color: #172844;
+  border: 1px solid #dbe8ff;
+  box-shadow: 0 10px 28px rgba(18, 42, 82, 0.16);
+  padding: 0.45rem;
+}
+
+::ng-deep .member-avatar-tooltip.bs-tooltip-top .tooltip-arrow::before,
+::ng-deep .member-avatar-tooltip.bs-tooltip-bottom .tooltip-arrow::before,
+::ng-deep .member-avatar-tooltip.bs-tooltip-start .tooltip-arrow::before,
+::ng-deep .member-avatar-tooltip.bs-tooltip-end .tooltip-arrow::before {
+  border-top-color: #dbe8ff;
+  border-bottom-color: #dbe8ff;
+  border-left-color: #dbe8ff;
+  border-right-color: #dbe8ff;
+}
+
+.member-avatar-preview {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  min-width: 108px;
+}
+
+.member-avatar-preview-image {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #d7e5ff;
+  background: #e8f0ff;
+  display: grid;
+  place-items: center;
+  color: #1f4f8d;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.member-avatar-preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.member-avatar-preview-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
+  color: #1a2d4f;
+}
+
+.member-presence {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.member-presence-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.member-presence-online {
+  color: #146c43;
+}
+
+.member-presence-online .member-presence-dot {
+  background: #20c56f;
+  box-shadow: 0 0 0 2px rgba(32, 197, 111, 0.18);
+}
+
+.member-presence-offline {
+  color: #5f6f86;
+}
+
+.member-presence-offline .member-presence-dot {
+  background: #9aa8bd;
+}
+
 .empty-row {
   text-align: center;
   color: #617089;

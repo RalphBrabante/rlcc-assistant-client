@@ -67,7 +67,7 @@
           <table class="table align-middle members-table mb-0">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>PCO ID</th>
                 <th>Full Name</th>
                 <th>Status</th>
                 @if (canRemoveMembers()) {
@@ -88,14 +88,59 @@
               } @else {
                 @for (member of group()?.groupMembers; track member.id) {
                 <tr>
-                  <td>{{ member.id }}</td>
+                  <td>{{ member.pcoId || '-' }}</td>
                   <td>
-                    <span>{{ member.firstName }} {{ member.lastName }}</span>
+                    <span class="member-name-wrap">
+                      <span
+                        class="member-avatar-chip"
+                        [ngbTooltip]="memberAvatarPreview"
+                        tooltipClass="member-avatar-tooltip"
+                        container="body"
+                      >
+                        @if (memberAvatarUrl(member)) {
+                        <img
+                          [src]="memberAvatarUrl(member)"
+                          [alt]="member.firstName + ' ' + member.lastName"
+                          (error)="onMemberAvatarError(member.id)"
+                        />
+                        } @else {
+                        <span>{{ memberInitials(member) }}</span>
+                        }
+                      </span>
+                      <span>{{ member.firstName }} {{ member.lastName }}</span>
+                    </span>
+                    <ng-template #memberAvatarPreview>
+                      <div class="member-avatar-preview">
+                        <div class="member-avatar-preview-image">
+                          @if (memberAvatarUrl(member)) {
+                          <img
+                            [src]="memberAvatarUrl(member)"
+                            [alt]="member.firstName + ' ' + member.lastName"
+                            (error)="onMemberAvatarError(member.id)"
+                          />
+                          } @else {
+                          <span>{{ memberInitials(member) }}</span>
+                          }
+                        </div>
+                        <div class="member-avatar-preview-name">
+                          {{ member.firstName }} {{ member.lastName }}
+                        </div>
+                      </div>
+                    </ng-template>
                     @if (member.id === group()?.leaderId) {
                     <span class="leader-pill ms-2">Leader</span>
                     }
                   </td>
-                  <td><span class="badge bg-success-subtle text-success-emphasis">Active</span></td>
+                  <td>
+                    <span
+                      class="member-presence"
+                      [class.member-presence-online]="isMemberOnline(member.id)"
+                      [class.member-presence-offline]="!isMemberOnline(member.id)"
+                    >
+                      <span class="member-presence-dot"></span>
+                      {{ isMemberOnline(member.id) ? 'Online' : 'Offline' }}
+                    </span>
+                  </td>
                   @if (canRemoveMembers()) {
                   <td class="text-center">
                     @if (canRemoveSpecificMember(member.id)) {
@@ -421,6 +466,7 @@
         [canAccess]="hasChatAccess()"
         [isOpen]="isChatOpen()"
         (unreadCountChange)="onChatUnreadCountChange($event)"
+        (onlineUserIdsChange)="onOnlineUserIdsChange($event)"
       />
     </aside>
   }

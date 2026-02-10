@@ -37,6 +37,12 @@
               } @else {
                 <span>{{ senderInitials(message) }}</span>
               }
+              <span
+                class="presence-dot"
+                [class.presence-dot-online]="isUserOnline(message.senderId)"
+                [class.presence-dot-offline]="!isUserOnline(message.senderId)"
+                [attr.aria-label]="isUserOnline(message.senderId) ? 'Online' : 'Offline'"
+              ></span>
             </div>
             <div class="message-bubble">
               <div class="message-meta">

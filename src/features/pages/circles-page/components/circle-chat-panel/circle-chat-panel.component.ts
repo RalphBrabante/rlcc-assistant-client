@@ -28,6 +28,7 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
   @Input() canAccess = false;
   @Input() isOpen = false;
   @Output() unreadCountChange = new EventEmitter<number>();
+  @Output() onlineUserIdsChange = new EventEmitter<number[]>();
 
   @ViewChild('messageList') messageList?: ElementRef<HTMLDivElement>;
 
@@ -39,6 +40,7 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
   failedAvatarSenderIds = signal<Set<number>>(new Set());
   currentUserId = 0;
   unreadCount = signal<number>(0);
+  onlineUserIds = signal<number[]>([]);
 
   messageControl = new FormControl('', {
     nonNullable: true,
@@ -83,6 +85,8 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
 
     if (!this.groupId || !this.canAccess) {
       this.resetUnreadCount();
+      this.onlineUserIds.set([]);
+      this.onlineUserIdsChange.emit([]);
       this.leaveCurrentRoom();
       return;
     }
@@ -125,8 +129,9 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
 
     this.groupChatSocketSvc
       .joinGroup(groupId)
-      .then(() => {
+      .then((onlineUserIds) => {
         this.socketConnected.set(true);
+        this.setOnlineUsers(onlineUserIds);
       })
       .catch((error) => {
         this.socketConnected.set(false);
@@ -234,6 +239,10 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
     return 'U';
   }
 
+  isUserOnline(userId: number): boolean {
+    return this.onlineUserIds().includes(Number(userId));
+  }
+
   private upsertMessage(message: GroupChatMessage) {
     const current = this.messages();
     const existingIndex = current.findIndex((m) => m.id === message.id);
@@ -301,6 +310,13 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
         if (payload.groupId !== this.activeGroupId) return;
         this.messages.set(this.messages().filter((m) => m.id !== payload.messageId));
       });
+
+    this.groupChatSocketSvc
+      .onPresenceOnlineUsers()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((payload) => {
+        this.setOnlineUsers(payload?.userIds || []);
+      });
   }
 
   private safeGetUserId() {
@@ -345,6 +361,18 @@ export class CircleChatPanelComponent extends BaseComponent implements OnChanges
     } catch (error) {
       // Ignore notification sound errors to avoid impacting chat interactions.
     }
+  }
+
+  private setOnlineUsers(userIds: number[]) {
+    const uniqueIds = Array.from(
+      new Set(
+        (Array.isArray(userIds) ? userIds : [])
+          .map((id) => Number(id))
+          .filter((id) => Number.isInteger(id) && id > 0)
+      )
+    );
+    this.onlineUserIds.set(uniqueIds);
+    this.onlineUserIdsChange.emit(uniqueIds);
   }
 
   private resetUnreadCount() {

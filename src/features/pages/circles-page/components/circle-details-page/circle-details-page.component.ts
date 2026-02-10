@@ -40,6 +40,7 @@ export class CircleDetailsPageComponent
   canCommentOnTopics = signal<boolean>(false);
   isChatOpen = signal<boolean>(false);
   unreadChatCount = signal<number>(0);
+  onlineUserIds = signal<number[]>([]);
   creatingTopicComments = signal<Record<number, boolean>>({});
   creatingCommentReplies = signal<Record<number, boolean>>({});
   topicCommentDrafts = signal<Record<number, string>>({});
@@ -50,6 +51,7 @@ export class CircleDetailsPageComponent
   commentVisibleCount = signal<Record<number, number>>({});
   expandedTopics = signal<Record<number, boolean>>({});
   failedCommentAvatars = signal<Record<number, boolean>>({});
+  failedMemberAvatars = signal<Record<number, boolean>>({});
   leaderAvatarFailed = signal<boolean>(false);
   currentUserId = 0;
   topicForm!: FormGroup;
@@ -104,18 +106,21 @@ export class CircleDetailsPageComponent
           );
           this.canCommentOnTopics.set(this.checkTopicCommentAccess(group));
           this.leaderAvatarFailed.set(false);
+          this.failedMemberAvatars.set({});
           this.errorMessage.set('');
           this.fetchTopics();
         },
         error: (err) => {
           this.group.set(null);
           this.topics.set([]);
+          this.onlineUserIds.set([]);
           this.canCreateTopics.set(false);
           this.canDeleteTopics.set(false);
           this.canCommentOnTopics.set(false);
           this.hasChatAccess.set(false);
           this.unreadChatCount.set(0);
           this.leaderAvatarFailed.set(false);
+          this.failedMemberAvatars.set({});
           if (err?.status === 403) {
             this.errorMessage.set(
               err?.error?.message ||
@@ -356,6 +361,25 @@ export class CircleDetailsPageComponent
     if (!leader) return 'NA';
     const first = leader.firstName?.trim()?.charAt(0) || '';
     const last = leader.lastName?.trim()?.charAt(0) || '';
+    const initials = `${first}${last}`.toUpperCase();
+    return initials || 'NA';
+  }
+
+  memberAvatarUrl(member: GroupUser): string {
+    if (this.failedMemberAvatars()[member.id]) return '';
+    return member.avatar?.trim() || '';
+  }
+
+  onMemberAvatarError(memberId: number) {
+    this.failedMemberAvatars.update((state) => ({
+      ...state,
+      [memberId]: true,
+    }));
+  }
+
+  memberInitials(member: GroupUser): string {
+    const first = member.firstName?.trim()?.charAt(0) || '';
+    const last = member.lastName?.trim()?.charAt(0) || '';
     const initials = `${first}${last}`.toUpperCase();
     return initials || 'NA';
   }
@@ -739,5 +763,20 @@ export class CircleDetailsPageComponent
 
   onChatUnreadCountChange(count: number) {
     this.unreadChatCount.set(Math.max(0, Number(count || 0)));
+  }
+
+  onOnlineUserIdsChange(userIds: number[]) {
+    const uniqueIds = Array.from(
+      new Set(
+        (Array.isArray(userIds) ? userIds : [])
+          .map((id) => Number(id))
+          .filter((id) => Number.isInteger(id) && id > 0)
+      )
+    );
+    this.onlineUserIds.set(uniqueIds);
+  }
+
+  isMemberOnline(memberId: number): boolean {
+    return this.onlineUserIds().includes(Number(memberId));
   }
 }

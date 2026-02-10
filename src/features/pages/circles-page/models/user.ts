@@ -2,6 +2,7 @@ import { Group } from './groups';
 
 export interface GroupUser {
   id: number;
+  pcoId?: string | number | null;
   firstName: string;
   lastName: string;
   avatar?: string | null;

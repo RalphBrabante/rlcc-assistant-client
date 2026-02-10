@@ -20,6 +20,16 @@ interface AuthTokenUpdatedPayload {
   reason?: string;
 }
 
+interface PresenceOnlineUsersPayload {
+  userIds: number[];
+}
+
+interface JoinGroupAckPayload {
+  ok: boolean;
+  message?: string;
+  onlineUserIds?: number[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -64,7 +74,7 @@ export class GroupChatSocketService {
     this.socket = null;
   }
 
-  joinGroup(groupId: number): Promise<void> {
+  joinGroup(groupId: number): Promise<number[]> {
     this.connect();
     this.joinedGroups.add(groupId);
     return this.emitJoin(groupId);
@@ -135,7 +145,19 @@ export class GroupChatSocketService {
     });
   }
 
-  private emitJoin(groupId: number): Promise<void> {
+  onPresenceOnlineUsers(): Observable<PresenceOnlineUsersPayload> {
+    return new Observable((observer) => {
+      this.connect();
+      const handler = (payload: PresenceOnlineUsersPayload) => observer.next(payload);
+      this.socket?.on('presence:online-users', handler);
+
+      return () => {
+        this.socket?.off('presence:online-users', handler);
+      };
+    });
+  }
+
+  private emitJoin(groupId: number): Promise<number[]> {
     return new Promise((resolve, reject) => {
       let settled = false;
       const timeout = setTimeout(() => {
@@ -147,13 +169,13 @@ export class GroupChatSocketService {
       this.socket?.emit(
         'join-group-chat',
         { groupId },
-        (ack: { ok: boolean; message?: string }) => {
+        (ack: JoinGroupAckPayload) => {
           if (settled) return;
           clearTimeout(timeout);
           settled = true;
 
           if (ack?.ok) {
-            resolve();
+            resolve(Array.isArray(ack.onlineUserIds) ? ack.onlineUserIds : []);
             return;
           }
 
