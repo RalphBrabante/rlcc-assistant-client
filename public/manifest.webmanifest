@@ -1,0 +1,25 @@
+{
+  "name": "RLCC Assistant",
+  "short_name": "RLCC",
+  "description": "RLCC Assistant mobile web app",
+  "theme_color": "#365133",
+  "background_color": "#f7faf7",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/dashboard",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

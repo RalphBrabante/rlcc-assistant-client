@@ -35,6 +35,7 @@ export class CircleDetailsPageComponent
   creatingTopic = signal<boolean>(false);
   hasChatAccess = signal<boolean>(false);
   canRemoveMembers = signal<boolean>(false);
+  canAssignLeader = signal<boolean>(false);
   canCreateTopics = signal<boolean>(false);
   canDeleteTopics = signal<boolean>(false);
   canCommentOnTopics = signal<boolean>(false);
@@ -71,6 +72,7 @@ export class CircleDetailsPageComponent
     super();
     this.currentUserId = this.safeGetUserId();
     this.canRemoveMembers.set(this.authSvc.isAdmin() || this.authSvc.isSuperUser());
+    this.canAssignLeader.set(this.authSvc.isAdmin() || this.authSvc.isSuperUser());
     this.topicForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(120)]],
       description: ['', [Validators.maxLength(2000)]],
@@ -408,6 +410,54 @@ export class CircleDetailsPageComponent
 
   canRemoveSpecificMember(memberId: number): boolean {
     return this.canRemoveMembers() && memberId !== this.currentUserId;
+  }
+
+  canAssignLeaderForMember(memberId: number): boolean {
+    if (!this.canAssignLeader()) return false;
+    return Number(this.group()?.leaderId) !== Number(memberId);
+  }
+
+  onAssignLeader(memberId: number) {
+    if (!this.canAssignLeaderForMember(memberId)) return;
+
+    const selectedGroup = this.group();
+    if (!selectedGroup?.id) return;
+
+    const member = (selectedGroup.groupMembers || []).find((item) => item.id === memberId);
+    const memberName = member
+      ? `${member.firstName} ${member.lastName}`.trim()
+      : `member #${memberId}`;
+
+    const modalRef = this.modalService.open(DeleteConfirmationModalComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
+
+    modalRef.componentInstance.title = 'Assign Leader';
+    modalRef.componentInstance.message = `Set ${memberName} as the leader of this circle?`;
+    modalRef.componentInstance.confirmLabel = 'Assign Leader';
+    modalRef.componentInstance.confirmButtonClass = 'btn btn-primary';
+
+    modalRef.result.then(
+      (confirmed) => {
+        if (!confirmed) return;
+
+        this.grpSvc
+          .assignGroupAdministrator(selectedGroup.id!, memberId)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe({
+            next: () => {
+              this.fetchData();
+            },
+            error: (err) => {
+              this.errorMessage.set(
+                err?.error?.message || 'Unable to assign leader.'
+              );
+            },
+          });
+      },
+      () => {}
+    );
   }
 
   fetchJoinRequests() {

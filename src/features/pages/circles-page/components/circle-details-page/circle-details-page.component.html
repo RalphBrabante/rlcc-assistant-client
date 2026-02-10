@@ -143,6 +143,15 @@
                   </td>
                   @if (canRemoveMembers()) {
                   <td class="text-center">
+                    @if (canAssignLeaderForMember(member.id)) {
+                    <button
+                      class="btn btn-sm btn-outline-primary me-1"
+                      ngbTooltip="Assign as Leader"
+                      (click)="onAssignLeader(member.id)"
+                    >
+                      <i class="bi bi-person-badge"></i>
+                    </button>
+                    }
                     @if (canRemoveSpecificMember(member.id)) {
                     <button
                       class="btn btn-sm btn-outline-danger"
@@ -151,7 +160,8 @@
                     >
                       <i class="bi bi-person-x"></i>
                     </button>
-                    } @else {
+                    }
+                    @if (!canAssignLeaderForMember(member.id) && !canRemoveSpecificMember(member.id)) {
                     <span class="text-muted">-</span>
                     }
                   </td>

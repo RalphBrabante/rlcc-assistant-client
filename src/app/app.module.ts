@@ -23,7 +23,7 @@ import { ForbiddenOverlayComponent } from '../common/components/forbidden-overla
     CommonModule,
     AppRoutingModule,
     NgbModule,
-    DashboardHeaderModule
+    DashboardHeaderModule,
 ],
   providers: [
     provideHttpClient(
