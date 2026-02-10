@@ -21,6 +21,21 @@ export interface Group {
     lastName: string;
     emailAddress: string;
   } | null;
+  isMember?: boolean;
+  hasPendingJoinRequest?: boolean;
+  pendingJoinRequestId?: number | null;
+}
+
+export interface GroupJoinRequest {
+  id: number;
+  groupId: number;
+  userId: number;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  reviewedBy?: number | null;
+  reviewedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  requester?: GroupUser;
 }
 
 export interface GroupsPayload {
@@ -36,6 +51,9 @@ export type GroupsAPIResp = ApiResponse<GroupsPayload>;
 export type GroupUnassignedUsersAPIResp = ApiResponse<{
   count: number;
   rows: GroupUser[];
+}>;
+export type GroupJoinRequestsAPIResp = ApiResponse<{
+  joinRequests: GroupJoinRequest[];
 }>;
 
 export interface AssignUsersToGroupAPI {

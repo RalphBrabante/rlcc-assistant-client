@@ -73,6 +73,9 @@
           <th scope="col">Encoded By</th>
           <th scope="col">Created At</th>
           <th scope="col">Status</th>
+          @if (canRequestJoin()) {
+          <th scope="col">Membership</th>
+          }
           <th scope="col" class="text-center">Actions</th>
         </tr>
       </thead>
@@ -99,10 +102,39 @@
                 {{ group.isActive ? "Active" : "Inactive" }}
               </span>
             </td>
+            @if (canRequestJoin()) {
+            <td>
+              <span class="badge" [ngClass]="membershipBadgeClass(group)">
+                @if (group.isMember) {
+                <i class="bi bi-check-circle me-1"></i>
+                } @else if (group.hasPendingJoinRequest) {
+                <i class="bi bi-hourglass-split me-1"></i>
+                } @else {
+                <i class="bi bi-person-dash me-1"></i>
+                }
+                {{ membershipLabel(group) }}
+              </span>
+            </td>
+            }
             <td class="text-end">
-              <button class="btn btn-sm btn-outline-primary me-1" ngbTooltip="View" [routerLink]="['./view', group.id]">
-                <i class="bi bi-eye"></i>
+              @if (canRequestJoin()) {
+                @if (canJoinGroup(group)) {
+                <button
+                  class="btn btn-sm btn-outline-success me-1"
+                  ngbTooltip="Request to Join"
+                  [disabled]="joiningGroupState()[group.id!]"
+                  (click)="onRequestJoin(group)"
+                >
+                  <i class="bi bi-person-plus"></i>
+                </button>
+                }
+              }
+
+              @if (!canRequestJoin() || group.isMember) {
+              <button class="btn btn-sm btn-outline-primary me-1" ngbTooltip="Enter Circle" [routerLink]="['./view', group.id]">
+                <i class="bi bi-door-open-fill"></i>
               </button>
+              }
 
               @if (canManageCircles()) {
               <button class="btn btn-sm btn-outline-secondary me-1" ngbTooltip="Edit" [routerLink]="['./edit', group.id]">
@@ -117,7 +149,7 @@
           </tr>
           } @empty {
           <tr>
-            <td colspan="7" class="empty-state">
+            <td [attr.colspan]="canRequestJoin() ? 8 : 7" class="empty-state">
               <i class="bi bi-people"></i>
               <p>No circles available yet.</p>
             </td>

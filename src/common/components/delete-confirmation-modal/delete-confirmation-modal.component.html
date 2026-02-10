@@ -15,8 +15,8 @@
     <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
       Cancel
     </button>
-    <button type="button" class="btn btn-danger" (click)="confirmDelete()">
-      Delete
+    <button type="button" [class]="confirmButtonClass" (click)="confirmDelete()">
+      {{ confirmLabel }}
     </button>
   </div>
 </div>

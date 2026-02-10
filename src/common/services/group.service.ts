@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   Group,
+  GroupJoinRequestsAPIResp,
   GroupsAPIResp,
   GroupUnassignedUsersAPIResp,
   GroupUsers,
@@ -110,6 +111,30 @@ export class GroupService {
     return this.http.patch<GroupsAPIResp>(
       baseUrl + `/groups/${groupId}/administrator/${userId}`,
       {}
+    );
+  }
+
+  requestToJoinGroup(groupId: number): Observable<GroupsAPIResp> {
+    return this.http.post<GroupsAPIResp>(baseUrl + `/groups/${groupId}/join`, {});
+  }
+
+  getGroupJoinRequests(
+    groupId: number | string,
+    status: 'pending' | 'approved' | 'rejected' | 'all' = 'pending'
+  ): Observable<GroupJoinRequestsAPIResp> {
+    return this.http.get<GroupJoinRequestsAPIResp>(
+      baseUrl + `/groups/${groupId}/join-requests?status=${status}`
+    );
+  }
+
+  reviewGroupJoinRequest(
+    groupId: number | string,
+    requestId: number,
+    decision: 'APPROVE' | 'REJECT'
+  ): Observable<GroupsAPIResp> {
+    return this.http.patch<GroupsAPIResp>(
+      baseUrl + `/groups/${groupId}/join-requests/${requestId}`,
+      { decision }
     );
   }
 

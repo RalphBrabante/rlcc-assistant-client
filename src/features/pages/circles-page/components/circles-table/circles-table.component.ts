@@ -24,6 +24,8 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
   filterError = signal<string>('');
   isLoading = signal<boolean>(false);
   canManageCircles = signal<boolean>(false);
+  canRequestJoin = signal<boolean>(false);
+  joiningGroupState = signal<Record<number, boolean>>({});
   filtersForm: FormGroup;
   private errorTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -35,6 +37,10 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
   ) {
     super();
     this.canManageCircles.set(this.authSvc.isAdmin() || this.authSvc.isSuperUser());
+    const roles = this.authSvc.getRoles();
+    this.canRequestJoin.set(
+      roles.includes('ENDUSER') && !this.authSvc.isAdmin() && !this.authSvc.isSuperUser()
+    );
     this.filtersForm = this.fb.group({
       name: [''],
       status: ['active'],
@@ -42,6 +48,75 @@ export class CirclesTableComponent extends BaseComponent implements OnInit {
       createdFrom: [''],
       createdTo: [''],
     });
+  }
+
+  canJoinGroup(group: Group): boolean {
+    if (!this.canRequestJoin()) return false;
+    if (!group?.id || !group.isActive) return false;
+    if (group.isMember) return false;
+    if (group.hasPendingJoinRequest) return false;
+    return true;
+  }
+
+  membershipLabel(group: Group): string {
+    if (group?.isMember) return 'Joined';
+    if (group?.hasPendingJoinRequest) return 'Pending';
+    return 'Not a member';
+  }
+
+  membershipBadgeClass(group: Group): string {
+    if (group?.isMember) return 'bg-success-subtle text-success-emphasis';
+    if (group?.hasPendingJoinRequest) return 'bg-warning-subtle text-warning-emphasis';
+    return 'bg-secondary-subtle text-secondary-emphasis';
+  }
+
+  onRequestJoin(group: Group) {
+    if (!group?.id || !this.canJoinGroup(group)) return;
+
+    const modalRef = this.modalService.open(DeleteConfirmationModalComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
+
+    modalRef.componentInstance.title = 'Request to Join Circle';
+    modalRef.componentInstance.message = `Send a join request to ${group.name}?`;
+    modalRef.componentInstance.confirmLabel = 'Send Request';
+    modalRef.componentInstance.confirmButtonClass = 'btn btn-primary';
+
+    modalRef.result.then(
+      (confirmed) => {
+        if (!confirmed) return;
+
+        this.joiningGroupState.update((state) => ({
+          ...state,
+          [group.id!]: true,
+        }));
+
+        this.grpSvc
+          .requestToJoinGroup(group.id!)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe({
+            next: () => {
+              this.joiningGroupState.update((state) => ({
+                ...state,
+                [group.id!]: false,
+              }));
+              this.fetchData();
+            },
+            error: (err) => {
+              this.joiningGroupState.update((state) => ({
+                ...state,
+                [group.id!]: false,
+              }));
+              this.setErrorMessage(
+                err?.error?.message || 'Unable to send join request.',
+                3000
+              );
+            },
+          });
+      },
+      () => {}
+    );
   }
 
   ngOnInit(): void {

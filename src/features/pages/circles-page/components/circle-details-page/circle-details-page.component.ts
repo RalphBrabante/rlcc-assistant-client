@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, viewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Group } from '../../models/groups';
+import { Group, GroupJoinRequest } from '../../models/groups';
 import { GroupService } from '../../../../../common/services/group.service';
 import { BaseComponent } from '../../../../../common/directives/base-component';
 import { finalize, takeUntil } from 'rxjs';
@@ -38,9 +38,14 @@ export class CircleDetailsPageComponent
   canCreateTopics = signal<boolean>(false);
   canDeleteTopics = signal<boolean>(false);
   canCommentOnTopics = signal<boolean>(false);
+  canReviewJoinRequests = signal<boolean>(false);
   isChatOpen = signal<boolean>(false);
   unreadChatCount = signal<number>(0);
   onlineUserIds = signal<number[]>([]);
+  joinRequests = signal<GroupJoinRequest[]>([]);
+  joinRequestsLoading = signal<boolean>(false);
+  joinRequestsError = signal<string>('');
+  reviewingJoinRequests = signal<Record<number, boolean>>({});
   creatingTopicComments = signal<Record<number, boolean>>({});
   creatingCommentReplies = signal<Record<number, boolean>>({});
   topicCommentDrafts = signal<Record<number, string>>({});
@@ -105,10 +110,17 @@ export class CircleDetailsPageComponent
               group.leaderId === this.currentUserId
           );
           this.canCommentOnTopics.set(this.checkTopicCommentAccess(group));
+          this.canReviewJoinRequests.set(this.checkJoinRequestReviewAccess(group));
           this.leaderAvatarFailed.set(false);
           this.failedMemberAvatars.set({});
           this.errorMessage.set('');
           this.fetchTopics();
+          if (this.canReviewJoinRequests()) {
+            this.fetchJoinRequests();
+          } else {
+            this.joinRequests.set([]);
+            this.joinRequestsError.set('');
+          }
         },
         error: (err) => {
           this.group.set(null);
@@ -117,6 +129,9 @@ export class CircleDetailsPageComponent
           this.canCreateTopics.set(false);
           this.canDeleteTopics.set(false);
           this.canCommentOnTopics.set(false);
+          this.canReviewJoinRequests.set(false);
+          this.joinRequests.set([]);
+          this.joinRequestsError.set('');
           this.hasChatAccess.set(false);
           this.unreadChatCount.set(0);
           this.leaderAvatarFailed.set(false);
@@ -282,6 +297,13 @@ export class CircleDetailsPageComponent
     return members.some((member) => member.id === this.currentUserId);
   }
 
+  private checkJoinRequestReviewAccess(group: Group): boolean {
+    if (this.authSvc.isAdmin() || this.authSvc.isSuperUser()) {
+      return true;
+    }
+    return Number(group?.leaderId) === Number(this.currentUserId);
+  }
+
   private safeGetUserId() {
     try {
       return this.authSvc.getId();
@@ -386,6 +408,93 @@ export class CircleDetailsPageComponent
 
   canRemoveSpecificMember(memberId: number): boolean {
     return this.canRemoveMembers() && memberId !== this.currentUserId;
+  }
+
+  fetchJoinRequests() {
+    const groupId = this.id();
+    if (!groupId || !this.canReviewJoinRequests()) return;
+
+    this.joinRequestsLoading.set(true);
+    this.joinRequestsError.set('');
+    this.grpSvc
+      .getGroupJoinRequests(groupId, 'pending')
+      .pipe(
+        finalize(() => this.joinRequestsLoading.set(false)),
+        takeUntil(this.unsubscribe)
+      )
+      .subscribe({
+        next: (resp) => {
+          this.joinRequests.set(resp.data?.joinRequests || []);
+          this.joinRequestsError.set('');
+        },
+        error: (err) => {
+          this.joinRequests.set([]);
+          this.joinRequestsError.set(
+            err?.error?.message || 'Unable to load join requests.'
+          );
+        },
+      });
+  }
+
+  onReviewJoinRequest(requestId: number, decision: 'APPROVE' | 'REJECT') {
+    const groupId = this.id();
+    if (!groupId || !this.canReviewJoinRequests()) return;
+
+    const request = this.joinRequests().find((item) => item.id === requestId);
+    const requesterName = request?.requester
+      ? `${request.requester.firstName} ${request.requester.lastName}`.trim()
+      : `Request #${requestId}`;
+
+    const modalRef = this.modalService.open(DeleteConfirmationModalComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
+
+    modalRef.componentInstance.title =
+      decision === 'APPROVE' ? 'Approve Join Request' : 'Reject Join Request';
+    modalRef.componentInstance.message =
+      decision === 'APPROVE'
+        ? `Approve ${requesterName} to join this circle?`
+        : `Reject ${requesterName}'s join request?`;
+    modalRef.componentInstance.confirmLabel =
+      decision === 'APPROVE' ? 'Approve' : 'Reject';
+    modalRef.componentInstance.confirmButtonClass =
+      decision === 'APPROVE' ? 'btn btn-success' : 'btn btn-outline-danger';
+
+    modalRef.result.then(
+      (confirmed) => {
+        if (!confirmed) return;
+
+        this.reviewingJoinRequests.update((state) => ({
+          ...state,
+          [requestId]: true,
+        }));
+
+        this.grpSvc
+          .reviewGroupJoinRequest(groupId, requestId, decision)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe({
+            next: () => {
+              this.reviewingJoinRequests.update((state) => ({
+                ...state,
+                [requestId]: false,
+              }));
+              this.fetchJoinRequests();
+              this.fetchData();
+            },
+            error: (err) => {
+              this.reviewingJoinRequests.update((state) => ({
+                ...state,
+                [requestId]: false,
+              }));
+              this.joinRequestsError.set(
+                err?.error?.message || 'Unable to review join request.'
+              );
+            },
+          });
+      },
+      () => {}
+    );
   }
 
   getTopicCommentDraft(topicId: number): string {
